@@ -45,16 +45,13 @@ function BULLET.NewBullet(pMapObject)
     end
 
 
-    function myBullet:update(dt, pPlayerObject)
+    function myBullet:update(dt)
         -- Bullet animation
         self:PlayAnimation(dt)
 
         -- Move bullet
         self.x = self.x + self.vx * dt
         self.y = self.y + self.vy * dt
-
-        -- Collisions
-        self:CheckPlayerCollision(pPlayerObject)
     end
 
 --------------------------------------------------------------------------------------------------------
@@ -96,8 +93,8 @@ function BULLET.NewBullet(pMapObject)
 
 --------------------------------------------------------------------------------------------------------
 
+    -- Check collision with the player
     function myBullet:CheckPlayerCollision(pPlayerObject)
-
         -- Check if bullet coordinates are the same as the player
         if self.mapSidePosition == "up" or self.mapSidePosition == "down" then
 
@@ -107,43 +104,57 @@ function BULLET.NewBullet(pMapObject)
             if (self.x <= pPlayerObject.x + self.map_Object.TILE_WIDTH) and (self.y >= pPlayerObject.y and self.y <= pPlayerObject.y + self.map_Object.TILE_HEIGHT) then
                 self.vx = self.vx * -1
                 self.x = pPlayerObject.x + self.map_Object.TILE_WIDTH
+                return true
             end
         end
 
+        return false
+    end
 
---[[         if (self.col <= 0 or self.line <= 0) or (self.col > self.map_Object.colNumber or self.line > self.map_Object.lineNumber) then
-            stopPlayer = true
-        end
- ]]
-
-
---[[    OLD  (use col and line player's values)
-        local bulletCol, bulletLine = nil, nil
-
-        -- Get player cell coordinates
-        local xCell, yCell = self.map_Object:GetCellX_Y(pPlayerCol, pPlayerLine)
-
-        -- Get bullet col and line
+    -- Check if the bullet go outside the screen
+    function myBullet:CheckOutboundCollision()
         if self.mapSidePosition == "up" or self.mapSidePosition == "down" then
-            --self.col, self.line = self.map_Object:GetCellCol_Line(self.x, self.y + (self.h-PLAYER_FEET_HEIGHT))
-        elseif self.mapSidePosition == "left" then
-            --self.col, self.line = self.map_Object:GetCellCol_Line(self.x, self.y)
-        elseif self.mapSidePosition == "right" then
-            bulletCol, bulletLine = self.map_Object:GetCellCol_Line(self.x, self.y)
-        end
 
-        -- Check if bullet cell are the same as player
-        if bulletCol ~= nil then
-            if bulletCol == pPlayerCol and bulletLine == pPlayerLine then
-                if self.mapSidePosition == "up" or self.mapSidePosition == "down" then
-                elseif self.mapSidePosition == "left" then
-                elseif self.mapSidePosition == "right" then
-                    self.vx = self.vx * -1
-                    self.x = xCell
-                end
+        elseif self.mapSidePosition == "left" then
+
+        elseif self.mapSidePosition == "right" then
+            if self.x <= 0 then
+                return true
             end
         end
- ]]
+
+        return false
+    end
+
+
+    -- Check if the bullet touch the tentacle
+    function myBullet:CheckTentaculeCollision(pTentacleObject)
+        -- Check if bullet coordinates are the same as the tentacle
+        if self.mapSidePosition == "up" or self.mapSidePosition == "down" then
+
+        elseif self.mapSidePosition == "left" then
+
+        elseif self.mapSidePosition == "right" then
+            if self.x >= pTentacleObject.x then
+                return true
+            end
+        end
+
+        return false
+    end
+
+--------------------------------------------------------------------------------------------------------
+
+    -- If a bullet go outside the screen, it hit the village
+    function myBullet:HitVillage(pPlayerObject)
+        pPlayerObject.villageLife = pPlayerObject.villageLife - 1
+    end
+
+
+    -- If a bullet touch the tentacle, reduce its life
+    function myBullet:HitTentacle(pTentacleObject)
+        pTentacleObject.life = pTentacleObject.life - 1
+        print(pTentacleObject.life)
     end
 
 --------------------------------------------------------------------------------------------------------

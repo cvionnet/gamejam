@@ -38,6 +38,12 @@ function TENTACLE.NewTentacle(pMapObject, pXScreenSize, pYScreenSize)
     -- METHODS
     function myTentacle:draw(DEBUG_MODE)
         love.graphics.draw(self.images[math.floor(self.frame)], self.x, self.y, math.rad(self.rotation), self.sx, self.sy)  --, self.flip, 1) --, self.w/2, self.h-6) -- player.h/2)
+
+
+        -- DEBUG
+        if DEBUG_MODE == true then
+            love.graphics.print("bullets:"..tostring(#self.lstBullet), self.x-30, self.y)
+        end
     end
 
 

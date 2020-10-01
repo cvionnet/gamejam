@@ -61,9 +61,33 @@ function MONSTER.NewMonster(pMapObject, pXScreenSize, pYScreenSize)
             tentacle:update(dt)
 
             -- Bullets
-            for key1, bullet in pairs(tentacle.lstBullet) do
-                bullet:update(dt, pPlayerObject)
+            for bulletID = #tentacle.lstBullet, 1, -1 do
+                local bullet = tentacle.lstBullet[bulletID]
+
+                bullet:update(dt)
+
+                -- Collisions
+                local isCollide = false
+                -- With the player
+                isCollide = bullet:CheckPlayerCollision(pPlayerObject)
+
+                if isCollide == false then
+                    -- Outside of the screen  (remove the bullet)
+                    isCollide = bullet:CheckOutboundCollision(pPlayerObject)
+                    if isCollide then
+                        bullet:HitVillage(pPlayerObject)
+                        table.remove(tentacle.lstBullet, bulletID)
+                    else
+                        -- With the tentacle
+                        isCollide = bullet:CheckTentaculeCollision(tentacle)
+                        if isCollide then
+                            bullet:HitTentacle(tentacle)
+                            table.remove(tentacle.lstBullet, bulletID)
+                        end
+                    end
+                end
             end
+
         end
 
         -- Collisions

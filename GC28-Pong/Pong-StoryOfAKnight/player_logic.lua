@@ -32,6 +32,7 @@ function PLAYER.NewPlayer(pMapObject, pXScreenSize, pYScreenSize)
     myPlayer.frame = 1
 
     myPlayer.life = 0
+    myPlayer.villageLife = 0
     myPlayer.bulletTime = 0
     myPlayer.shieldColor = nil
 
