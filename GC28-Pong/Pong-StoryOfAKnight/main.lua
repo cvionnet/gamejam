@@ -36,6 +36,10 @@ function love.draw()
     map_Obj:draw(DEBUG_MODE)
     monster_Obj:draw(DEBUG_MODE)
     player_Obj:draw(DEBUG_MODE)
+
+    if DEBUG_MODE then
+        love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), 10, 10)
+    end
 end
 
 
@@ -44,11 +48,18 @@ function love.keypressed(key)
         love.event.quit()
     end
 
-if key == "t" then
-    monster_Obj:InitTentacle()
-end
-
+    -- Check if the player have to change side (left, right, up, down)
     player_Obj:SwitchSidePosition(key)
+
+
+    if DEBUG_MODE then
+        -- Create tentacles
+        if key == "t" then
+            for i = 1, 100 do
+                monster_Obj:CreateTentacle()
+            end
+        end
+    end
 end
 
 --------------------------------------------------------------------------------------------------------
@@ -61,5 +72,7 @@ function InitGame()
 
     monster_Obj = MONSTER.NewMonster(map_Obj, xScreenSize, yScreenSize)
     monster_Obj:InitMonster(xScreenSize - map_Obj.TILE_WIDTH*2, map_Obj.TILE_HEIGHT*2, "monster_background", 1)
+
+    monster_Obj:CreateTentacle()
 end
 

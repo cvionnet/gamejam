@@ -19,6 +19,7 @@ function BULLET.NewBullet(pMapObject)
 
     myBullet.vx = 0
     myBullet.vy = 0
+    myBullet.speed = 0
     myBullet.mapSidePosition = ""       -- up, down, left, right
 
     myBullet.images = {}
@@ -46,15 +47,21 @@ function BULLET.NewBullet(pMapObject)
         -- Bullet animation
         self:PlayAnimation(dt)
 
+        -- Move bullet
+        self.x = self.x + self.vx * dt
+        self.y = self.y + self.vy * dt
+
         -- Collisions
         --self:CheckWallCollision(oldX, oldY)
     end
 
 --------------------------------------------------------------------------------------------------------
 
-    function myBullet:InitBullet(pX, pY, pAnimationFile, pAnimationNumberFrames)
+    function myBullet:InitBullet(pX, pY, pAnimationFile, pAnimationNumberFrames, pVx, pVy)
         self.x = pX
         self.y = pY
+        self.vx = pVx
+        self.vy = pVy
         self.sx = 1
         self.sy = -1
         self.rotation = 90

@@ -1,7 +1,6 @@
 local MONSTER = {}
 
 local TENTACLE = require("tentacle_logic")
-local BULLET = require("bullet_logic")
 
 local FRAME_PER_SECOND = 24
 
@@ -43,20 +42,12 @@ function MONSTER.NewMonster(pMapObject, pXScreenSize, pYScreenSize)
 
         -- Tentacles
         for key, tentacle in pairs(self.tentacles) do
-            tentacle:draw()
+            tentacle:draw(DEBUG_MODE)
 
             -- Bullets
             for key1, bullet in pairs(tentacle.lstBullet) do
-                bullet:draw()
+                bullet:draw(DEBUG_MODE)
             end
-        end
-
-
-        -- DEBUG - draw player box
-        if DEBUG_MODE == true then
-            love.graphics.setColor(1,0,0)
-            love.graphics.rectangle("line", self.x, self.y, self.w, self.h)
-            love.graphics.setColor(1,1,1)
         end
     end
 
@@ -68,6 +59,11 @@ function MONSTER.NewMonster(pMapObject, pXScreenSize, pYScreenSize)
         -- Tentacles animation
         for key, tentacle in pairs(self.tentacles) do
             tentacle:update(dt)
+
+            -- Bullets
+            for key1, bullet in pairs(tentacle.lstBullet) do
+                bullet:update(dt)
+            end
         end
 
         -- Collisions
@@ -118,18 +114,21 @@ function MONSTER.NewMonster(pMapObject, pXScreenSize, pYScreenSize)
 
 --------------------------------------------------------------------------------------------------------
 
-    function myMonster:InitTentacle()
+    -- Display a tentacle on the monster
+    function myMonster:CreateTentacle()
+
+        local xTentacle, yTentacle = 0, 0
         local myTentacle = TENTACLE.NewTentacle(self.map_Object, self.xScreenSize, self.yScreenSize)
---        myTentacle:InitTentacle(self.x - self.map_Object.TILE_HEIGHT * 2, math.random(self.y, self.y + self.map_Object.TILE_HEIGHT), "monster_tentacle", 1)
-        myTentacle:InitTentacle(self.x - self.map_Object.TILE_HEIGHT * 2 + math.random(0,self.map_Object.TILE_HEIGHT), math.random(self.y, self.y + self.w - myTentacle.h*2), "monster_tentacle", 1)
+
+        -- Calculate tentacle position on the monster
+        if  self.mapSidePosition == "right" then
+            xTentacle = self.x - myTentacle.h + math.random(0, self.map_Object.TILE_HEIGHT)
+            yTentacle = math.random(self.y - self.map_Object.TILE_WIDTH, self.y + self.w - self.map_Object.TILE_WIDTH - 20)
+        end
+
+        -- Set tentacle position
+        myTentacle:InitTentacle(xTentacle, yTentacle, "monster_tentacle", 1)
         table.insert(self.tentacles, myTentacle)
-
-
-
-        local myBullet = BULLET.NewBullet(self.map_Object)
-        myBullet:InitBullet(myTentacle.x - 30, myTentacle.y, "monster_bullet", 1)
-        print(myTentacle.lstBullet)
-        table.insert(myTentacle.lstBullet, myBullet)
     end
 
 --------------------------------------------------------------------------------------------------------
