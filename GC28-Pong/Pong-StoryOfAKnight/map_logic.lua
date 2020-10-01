@@ -66,8 +66,18 @@ function MAP.NewMap(pXScreenSize, pYScreenSize)
         return col, line
     end
 
+    -- Return the x and y coordinates on the map, from col and line
+    function myMap:GetCellX_Y(pCol, pLine)
+        local x = 0
+        local y = 0
 
+        x = pCol * self.TILE_WIDTH
+        y = pLine * self.TILE_HEIGHT
 
+        return x, y
+    end
+
+--------------------------------------------------------------------------------------------------------
 
     return myMap
 end

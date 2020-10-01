@@ -28,13 +28,20 @@ end
 
 function love.update(dt)
     player_Obj:update(dt)
-    monster_Obj:update(dt)
+
+    for key, monster in pairs(lstMonsters) do
+        monster:update(dt, player_Obj)
+    end
 end
 
 
 function love.draw()
     map_Obj:draw(DEBUG_MODE)
-    monster_Obj:draw(DEBUG_MODE)
+
+    for key, monster in pairs(lstMonsters) do
+        monster:draw(DEBUG_MODE)
+    end
+
     player_Obj:draw(DEBUG_MODE)
 
     if DEBUG_MODE then
@@ -55,7 +62,7 @@ function love.keypressed(key)
     if DEBUG_MODE then
         -- Create tentacles
         if key == "t" then
-            for i = 1, 100 do
+            for i = 1, 50 do
                 monster_Obj:CreateTentacle()
             end
         end
@@ -72,7 +79,6 @@ function InitGame()
 
     monster_Obj = MONSTER.NewMonster(map_Obj, xScreenSize, yScreenSize)
     monster_Obj:InitMonster(xScreenSize - map_Obj.TILE_WIDTH*2, map_Obj.TILE_HEIGHT*2, "monster_background", 1)
-
-    monster_Obj:CreateTentacle()
+    table.insert(lstMonsters, monster_Obj)
 end
 

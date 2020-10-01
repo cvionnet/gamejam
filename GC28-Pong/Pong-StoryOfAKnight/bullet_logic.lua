@@ -39,11 +39,13 @@ function BULLET.NewBullet(pMapObject)
             love.graphics.setColor(1,0,0)
             love.graphics.rectangle("line", self.x, self.y, self.w, self.h)
             love.graphics.setColor(1,1,1)
+
+            love.graphics.print("x:"..tostring(math.floor(self.x)).." / y:"..tostring(math.floor(self.y)), self.x, self.y-10)
         end
     end
 
 
-    function myBullet:update(dt)
+    function myBullet:update(dt, pPlayerObject)
         -- Bullet animation
         self:PlayAnimation(dt)
 
@@ -52,7 +54,7 @@ function BULLET.NewBullet(pMapObject)
         self.y = self.y + self.vy * dt
 
         -- Collisions
-        --self:CheckWallCollision(oldX, oldY)
+        self:CheckPlayerCollision(pPlayerObject)
     end
 
 --------------------------------------------------------------------------------------------------------
@@ -90,6 +92,58 @@ function BULLET.NewBullet(pMapObject)
                 self.frame = 1
             end
         end
+    end
+
+--------------------------------------------------------------------------------------------------------
+
+    function myBullet:CheckPlayerCollision(pPlayerObject)
+
+        -- Check if bullet coordinates are the same as the player
+        if self.mapSidePosition == "up" or self.mapSidePosition == "down" then
+
+        elseif self.mapSidePosition == "left" then
+
+        elseif self.mapSidePosition == "right" then
+            if (self.x <= pPlayerObject.x + self.map_Object.TILE_WIDTH) and (self.y >= pPlayerObject.y and self.y <= pPlayerObject.y + self.map_Object.TILE_HEIGHT) then
+                self.vx = self.vx * -1
+                self.x = pPlayerObject.x + self.map_Object.TILE_WIDTH
+            end
+        end
+
+
+--[[         if (self.col <= 0 or self.line <= 0) or (self.col > self.map_Object.colNumber or self.line > self.map_Object.lineNumber) then
+            stopPlayer = true
+        end
+ ]]
+
+
+--[[    OLD  (use col and line player's values)
+        local bulletCol, bulletLine = nil, nil
+
+        -- Get player cell coordinates
+        local xCell, yCell = self.map_Object:GetCellX_Y(pPlayerCol, pPlayerLine)
+
+        -- Get bullet col and line
+        if self.mapSidePosition == "up" or self.mapSidePosition == "down" then
+            --self.col, self.line = self.map_Object:GetCellCol_Line(self.x, self.y + (self.h-PLAYER_FEET_HEIGHT))
+        elseif self.mapSidePosition == "left" then
+            --self.col, self.line = self.map_Object:GetCellCol_Line(self.x, self.y)
+        elseif self.mapSidePosition == "right" then
+            bulletCol, bulletLine = self.map_Object:GetCellCol_Line(self.x, self.y)
+        end
+
+        -- Check if bullet cell are the same as player
+        if bulletCol ~= nil then
+            if bulletCol == pPlayerCol and bulletLine == pPlayerLine then
+                if self.mapSidePosition == "up" or self.mapSidePosition == "down" then
+                elseif self.mapSidePosition == "left" then
+                elseif self.mapSidePosition == "right" then
+                    self.vx = self.vx * -1
+                    self.x = xCell
+                end
+            end
+        end
+ ]]
     end
 
 --------------------------------------------------------------------------------------------------------

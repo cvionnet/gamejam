@@ -16,6 +16,8 @@ function PLAYER.NewPlayer(pMapObject, pXScreenSize, pYScreenSize)
     myPlayer.y = 0
     myPlayer.h = 0
     myPlayer.w = 0
+    myPlayer.col = 0
+    myPlayer.line = 0
 
     myPlayer.xScreenSize = pXScreenSize
     myPlayer.yScreenSize = pYScreenSize
@@ -44,6 +46,9 @@ function PLAYER.NewPlayer(pMapObject, pXScreenSize, pYScreenSize)
             love.graphics.setColor(1,0,0)
             love.graphics.rectangle("line", self.x, self.y, self.w, self.h)
             love.graphics.setColor(1,1,1)
+
+            --love.graphics.print("Col:"..tostring(self.col).." / Line:"..tostring(self.line), self.x, self.y-10)
+            love.graphics.print("x:"..tostring(math.floor(self.x)).." / y:"..tostring(math.floor(self.y)), self.x, self.y-10)
         end
     end
 
@@ -106,27 +111,22 @@ function PLAYER.NewPlayer(pMapObject, pXScreenSize, pYScreenSize)
     -- Check wall collision
     function myPlayer:CheckWallCollision(pX, pY)
         local stopPlayer = false
-        local playerCol, playerLine = nil, nil
 
         -- Get player col and line
         if self.movingDirection == "up" or self.movingDirection == "down" then
-            playerCol, playerLine = self.map_Object:GetCellCol_Line(self.x, self.y + (self.h-PLAYER_FEET_HEIGHT))
---        elseif self.movingDirection == "down" then
---            local playerCol, playerLine = pMapObject:GetCellCol_Line(self.x + self.w, self.y + (self.h-PLAYER_FEET_HEIGHT))
+            self.col, self.line = self.map_Object:GetCellCol_Line(self.x, self.y + (self.h-PLAYER_FEET_HEIGHT))
         elseif self.movingDirection == "left" then
-            playerCol, playerLine = self.map_Object:GetCellCol_Line(self.x, self.y)
+            self.col, self.line = self.map_Object:GetCellCol_Line(self.x, self.y)
         elseif self.movingDirection == "right" then
-            playerCol, playerLine = self.map_Object:GetCellCol_Line(self.x + self.w, self.y)
+            self.col, self.line = self.map_Object:GetCellCol_Line(self.x + self.w, self.y)
         end
 
         -- Check if player is out of the map bound
-        if playerCol ~= nil then
-            if (playerCol <= 0 or playerLine <= 0) or (playerCol > self.map_Object.colNumber or playerLine > self.map_Object.lineNumber) then
-                stopPlayer = true
-            -- If the ID is not 0, the player can't walk on it
-            elseif self.map_Object.mapWalls[playerLine][playerCol] > 0 then
-                stopPlayer = true
-            end
+        if (self.col <= 0 or self.line <= 0) or (self.col > self.map_Object.colNumber or self.line > self.map_Object.lineNumber) then
+            stopPlayer = true
+        -- If the ID is not 0, the player can't walk on it
+        elseif self.map_Object.mapWalls[self.line][self.col] > 0 then
+            stopPlayer = true
         end
 
         if stopPlayer then

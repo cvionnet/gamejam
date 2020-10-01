@@ -52,7 +52,7 @@ function MONSTER.NewMonster(pMapObject, pXScreenSize, pYScreenSize)
     end
 
 
-    function myMonster:update(dt)
+    function myMonster:update(dt, pPlayerObject)
         -- Monster animation
         self:PlayAnimation(dt)
 
@@ -62,7 +62,7 @@ function MONSTER.NewMonster(pMapObject, pXScreenSize, pYScreenSize)
 
             -- Bullets
             for key1, bullet in pairs(tentacle.lstBullet) do
-                bullet:update(dt)
+                bullet:update(dt, pPlayerObject)
             end
         end
 
@@ -81,6 +81,8 @@ function MONSTER.NewMonster(pMapObject, pXScreenSize, pYScreenSize)
         self.mapSidePosition = "right"
 
         self:LoadAnimation(pAnimationFile, pAnimationNumberFrames)
+
+        self:CreateTentacle()
     end
 
 
