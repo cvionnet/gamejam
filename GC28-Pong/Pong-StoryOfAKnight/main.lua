@@ -7,8 +7,14 @@ local MAP = require("map_logic")
 local PLAYER = require("player_logic")
 local MONSTER = require("monster_logic")
 
-local lstMonsters = {}
+local PLAYER_LIFE = 10
+local VILLAGE_LIFE = 100
+local MONSTER_MIN_LIFE = 50
+local MONSTER_MAX_LIFE = 80
 
+local gameState = ""            -- game / gameover / victory
+
+local lstMonsters = {}
 
 local DEBUG_MODE = true
 
@@ -27,39 +33,48 @@ end
 
 
 function love.update(dt)
-    player_Obj:update(dt)
+    if gameState == "game" then
+        player_Obj:update(dt)
 
-    for key, monster in pairs(lstMonsters) do
-        monster:update(dt, player_Obj)
+        for key, monster in pairs(lstMonsters) do
+            monster:update(dt, player_Obj)
+        end
+
+        CheckforGameOver()
+        CheckforVictory()
     end
 end
 
 
 function love.draw()
-    map_Obj:draw(DEBUG_MODE)
+    if gameState == "game" then
+        map_Obj:draw(DEBUG_MODE)
 
-    for key, monster in pairs(lstMonsters) do
-        monster:draw(DEBUG_MODE)
-    end
+        for key, monster in pairs(lstMonsters) do
+            monster:draw(DEBUG_MODE)
+        end
 
-    player_Obj:draw(DEBUG_MODE)
+        player_Obj:draw(DEBUG_MODE)
 
-    if DEBUG_MODE then
-        love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), 10, 10)
+        if DEBUG_MODE then
+            love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), 10, 10)
+        end
     end
 end
 
 
 function love.keypressed(key)
-    if key == "escape" then
-        love.event.quit()
+    if gameState == "game" then
+        -- Check if the player have to change side (left, right, up, down)
+        player_Obj:SwitchSidePosition(key)
     end
-
-    -- Check if the player have to change side (left, right, up, down)
-    player_Obj:SwitchSidePosition(key)
 
 
     if DEBUG_MODE then
+        if key == "escape" then
+            love.event.quit()
+        end
+
         -- Create tentacles
         if key == "t" then
             for i = 1, 50 do
@@ -74,11 +89,33 @@ end
 function InitGame()
     map_Obj = MAP.NewMap(xScreenSize, yScreenSize)
 
-    player_Obj = PLAYER.NewPlayer(map_Obj, xScreenSize, yScreenSize)
+    player_Obj = PLAYER.NewPlayer(map_Obj, xScreenSize, yScreenSize, VILLAGE_LIFE, PLAYER_LIFE)
     player_Obj:InitPlayer(0, yScreenSize/2, "idle/p1_walk", 11)
 
     monster_Obj = MONSTER.NewMonster(map_Obj, xScreenSize, yScreenSize)
-    monster_Obj:InitMonster(xScreenSize - map_Obj.TILE_WIDTH*2, map_Obj.TILE_HEIGHT*2, "monster_background", 1)
+    monster_Obj:InitMonster(xScreenSize - map_Obj.TILE_WIDTH*2, map_Obj.TILE_HEIGHT*2, "monster_background", 1, math.random(MONSTER_MIN_LIFE, MONSTER_MAX_LIFE))
     table.insert(lstMonsters, monster_Obj)
+
+    gameState = "game"
 end
 
+
+function CheckforGameOver()
+    if player_Obj.life <= 0 or player_Obj.villageLife <= 0 then
+        gameState = "gameover"
+    end
+end
+
+function CheckforVictory()
+    local monsterDeadNumber = 0
+
+    for key, monster in pairs(lstMonsters) do
+        if monster.life <= 0 then
+            monsterDeadNumber = monsterDeadNumber + 1
+        end
+    end
+
+    if monsterDeadNumber == #lstMonsters then
+        gameState = "victory"
+    end
+end

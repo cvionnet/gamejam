@@ -34,7 +34,7 @@ function BULLET.NewBullet(pMapObject)
 
         love.graphics.draw(self.images[math.floor(self.frame)], self.x, self.y, math.rad(self.rotation), self.sx, self.sy)  --, self.flip, 1) --, self.w/2, self.h-6) -- player.h/2)
 
-        -- DEBUG - draw player box
+        -- DEBUG
         if DEBUG_MODE == true then
             love.graphics.setColor(1,0,0)
             love.graphics.rectangle("line", self.x, self.y, self.w, self.h)
@@ -141,20 +141,6 @@ function BULLET.NewBullet(pMapObject)
         end
 
         return false
-    end
-
---------------------------------------------------------------------------------------------------------
-
-    -- If a bullet go outside the screen, it hit the village
-    function myBullet:HitVillage(pPlayerObject)
-        pPlayerObject.villageLife = pPlayerObject.villageLife - 1
-    end
-
-
-    -- If a bullet touch the tentacle, reduce its life
-    function myBullet:HitTentacle(pTentacleObject)
-        pTentacleObject.life = pTentacleObject.life - 1
-        print(pTentacleObject.life)
     end
 
 --------------------------------------------------------------------------------------------------------

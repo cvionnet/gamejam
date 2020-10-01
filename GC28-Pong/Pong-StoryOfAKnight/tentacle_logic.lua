@@ -3,6 +3,10 @@ local TENTACLE = {}
 local BULLET = require("bullet_logic")
 
 local FRAME_PER_SECOND = 24
+local TIME_MIN_SHOOT_BULLET = 5
+local TIME_MAX_SHOOT_BULLET = 10
+local MIN_LIFE = 2
+local MAX_LIFE = 5
 
 
 function TENTACLE.NewTentacle(pMapObject, pXScreenSize, pYScreenSize)
@@ -54,17 +58,16 @@ function TENTACLE.NewTentacle(pMapObject, pXScreenSize, pYScreenSize)
         -- Shoot a new bullet
         self.timeToShoot = self.timeToShoot - 0.1
         if self.timeToShoot < 0 then
-            self.timeToShoot = math.random(5, 10)
+            self.timeToShoot = math.random(TIME_MIN_SHOOT_BULLET, TIME_MAX_SHOOT_BULLET)
             self:ShootBullet()
         end
-
-        -- Collisions
-        --self:CheckWallCollision(oldX, oldY)
     end
 
 --------------------------------------------------------------------------------------------------------
 
     function myTentacle:InitTentacle(pX, pY, pAnimationFile, pAnimationNumberFrames)
+        self.lstBullet = {}
+
         self.x = pX
         self.y = pY
         self.sx = 1
@@ -72,7 +75,8 @@ function TENTACLE.NewTentacle(pMapObject, pXScreenSize, pYScreenSize)
         self.rotation = 90
         self.mapSidePosition = "right"
 
-        self.timeToShoot = math.random(0.2, 1)
+        self.life = math.random(MIN_LIFE, MAX_LIFE)
+        self.timeToShoot = math.random(TIME_MIN_SHOOT_BULLET, TIME_MAX_SHOOT_BULLET)
 
         self:LoadAnimation(pAnimationFile, pAnimationNumberFrames)
     end

@@ -6,7 +6,7 @@ local STOP_PLAYER = .5  --.01
 local PLAYER_FEET_HEIGHT = 6
 
 
-function PLAYER.NewPlayer(pMapObject, pXScreenSize, pYScreenSize)
+function PLAYER.NewPlayer(pMapObject, pXScreenSize, pYScreenSize, pVillageLife, pPlayerLife)
     -- PROPERTIES
     local myPlayer = {}
 
@@ -31,8 +31,9 @@ function PLAYER.NewPlayer(pMapObject, pXScreenSize, pYScreenSize)
     myPlayer.images = {}
     myPlayer.frame = 1
 
-    myPlayer.life = 0
-    myPlayer.villageLife = 0
+    myPlayer.life = pPlayerLife
+    myPlayer.villageLife = pVillageLife
+
     myPlayer.bulletTime = 0
     myPlayer.shieldColor = nil
 
@@ -41,6 +42,7 @@ function PLAYER.NewPlayer(pMapObject, pXScreenSize, pYScreenSize)
     function myPlayer:draw(DEBUG_MODE)
 
         love.graphics.draw(self.images[math.floor(self.frame)], self.x, self.y)  --, 0, self.flip, 1) --, self.w/2, self.h-6) -- player.h/2)
+        love.graphics.print("Villageois : "..tostring(self.villageLife), 10, 30)
 
         -- DEBUG - draw player box
         if DEBUG_MODE == true then
