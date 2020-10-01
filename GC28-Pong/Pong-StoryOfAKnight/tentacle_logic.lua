@@ -3,8 +3,8 @@ local TENTACLE = {}
 local BULLET = require("bullet_logic")
 
 local FRAME_PER_SECOND = 24
-local TIME_MIN_SHOOT_BULLET = 5
-local TIME_MAX_SHOOT_BULLET = 10
+local TIME_MIN_SHOOT_BULLET = 0.5
+local TIME_MAX_SHOOT_BULLET = 1
 local MIN_LIFE = 2
 local MAX_LIFE = 5
 
@@ -56,7 +56,7 @@ function TENTACLE.NewTentacle(pMapObject, pXScreenSize, pYScreenSize)
         self:PlayAnimation(dt)
 
         -- Shoot a new bullet
-        self.timeToShoot = self.timeToShoot - 0.1
+        self.timeToShoot = self.timeToShoot - 1 * dt
         if self.timeToShoot < 0 then
             self.timeToShoot = math.random(TIME_MIN_SHOOT_BULLET, TIME_MAX_SHOOT_BULLET)
             self:ShootBullet()

@@ -93,7 +93,7 @@ function InitGame()
     player_Obj:InitPlayer(0, yScreenSize/2, "idle/p1_walk", 11)
 
     monster_Obj = MONSTER.NewMonster(map_Obj, xScreenSize, yScreenSize)
-    monster_Obj:InitMonster(xScreenSize - map_Obj.TILE_WIDTH*2, map_Obj.TILE_HEIGHT*2, "monster_background", 1, math.random(MONSTER_MIN_LIFE, MONSTER_MAX_LIFE))
+    monster_Obj:InitMonster("monster_background", 1, math.random(MONSTER_MIN_LIFE, MONSTER_MAX_LIFE))
     table.insert(lstMonsters, monster_Obj)
 
     gameState = "game"

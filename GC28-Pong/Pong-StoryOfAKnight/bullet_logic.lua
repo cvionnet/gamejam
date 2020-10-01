@@ -26,7 +26,6 @@ function BULLET.NewBullet(pMapObject)
     myBullet.frame = 1
 
     myBullet.type = 0
-    myBullet.speedShoot = 0
 
 --------------------------------------------------------------------------------------------------------
     -- METHODS
