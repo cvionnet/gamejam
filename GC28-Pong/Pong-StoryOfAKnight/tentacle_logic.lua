@@ -1,12 +1,7 @@
 local TENTACLE = {}
 
 local BULLET = require("bullet_logic")
-
-local FRAME_PER_SECOND = 24
-local TIME_MIN_SHOOT_BULLET = 0.5
-local TIME_MAX_SHOOT_BULLET = 1
-local MIN_LIFE = 2
-local MAX_LIFE = 5
+require("param")
 
 
 function TENTACLE.NewTentacle(pMapObject, pXScreenSize, pYScreenSize)
@@ -75,7 +70,7 @@ function TENTACLE.NewTentacle(pMapObject, pXScreenSize, pYScreenSize)
         self.rotation = 90
         self.mapSidePosition = "right"
 
-        self.life = math.random(MIN_LIFE, MAX_LIFE)
+        self.life = math.random(TENTACLE_MIN_LIFE, TENTACLE_MAX_LIFE)
         self.timeToShoot = math.random(TIME_MIN_SHOOT_BULLET, TIME_MAX_SHOOT_BULLET)
 
         self:LoadAnimation(pAnimationFile, pAnimationNumberFrames)

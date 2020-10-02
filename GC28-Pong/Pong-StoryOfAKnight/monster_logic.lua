@@ -1,14 +1,7 @@
 local MONSTER = {}
 
 local TENTACLE = require("tentacle_logic")
-
-local FRAME_PER_SECOND = 24
-local TIME_WARNING = 4
-local TIME_MIN_CREATE_TENTACLE = 1 --10
-local TIME_MAX_CREATE_TENTACLE = 5 --20
-local MAX_TENTACLE = 2 --10
-
-local fontBig = love.graphics.newFont("fonts/Gameplay.ttf", 70)
+require("param")
 
 
 function MONSTER.NewMonster(pMapObject, pXScreenSize, pYScreenSize)
@@ -45,6 +38,8 @@ function MONSTER.NewMonster(pMapObject, pXScreenSize, pYScreenSize)
     myMonster.timeToNewTentacle = 0
     myMonster.timeWarning = TIME_WARNING
 
+    myMonster.lstMessageVillageHit = {}         -- to display a message when the village is hitten
+
 --------------------------------------------------------------------------------------------------------
     -- METHODS
     function myMonster:draw(DEBUG_MODE)
@@ -64,6 +59,9 @@ function MONSTER.NewMonster(pMapObject, pXScreenSize, pYScreenSize)
                     bullet:draw(DEBUG_MODE)
                 end
             end
+
+            -- Message when the village is hitten
+            self:drawMessageHitVillage()
         end
     end
 
@@ -98,7 +96,7 @@ function MONSTER.NewMonster(pMapObject, pXScreenSize, pYScreenSize)
                     -- Bullet collisions
                     if self:CheckBulletWithPlayerCollision(bullet, pPlayerObject) == false then     -- with the player
                         if self:CheckBulletWithOutsideCollision(bullet, pPlayerObject) then         -- outside the screen
-                            self:HitVillage(pPlayerObject)
+                            self:HitVillage(pPlayerObject, bullet)
                             table.remove(tentacle.lstBullet, bulletID)        -- delete the bullet
                         elseif self:CheckBulletWithTentacleCollision(bullet, tentacle) then         -- with a tentacle
                             isTentacleToDelete = self:HitTentacle(tentacle)
@@ -140,6 +138,8 @@ function MONSTER.NewMonster(pMapObject, pXScreenSize, pYScreenSize)
                 end
             end
 
+            -- Message when the village is hitten
+            self:updateMessageHitVillage(dt)
         end
     end
 
@@ -229,7 +229,29 @@ function MONSTER.NewMonster(pMapObject, pXScreenSize, pYScreenSize)
             end
         end
     end
- 
+
+--------------------------------------------------------------------------------------------------------
+
+    -- Display a message where the bullet hit the village
+    function myMonster:drawMessageHitVillage()
+        for key, message in pairs(self.lstMessageVillageHit) do
+            love.graphics.print(message.message, fontBig, message.x , message.y)
+        end
+    end
+
+    -- Display a message where the bullet hit the village
+    function myMonster:updateMessageHitVillage(dt)
+        for i = #self.lstMessageVillageHit, 1, -1 do
+            local message = self.lstMessageVillageHit[i]
+
+            -- When the time is up, delete the message from the list
+            message.ttl = message.ttl - 5 * dt
+            if message.ttl < 0 then
+                table.remove(self.lstMessageVillageHit, i)
+            end
+        end
+    end
+
 --------------------------------------------------------------------------------------------------------
 
     function myMonster:InitMonster(pAnimationFile, pAnimationNumberFrames, pMonsterLife)
@@ -317,15 +339,25 @@ function MONSTER.NewMonster(pMapObject, pXScreenSize, pYScreenSize)
 
 
     -- If a bullet go outside the screen, it hit the village
-    function myMonster:HitVillage(pPlayerObject)
+    function myMonster:HitVillage(pPlayerObject, pBulletObject)
         pPlayerObject.villageLife = pPlayerObject.villageLife - 1
 
-        -- If the village has been eradicated
-        if pPlayerObject.villageLife <= 0 then
-            return true
-        end
+        -- Display a message where the bullet hit the village
+        local myMessage = {}
+        if pBulletObject.mapSidePosition == "up" then
 
-        return false
+        elseif pBulletObject.mapSidePosition == "down" then
+
+        elseif pBulletObject.mapSidePosition == "left" then
+
+        elseif pBulletObject.mapSidePosition == "right" then
+            myMessage.x = pBulletObject.x + math.random(self.map_Object.TILE_WIDTH*3, self.map_Object.TILE_WIDTH*4)
+            myMessage.y = pBulletObject.y - fontBig:getHeight()/2
+            myMessage.message = "OUCH !"
+            myMessage.ttl = TIME_DISPLAY_MESSAGE_VILLAGE
+
+            table.insert(self.lstMessageVillageHit, myMessage)
+        end
     end
 
 

@@ -1,6 +1,6 @@
 local BULLET = {}
 
-local FRAME_PER_SECOND = 24
+require("param")
 
 
 function BULLET.NewBullet(pMapObject)

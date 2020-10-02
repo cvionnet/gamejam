@@ -1,9 +1,6 @@
 local PLAYER = {}
 
-local FRAME_PER_SECOND = 24
-local GRAVITY = .9
-local STOP_PLAYER = .5  --.01
-local PLAYER_FEET_HEIGHT = 6
+require("param")
 
 
 function PLAYER.NewPlayer(pMapObject, pXScreenSize, pYScreenSize, pVillageLife, pPlayerLife)

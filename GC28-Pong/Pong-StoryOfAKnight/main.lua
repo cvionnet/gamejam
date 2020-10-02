@@ -6,17 +6,15 @@ if arg[#arg] == "-debug" then require("mobdebug").start() end   -- To debug step
 local MAP = require("map_logic")
 local PLAYER = require("player_logic")
 local MONSTER = require("monster_logic")
+require("param")
 
-local PLAYER_LIFE = 10
-local VILLAGE_LIFE = 100
-local MONSTER_MIN_LIFE = 50
-local MONSTER_MAX_LIFE = 80
 
 local gameState = ""            -- game / gameover / victory
 
 local lstMonsters = {}
 
-local DEBUG_MODE = true
+local bulletTimeMode = false
+local bulletTimer = 0.5
 
 --------------------------------------------------------------------------------------------------------
 
@@ -36,8 +34,19 @@ function love.update(dt)
     if gameState == "game" then
         player_Obj:update(dt)
 
-        for key, monster in pairs(lstMonsters) do
-            monster:update(dt, player_Obj)
+
+        if bulletTimeMode then
+            bulletTimer = bulletTimer - BULLET_TIME_SPEED * dt
+            if bulletTimer < 0 then
+                bulletTimer = 0.5
+                for key, monster in pairs(lstMonsters) do
+                    monster:update(dt, player_Obj)
+                end
+            end
+        else
+            for key, monster in pairs(lstMonsters) do
+                monster:update(dt, player_Obj)
+            end
         end
 
         CheckforGameOver()
@@ -59,6 +68,8 @@ function love.draw()
         if DEBUG_MODE then
             love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), 10, 10)
         end
+    elseif gameState == "gameover" then
+        love.graphics.print("GAME OVER", xScreenSize/2, yScreenSize/2)
     end
 end
 
@@ -81,6 +92,16 @@ function love.keypressed(key)
                 monster_Obj:CreateTentacle()
             end
         end
+
+        -- Activate / desactivate bullet time mode
+        if key == "b" then
+            if bulletTimeMode then
+                bulletTimeMode = false
+            else
+                bulletTimeMode = true
+            end
+        end
+
     end
 end
 
