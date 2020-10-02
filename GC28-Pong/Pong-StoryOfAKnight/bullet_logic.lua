@@ -3,7 +3,7 @@ local BULLET = {}
 require("param")
 
 
-function BULLET.NewBullet(pMapObject)
+function BULLET.NewBullet(pMapObject, pXScreenSize, pYScreenSize)
     -- PROPERTIES
     local myBullet = {}
 
@@ -16,6 +16,9 @@ function BULLET.NewBullet(pMapObject)
     myBullet.sx = 0    -- used to flip the sprite
     myBullet.sy = 0
     myBullet.rotation = 0
+
+    myBullet.xScreenSize = pXScreenSize
+    myBullet.yScreenSize = pYScreenSize
 
     myBullet.vx = 0
     myBullet.vy = 0
@@ -35,8 +38,12 @@ function BULLET.NewBullet(pMapObject)
 
         -- DEBUG
         if DEBUG_MODE == true then
+            --love.graphics.setColor(1,0,0)
+            --love.graphics.rectangle("line", self.x, self.y, self.w, self.h)
+            --love.graphics.setColor(1,1,1)
+
             love.graphics.setColor(1,0,0)
-            love.graphics.rectangle("line", self.x, self.y, self.w, self.h)
+            love.graphics.circle("fill", self.x, self.y, 5)
             love.graphics.setColor(1,1,1)
 
             love.graphics.print("x:"..tostring(math.floor(self.x)).." / y:"..tostring(math.floor(self.y)), self.x, self.y-10)
@@ -55,17 +62,15 @@ function BULLET.NewBullet(pMapObject)
 
 --------------------------------------------------------------------------------------------------------
 
-    function myBullet:InitBullet(pX, pY, pAnimationFile, pAnimationNumberFrames, pVx, pVy)
+    function myBullet:InitBullet(pX, pY, pAnimationFile, pAnimationNumberFrames, pVx, pVy, pTentacleSidePosition)
         self.x = pX
         self.y = pY
         self.vx = pVx
         self.vy = pVy
-        self.sx = 1
-        self.sy = -1
-        self.rotation = 90
-        self.mapSidePosition = "right"
+        self.mapSidePosition = pTentacleSidePosition
 
         self:LoadAnimation(pAnimationFile, pAnimationNumberFrames)
+        self:SetSidePosition()
     end
 
 
@@ -95,14 +100,28 @@ function BULLET.NewBullet(pMapObject)
     -- Check collision with the player
     function myBullet:CheckPlayerCollision(pPlayerObject)
         -- Check if bullet coordinates are the same as the player
-        if self.mapSidePosition == "up" or self.mapSidePosition == "down" then
-
+        if self.mapSidePosition == "up" then
+            if (self.y >= pPlayerObject.y) and (self.x >= pPlayerObject.x and self.x <= pPlayerObject.x + pPlayerObject.w) then
+                self.vy = self.vy * -1
+                self.y = pPlayerObject.y
+                return true
+            end
+        elseif self.mapSidePosition == "down" then
+            if (self.y <= pPlayerObject.y + pPlayerObject.h) and (self.x >= pPlayerObject.x and self.x <= pPlayerObject.x + pPlayerObject.w) then
+                self.vy = self.vy * -1
+                self.y = pPlayerObject.y + pPlayerObject.h
+                return true
+            end
         elseif self.mapSidePosition == "left" then
-
-        elseif self.mapSidePosition == "right" then
-            if (self.x <= pPlayerObject.x + self.map_Object.TILE_WIDTH) and (self.y >= pPlayerObject.y and self.y <= pPlayerObject.y + self.map_Object.TILE_HEIGHT) then
+            if (self.x >= pPlayerObject.x) and (self.y >= pPlayerObject.y and self.y <= pPlayerObject.y + pPlayerObject.h) then
                 self.vx = self.vx * -1
-                self.x = pPlayerObject.x + self.map_Object.TILE_WIDTH
+                self.x = pPlayerObject.x
+                return true
+            end
+        elseif self.mapSidePosition == "right" then
+            if (self.x <= pPlayerObject.x + pPlayerObject.w) and (self.y >= pPlayerObject.y and self.y <= pPlayerObject.y + pPlayerObject.h) then
+                self.vx = self.vx * -1
+                self.x = pPlayerObject.x + pPlayerObject.w
                 return true
             end
         end
@@ -110,12 +129,21 @@ function BULLET.NewBullet(pMapObject)
         return false
     end
 
+
     -- Check if the bullet go outside the screen
     function myBullet:CheckOutboundCollision()
-        if self.mapSidePosition == "up" or self.mapSidePosition == "down" then
-
+        if self.mapSidePosition == "up" then
+            if self.y >= self.yScreenSize then
+                return true
+            end
+        elseif self.mapSidePosition == "down" then
+            if self.y <= 0 then
+                return true
+            end
         elseif self.mapSidePosition == "left" then
-
+            if self.x >= self.xScreenSize then
+                return true
+            end
         elseif self.mapSidePosition == "right" then
             if self.x <= 0 then
                 return true
@@ -126,13 +154,22 @@ function BULLET.NewBullet(pMapObject)
     end
 
 
-    -- Check if the bullet touch the tentacle
+    -- Check if the bullet touch the tentacle  
+    -- ! direction is inverted, the bullet has rebounded on the player
     function myBullet:CheckTentaculeCollision(pTentacleObject)
         -- Check if bullet coordinates are the same as the tentacle
-        if self.mapSidePosition == "up" or self.mapSidePosition == "down" then
-
+        if self.mapSidePosition == "up" then
+            if self.y <= pTentacleObject.y then
+                return true
+            end
+        elseif self.mapSidePosition == "down" then
+            if self.y >= pTentacleObject.y then
+                return true
+            end
         elseif self.mapSidePosition == "left" then
-
+            if self.x <= pTentacleObject.x then
+                return true
+            end
         elseif self.mapSidePosition == "right" then
             if self.x >= pTentacleObject.x then
                 return true
@@ -140,6 +177,29 @@ function BULLET.NewBullet(pMapObject)
         end
 
         return false
+    end
+
+--------------------------------------------------------------------------------------------------------
+
+    -- Set bullet side position
+    function myBullet:SetSidePosition()
+        if self.mapSidePosition == "up" then
+            self.sx = -1
+            self.sy = 1
+            self.rotation = 180
+        elseif self.mapSidePosition == "down" then
+            self.sx = -1
+            self.sy = -1
+            self.rotation = 180
+        elseif self.mapSidePosition == "left" then
+            self.sx = 1
+            self.sy = 1
+            self.rotation = 90
+        elseif self.mapSidePosition == "right" then
+            self.sx = 1
+            self.sy = -1
+            self.rotation = 90
+        end
     end
 
 --------------------------------------------------------------------------------------------------------

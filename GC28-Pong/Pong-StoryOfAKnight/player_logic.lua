@@ -43,8 +43,12 @@ function PLAYER.NewPlayer(pMapObject, pXScreenSize, pYScreenSize, pVillageLife, 
 
         -- DEBUG - draw player box
         if DEBUG_MODE == true then
+            --love.graphics.setColor(1,0,0)
+            --love.graphics.rectangle("line", self.x, self.y, self.w, self.h)
+            --love.graphics.setColor(1,1,1)
+            
             love.graphics.setColor(1,0,0)
-            love.graphics.rectangle("line", self.x, self.y, self.w, self.h)
+            love.graphics.circle("fill", self.x, self.y, 5)
             love.graphics.setColor(1,1,1)
 
             --love.graphics.print("Col:"..tostring(self.col).." / Line:"..tostring(self.line), self.x, self.y-10)

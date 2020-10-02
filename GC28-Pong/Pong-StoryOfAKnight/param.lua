@@ -1,6 +1,4 @@
 
-fontBig = love.graphics.newFont("fonts/Gameplay.ttf", 70)
-
 
 -- MAIN
 DEBUG_MODE = true
@@ -15,6 +13,8 @@ BULLET_TIME_SPEED = 15
 -- COMMON
 FRAME_PER_SECOND = 24
 
+fontBig = love.graphics.newFont("fonts/Gameplay.ttf", 70)
+
 
 -- PLAYER
 GRAVITY = .9
@@ -23,11 +23,12 @@ PLAYER_FEET_HEIGHT = 6
 
 
 -- MONSTER
-TIME_WARNING = 4
+TIME_WARNING = 1  --4
 TIME_MIN_CREATE_TENTACLE = 1 --10
-TIME_MAX_CREATE_TENTACLE = 5 --20
-MAX_TENTACLE = 2 --10
+TIME_MAX_CREATE_TENTACLE = 1 --20
+MAX_TENTACLE = 1 --10
 TIME_DISPLAY_MESSAGE_VILLAGE = 5
+SIDE_POSITIONS = {"up", "right", "down", "left"}     -- 4th positions on the screen
 
 
 -- TENTACLE

@@ -20,7 +20,7 @@ local bulletTimer = 0.5
 
 function love.load()
     math.randomseed(love.timer.getTime())
-    love.window.setMode(1024, 768, {fullscreen=false, vsync=true})
+    love.window.setMode(768, 768, {fullscreen=false, vsync=true})
     --love.keyboard.setKeyRepeat(true)
 
     xScreenSize = love.graphics.getWidth()
@@ -102,6 +102,11 @@ function love.keypressed(key)
             end
         end
 
+        -- force monster position
+        if key == "x" then
+            monster_Obj:SetSidePosition("left")
+            monster_Obj.status = "warning"
+        end
     end
 end
 

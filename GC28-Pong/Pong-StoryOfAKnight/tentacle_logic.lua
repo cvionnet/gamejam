@@ -38,9 +38,12 @@ function TENTACLE.NewTentacle(pMapObject, pXScreenSize, pYScreenSize)
     function myTentacle:draw(DEBUG_MODE)
         love.graphics.draw(self.images[math.floor(self.frame)], self.x, self.y, math.rad(self.rotation), self.sx, self.sy)  --, self.flip, 1) --, self.w/2, self.h-6) -- player.h/2)
 
-
         -- DEBUG
         if DEBUG_MODE == true then
+            love.graphics.setColor(1,0,0)
+            love.graphics.circle("fill", self.x, self.y, 5)
+            love.graphics.setColor(1,1,1)
+
             love.graphics.print("bullets:"..tostring(#self.lstBullet), self.x-30, self.y)
         end
     end
@@ -60,20 +63,18 @@ function TENTACLE.NewTentacle(pMapObject, pXScreenSize, pYScreenSize)
 
 --------------------------------------------------------------------------------------------------------
 
-    function myTentacle:InitTentacle(pX, pY, pAnimationFile, pAnimationNumberFrames)
+    function myTentacle:InitTentacle(pX, pY, pAnimationFile, pAnimationNumberFrames, pMonsterSidePosition)
         self.lstBullet = {}
 
         self.x = pX
         self.y = pY
-        self.sx = 1
-        self.sy = -1
-        self.rotation = 90
-        self.mapSidePosition = "right"
+        self.mapSidePosition = pMonsterSidePosition
 
         self.life = math.random(TENTACLE_MIN_LIFE, TENTACLE_MAX_LIFE)
         self.timeToShoot = math.random(TIME_MIN_SHOOT_BULLET, TIME_MAX_SHOOT_BULLET)
 
         self:LoadAnimation(pAnimationFile, pAnimationNumberFrames)
+        self:SetSidePosition()
     end
 
 
@@ -102,22 +103,56 @@ function TENTACLE.NewTentacle(pMapObject, pXScreenSize, pYScreenSize)
 
     -- Create a new bullet
     function myTentacle:ShootBullet()
+        local xTentacle, yTentacle = 0, 0
         local vxTentacle, vyTentacle = 0, 0
 
-        if  self.mapSidePosition == "right" then
+        if self.mapSidePosition == "up" then
+            xTentacle = self.x + self.w/2
+            yTentacle = self.y + 5
+            vxTentacle = 0
+            vyTentacle = math.random(300, 200)
+        elseif self.mapSidePosition == "down" then
+            xTentacle = self.x + self.w/2
+            yTentacle = self.y - 5
+            vxTentacle = 0
+            vyTentacle = math.random(-300, -200)
+        elseif self.mapSidePosition == "left" then
+            xTentacle = self.x + 5-- + 16                 -- 16px = bullet sprite size
+            yTentacle = self.y + self.w/2
+            vxTentacle = math.random(300, 200)
+            vyTentacle = 0
+        elseif self.mapSidePosition == "right" then
+            xTentacle = self.x - 5
+            yTentacle = self.y + self.w/2
             vxTentacle = math.random(-300, -200)
             vyTentacle = 0
         end
 
-        local myBullet = BULLET.NewBullet(self.map_Object)
-        myBullet:InitBullet(self.x - 30, self.y + self.w/2, "monster_bullet", 1, vxTentacle, vyTentacle)
+        local myBullet = BULLET.NewBullet(self.map_Object, self.xScreenSize, self.yScreenSize)
+        myBullet:InitBullet(xTentacle, yTentacle, "monster_bullet", 1, vxTentacle, vyTentacle, self.mapSidePosition)
         table.insert(self.lstBullet, myBullet)
     end
 
 
-    -- Change player side position
-    function myTentacle:SwitchSidePosition(key)
-
+    -- Set tentacle side position
+    function myTentacle:SetSidePosition()
+        if self.mapSidePosition == "up" then
+            self.sx = -1
+            self.sy = 1
+            self.rotation = 180
+        elseif self.mapSidePosition == "down" then
+            self.sx = -1
+            self.sy = -1
+            self.rotation = 180
+        elseif self.mapSidePosition == "left" then
+            self.sx = 1
+            self.sy = 1
+            self.rotation = 90
+        elseif self.mapSidePosition == "right" then
+            self.sx = 1
+            self.sy = -1
+            self.rotation = 90
+        end
     end
 
 --------------------------------------------------------------------------------------------------------

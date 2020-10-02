@@ -13,7 +13,23 @@ function MAP.NewMap(pXScreenSize, pYScreenSize)
     myMap.colNumber = pXScreenSize / myMap.TILE_WIDTH
     myMap.lineNumber = pYScreenSize / myMap.TILE_HEIGHT
 
-    myMap.mapWalls = {}     -- map the walls of the room (12 x 16 cells of 64px each)
+    -- 768 x 768
+    myMap.mapWalls = {}     -- map the walls of the room (12 x 12 cells of 64px each)
+    myMap.mapWalls[1]  = {1,1,0,0,0,0,0,0,0,0,1,1}
+    myMap.mapWalls[2]  = {1,1,0,0,0,0,0,0,0,0,1,1}
+    myMap.mapWalls[3]  = {0,0,0,0,0,0,0,0,0,0,0,0}
+    myMap.mapWalls[4]  = {0,0,0,0,0,0,0,0,0,0,0,0}
+    myMap.mapWalls[5]  = {0,0,0,0,0,0,0,0,0,0,0,0}
+    myMap.mapWalls[6]  = {0,0,0,0,0,0,0,0,0,0,0,0}
+    myMap.mapWalls[7]  = {0,0,0,0,0,0,0,0,0,0,0,0}
+    myMap.mapWalls[8]  = {0,0,0,0,0,0,0,0,0,0,0,0}
+    myMap.mapWalls[9]  = {0,0,0,0,0,0,0,0,0,0,0,0}
+    myMap.mapWalls[10] = {0,0,0,0,0,0,0,0,0,0,0,0}
+    myMap.mapWalls[11] = {1,1,0,0,0,0,0,0,0,0,1,1}
+    myMap.mapWalls[12] = {1,1,0,0,0,0,0,0,0,0,1,1}
+
+    -- 1024 x 768
+--[[     myMap.mapWalls = {}     -- map the walls of the room (12 x 16 cells of 64px each)
     myMap.mapWalls[1]  = {1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1}
     myMap.mapWalls[2]  = {1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1}
     myMap.mapWalls[3]  = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
@@ -26,8 +42,9 @@ function MAP.NewMap(pXScreenSize, pYScreenSize)
     myMap.mapWalls[10] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
     myMap.mapWalls[11] = {1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1}
     myMap.mapWalls[12] = {1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1}
+ ]]
 
---------------------------------------------------------------------------------------------------------
+ --------------------------------------------------------------------------------------------------------
     -- METHODS
     function myMap:draw(DEBUG_MODE)
         -- Display tiles
