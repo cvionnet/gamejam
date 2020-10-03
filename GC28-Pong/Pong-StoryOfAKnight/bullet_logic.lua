@@ -32,7 +32,7 @@ function BULLET.NewBullet(pMapObject, pXScreenSize, pYScreenSize)
 
 --------------------------------------------------------------------------------------------------------
     -- METHODS
-    function myBullet:draw(DEBUG_MODE)
+    function myBullet:draw()
 
         love.graphics.draw(self.images[math.floor(self.frame)], self.x, self.y, math.rad(self.rotation), self.sx, self.sy)  --, self.flip, 1) --, self.w/2, self.h-6) -- player.h/2)
 
@@ -103,24 +103,28 @@ function BULLET.NewBullet(pMapObject, pXScreenSize, pYScreenSize)
         if self.mapSidePosition == "up" then
             if (self.y >= pPlayerObject.y) and (self.x >= pPlayerObject.x and self.x <= pPlayerObject.x + pPlayerObject.w) then
                 self.vy = self.vy * -1
+                self.sy = self.sy * -1      -- invert the bullet image
                 self.y = pPlayerObject.y
                 return true
             end
         elseif self.mapSidePosition == "down" then
             if (self.y <= pPlayerObject.y + pPlayerObject.h) and (self.x >= pPlayerObject.x and self.x <= pPlayerObject.x + pPlayerObject.w) then
                 self.vy = self.vy * -1
+                self.sy = self.sy * -1      -- invert the bullet image
                 self.y = pPlayerObject.y + pPlayerObject.h
                 return true
             end
         elseif self.mapSidePosition == "left" then
             if (self.x >= pPlayerObject.x) and (self.y >= pPlayerObject.y and self.y <= pPlayerObject.y + pPlayerObject.h) then
                 self.vx = self.vx * -1
+                self.sy = self.sy * -1      -- invert the bullet image
                 self.x = pPlayerObject.x
                 return true
             end
         elseif self.mapSidePosition == "right" then
             if (self.x <= pPlayerObject.x + pPlayerObject.w) and (self.y >= pPlayerObject.y and self.y <= pPlayerObject.y + pPlayerObject.h) then
                 self.vx = self.vx * -1
+                self.sy = self.sy * -1      -- invert the bullet image
                 self.x = pPlayerObject.x + pPlayerObject.w
                 return true
             end
@@ -154,7 +158,7 @@ function BULLET.NewBullet(pMapObject, pXScreenSize, pYScreenSize)
     end
 
 
-    -- Check if the bullet touch the tentacle  
+    -- Check if the bullet touch the tentacle
     -- ! direction is inverted, the bullet has rebounded on the player
     function myBullet:CheckTentaculeCollision(pTentacleObject)
         -- Check if bullet coordinates are the same as the tentacle

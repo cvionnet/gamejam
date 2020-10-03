@@ -4,12 +4,13 @@ local TENTACLE = require("tentacle_logic")
 require("param")
 
 
-function MONSTER.NewMonster(pMapObject, pXScreenSize, pYScreenSize)
+function MONSTER.NewMonster(pId, pMapObject, pXScreenSize, pYScreenSize)
     -- PROPERTIES
     local myMonster = {}
 
     myMonster.map_Object = pMapObject
 
+    myMonster.id = pId
     myMonster.x = 0
     myMonster.y = 0
     myMonster.h = 0
@@ -37,12 +38,13 @@ function MONSTER.NewMonster(pMapObject, pXScreenSize, pYScreenSize)
 
     myMonster.timeToNewTentacle = 0
     myMonster.timeWarning = TIME_WARNING
+    myMonster.timeHurtPlayer = TIME_HURT_PLAYER
 
     myMonster.lstMessageVillageHit = {}         -- to display a message when the village is hitten
 
 --------------------------------------------------------------------------------------------------------
     -- METHODS
-    function myMonster:draw(DEBUG_MODE)
+    function myMonster:draw()
         -- Display a warning countdown
         if self.status == "warning" then
             self:drawWarning()
@@ -52,33 +54,43 @@ function MONSTER.NewMonster(pMapObject, pXScreenSize, pYScreenSize)
 
             -- Tentacles
             for key, tentacle in pairs(self.lstTentacles) do
-                tentacle:draw(DEBUG_MODE)
+                tentacle:draw()
 
                 -- Bullets
                 for key1, bullet in pairs(tentacle.lstBullet) do
-                    bullet:draw(DEBUG_MODE)
+                    bullet:draw()
                 end
             end
 
             -- Message when the village is hitten
             self:drawMessageHitVillage()
         end
+
+
+        -- DEBUG
+        if DEBUG_MODE == true then
+            love.graphics.setColor(1,0,0)
+            love.graphics.circle("fill", self.x, self.y, 5)
+            love.graphics.setColor(1,1,1)
+
+            love.graphics.print("x:"..tostring(math.floor(self.x)).." / y:"..tostring(math.floor(self.y)), self.x, self.y-10)
+        end
     end
 
 
-    function myMonster:update(dt, pPlayerObject)
+    function myMonster:update(dt, pPlayerObject, pNumberOfMonsters, pOtherMonsterPosition)
         -- Display a warning where the monster will appear
         if self.status == "warning" then
             self:updateWarning(dt)
         -- Move the monster on the field
         elseif self.status == "coming" then
-            self:updateComing(dt)
+            self:updateComing(dt, pPlayerObject)
         -- All actions when the monster fight
         elseif self.status == "fighting" then
             self:updateFighting(dt, pPlayerObject)
         -- Move the monster out of the field
         elseif self.status == "leaving" then
-            self:updateLeaving(dt)
+            self:updateLeaving(dt, pNumberOfMonsters, pOtherMonsterPosition)
         end
     end
 
@@ -110,10 +122,13 @@ function MONSTER.NewMonster(pMapObject, pXScreenSize, pYScreenSize)
 
 
     -- Move the monster on the field
-    function myMonster:updateComing(dt)
+    function myMonster:updateComing(dt, pPlayerObject)
         -- Move the monster
         self.x = self.x + self.vx * dt
         self.y = self.y + self.vy * dt
+
+        -- Check for a collision with the player
+        self:CheckPlayerCollision(dt, pPlayerObject)
 
         -- Check if final position is reached, and then set the monster to fighting mode
         if self.mapSidePosition == "up" then
@@ -148,6 +163,9 @@ function MONSTER.NewMonster(pMapObject, pXScreenSize, pYScreenSize)
         -- Monster animation
         self:PlayAnimation(dt)
 
+        -- Check for a collision with the player
+        self:CheckPlayerCollision(dt, pPlayerObject)
+
         -- Tentacles update
         for tentacleID = #self.lstTentacles, 1, -1 do
             local isTentacleToDelete = false
@@ -174,6 +192,9 @@ function MONSTER.NewMonster(pMapObject, pXScreenSize, pYScreenSize)
 
             -- If the tentacle is dead, remove all its bullets and remove the tentacle
             if isTentacleToDelete then
+                -- Hit the monster
+                self.life = self.life - 1
+
                 -- Delete its own bullets
                 for i = #tentacle.lstBullet, 1, -1 do
                     table.remove(tentacle.lstBullet, i)
@@ -215,7 +236,7 @@ function MONSTER.NewMonster(pMapObject, pXScreenSize, pYScreenSize)
 
 
     -- Move the monster out of the field
-    function myMonster:updateLeaving(dt)
+    function myMonster:updateLeaving(dt, pNumberOfMonsters, pOtherMonsterPosition)
         -- Move the monster
         self.x = self.x + self.vx * dt
         self.y = self.y + self.vy * dt
@@ -224,25 +245,25 @@ function MONSTER.NewMonster(pMapObject, pXScreenSize, pYScreenSize)
         if self.mapSidePosition == "up" then
             if self.y <= 0 then
                 self.vy = 0
-                self:SetSidePosition()
+                self:SetSidePosition("", pNumberOfMonsters, pOtherMonsterPosition)
                 self.status = "warning"
             end
         elseif self.mapSidePosition == "down" then
             if self.y >= yScreenSize then
                 self.vy = 0
-                self:SetSidePosition()
+                self:SetSidePosition("", pNumberOfMonsters, pOtherMonsterPosition)
                 self.status = "warning"
             end
         elseif self.mapSidePosition == "left" then
             if self.x <= 0 then
                 self.vx = 0
-                self:SetSidePosition()
+                self:SetSidePosition("", pNumberOfMonsters, pOtherMonsterPosition)
                 self.status = "warning"
             end
         elseif self.mapSidePosition == "right" then
             if self.x >= xScreenSize then
                 self.vx = 0
-                self:SetSidePosition()
+                self:SetSidePosition("", pNumberOfMonsters, pOtherMonsterPosition)
                 self.status = "warning"
             end
         end
@@ -272,7 +293,7 @@ function MONSTER.NewMonster(pMapObject, pXScreenSize, pYScreenSize)
 
 --------------------------------------------------------------------------------------------------------
 
-    function myMonster:InitMonster(pAnimationFile, pAnimationNumberFrames, pMonsterLife)
+    function myMonster:InitMonster(pAnimationFile, pAnimationNumberFrames, pMonsterLife, pMonsterSidePosition, pNumberOfMonsters, pOtherMonsterPosition)
         self.lstTentacles = {}
         self.lstBullet = {}
         self.createdTentacles = 0
@@ -283,7 +304,7 @@ function MONSTER.NewMonster(pMapObject, pXScreenSize, pYScreenSize)
         self.timeToNewTentacle = math.random(TIME_MIN_CREATE_TENTACLE, TIME_MAX_CREATE_TENTACLE)
 
         self:LoadAnimation(pAnimationFile, pAnimationNumberFrames)
-        self:SetSidePosition("right")
+        self:SetSidePosition(pMonsterSidePosition, pNumberOfMonsters, pOtherMonsterPosition)
     end
 
 
@@ -369,15 +390,15 @@ function MONSTER.NewMonster(pMapObject, pXScreenSize, pYScreenSize)
 
         if pBulletObject.mapSidePosition == "up" then
             myMessage.x = pBulletObject.x - fontBig:getHeight()/2
-            myMessage.y = pBulletObject.y - math.random(self.map_Object.TILE_WIDTH*3, self.map_Object.TILE_WIDTH*4)
+            myMessage.y = pBulletObject.y - math.random(self.map_Object.TILE_WIDTH*2, self.map_Object.TILE_WIDTH*4)
         elseif pBulletObject.mapSidePosition == "down" then
             myMessage.x = pBulletObject.x - fontBig:getHeight()/2
-            myMessage.y = pBulletObject.y + math.random(self.map_Object.TILE_WIDTH*3, self.map_Object.TILE_WIDTH*4)
+            myMessage.y = pBulletObject.y + math.random(self.map_Object.TILE_WIDTH*2, self.map_Object.TILE_WIDTH*4)
         elseif pBulletObject.mapSidePosition == "left" then
-            myMessage.x = pBulletObject.x - math.random(self.map_Object.TILE_WIDTH*3, self.map_Object.TILE_WIDTH*4)
+            myMessage.x = pBulletObject.x - math.random(self.map_Object.TILE_WIDTH*2, self.map_Object.TILE_WIDTH*4)
             myMessage.y = pBulletObject.y - fontBig:getHeight()/2
         elseif pBulletObject.mapSidePosition == "right" then
-            myMessage.x = pBulletObject.x + math.random(self.map_Object.TILE_WIDTH*3, self.map_Object.TILE_WIDTH*4)
+            myMessage.x = pBulletObject.x + math.random(self.map_Object.TILE_WIDTH*2, self.map_Object.TILE_WIDTH*4)
             myMessage.y = pBulletObject.y - fontBig:getHeight()/2
         end
 
@@ -400,11 +421,11 @@ function MONSTER.NewMonster(pMapObject, pXScreenSize, pYScreenSize)
 --------------------------------------------------------------------------------------------------------
 
     -- Set monster side position
-    function myMonster:SetSidePosition(pForcedPosition)
+    function myMonster:SetSidePosition(pForcedPosition, pNumberOfMonsters, pOtherMonsterPosition)
 
         -- Get a new position if none has been passed as parameter
         if pForcedPosition == "" or pForcedPosition == nil then
-            self:GetNextSidePosition()
+            self:GetNextSidePosition(pNumberOfMonsters, pOtherMonsterPosition)
         else
             self.mapSidePosition = pForcedPosition
         end
@@ -448,27 +469,121 @@ function MONSTER.NewMonster(pMapObject, pXScreenSize, pYScreenSize)
         end
     end
 
-
-    function myMonster:GetNextSidePosition()
+    -- Get the next side where the monster will appear
+    function myMonster:GetNextSidePosition(pNumberOfMonsters, pOtherMonsterPosition)
         local positionID = -1
 
-        -- While a new position has not been found
-        while 1 do
-            -- Get a random value not equal the same as before
-            positionID = math.random(1, #SIDE_POSITIONS)
-            if SIDE_POSITIONS[positionID] ~= nil and SIDE_POSITIONS[positionID] ~= self.mapSidePosition then
-                break
+        -- Only one monster
+        if pNumberOfMonsters == 1 then
+
+            -- While a new position has not been found
+            while 1 do
+                -- Get a random value not equal the same as before
+                positionID = math.random(1, #SIDE_POSITIONS)
+                if SIDE_POSITIONS[positionID] ~= nil and SIDE_POSITIONS[positionID] ~= self.mapSidePosition then
+                    break
+                end
             end
+
+            -- 2 monsters, set position aside from the oter monster (to not have monsters face to face)
+        elseif pNumberOfMonsters == 2 then
+
+            local otherMonsterPositionID = -1
+            local newPositionID = -1
+
+            -- Get the other monster position ID
+            for i = 1, #SIDE_POSITIONS do
+                if SIDE_POSITIONS[i] == pOtherMonsterPosition then
+                    otherMonsterPositionID = i
+                end
+            end
+
+            -- Get a new position (must be -1 or 1)
+            while 1 do
+                newPositionID = math.random(-1, 1)
+                if newPositionID ~= 0 then
+                    break
+                end
+            end
+
+            -- Return the position +1 or -1 from the other monster
+            if (newPositionID == -1 and otherMonsterPositionID == 1) then
+                positionID = #SIDE_POSITIONS
+            elseif (newPositionID == 1 and otherMonsterPositionID == #SIDE_POSITIONS) then
+                positionID = 1
+            else
+                positionID = otherMonsterPositionID + newPositionID
+            end
+            --print(self.id, newPositionID, otherMonsterPositionID)
         end
 
         -- Set new position and reset tentacles created counter
         self.mapSidePosition = SIDE_POSITIONS[positionID]
         self.createdTentacles = 0
         self.lstMessageVillageHit = {}
+        --print(self.id, self.mapSidePosition, positionID, pNumberOfMonsters, SIDE_POSITIONS[pOtherMonsterPosition])
     end
+
+
+--[[     -- Get the next side where the monster will appear
+    function myMonster:GetNextSidePosition_MultipleMonsters()
+        local actualpositionID = -1
+        local newPositionID = -1
+
+        -- Get the actual position ID
+        for i = 1, #SIDE_POSITIONS do
+            if SIDE_POSITIONS[i] == self.mapSidePosition then
+                actualpositionID = i
+            end
+        end
+
+        -- Get a new position (must be -1 or 1)
+        while 1 do
+            newPositionID = math.random(-1, 1)
+            if newPositionID ~= 0 then
+                break
+            end
+        end
+
+        -- Return the position +1 or -1 from current monster
+        if (newPositionID == -1 and actualpositionID == 1) then
+            return SIDE_POSITIONS[#SIDE_POSITIONS]
+        elseif (newPositionID == 1 and actualpositionID == #SIDE_POSITIONS) then
+            return SIDE_POSITIONS[1]
+        else
+            return SIDE_POSITIONS[actualpositionID + newPositionID]
+        end
+    end ]]
 
 --------------------------------------------------------------------------------------------------------
 
+    -- Check collision with the player
+    function myMonster:CheckPlayerCollision(dt, pPlayerObject)
+        local isPlayerHurt = false
+
+        -- Check if monster coordinates are the same as the player
+        if self.mapSidePosition == "up" then
+            if self.y >= pPlayerObject.y then isPlayerHurt = true end
+        elseif self.mapSidePosition == "down" then
+            if self.y <= pPlayerObject.y + pPlayerObject.h then isPlayerHurt = true end
+        elseif self.mapSidePosition == "left" then
+            if self.x >= pPlayerObject.x then isPlayerHurt = true end
+        elseif self.mapSidePosition == "right" then
+            if self.x <= pPlayerObject.x + pPlayerObject.w then isPlayerHurt = true end
+        end
+
+        -- Decrease player's life
+        if isPlayerHurt then
+            self.timeHurtPlayer = self.timeHurtPlayer - 1 * dt
+            if self.timeHurtPlayer <= 0 then
+                self.timeHurtPlayer = TIME_HURT_PLAYER
+                pPlayerObject.life = pPlayerObject.life - 1
+            end
+        end
+
+    end
+
+--------------------------------------------------------------------------------------------------------
 
     return myMonster
 end

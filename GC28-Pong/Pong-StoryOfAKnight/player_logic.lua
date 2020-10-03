@@ -36,7 +36,7 @@ function PLAYER.NewPlayer(pMapObject, pXScreenSize, pYScreenSize, pVillageLife, 
 
 --------------------------------------------------------------------------------------------------------
     -- METHODS
-    function myPlayer:draw(DEBUG_MODE)
+    function myPlayer:draw()
 
         love.graphics.draw(self.images[math.floor(self.frame)], self.x, self.y)  --, 0, self.flip, 1) --, self.w/2, self.h-6) -- player.h/2)
         love.graphics.print("Villageois : "..tostring(self.villageLife), 10, 30)
