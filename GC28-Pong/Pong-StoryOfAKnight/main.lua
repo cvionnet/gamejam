@@ -20,7 +20,7 @@ local bulletTimer = 0.5
 
 function love.load()
     math.randomseed(love.timer.getTime())
-    love.window.setMode(768, 768, {fullscreen=false, vsync=true})
+    love.window.setMode(768, 768) --, {fullscreen=false, vsync=true})
     --love.keyboard.setKeyRepeat(true)
 
     xScreenSize = love.graphics.getWidth()
@@ -82,10 +82,10 @@ function love.keypressed(key)
             love.event.quit()
         end
 
-        -- Create tentacles on the 1st monster
+        -- Create enemies on the 1st monster
         if key == "t" then
             for i = 1, 20 do
-                monster_Obj:CreateTentacle()
+                monster_Obj:CreateEnemy()
             end
         end
 
@@ -121,7 +121,7 @@ function InitGame()
     map_Obj = MAP.NewMap(xScreenSize, yScreenSize)
 
     player_Obj = PLAYER.NewPlayer(map_Obj, xScreenSize, yScreenSize, VILLAGE_LIFE, PLAYER_LIFE)
-    player_Obj:InitPlayer(0, yScreenSize/2, "idle/p1_walk", 11)
+    player_Obj:InitPlayer(0, yScreenSize/2, "running/knight_hero_side_defend", 4)
 
     monster_Obj = MONSTER.NewMonster(1, map_Obj, xScreenSize, yScreenSize)
     monster_Obj:InitMonster("monster_background", 1, MONSTER_LIFE, "right", 1, "")

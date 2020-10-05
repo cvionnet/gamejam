@@ -38,6 +38,7 @@ function MAP.NewMap(pXScreenSize, pYScreenSize)
     myMap.mapWalls[11] = { 6,  4,  1,  1,  0, "C","C",  0,  1,  1,  3,  5}
     myMap.mapWalls[12] = { 2,  8,  1,  1,  0, "C","C",  1,  1,  1,  7,  2}
 
+    local lstNonWalking = {2,3,4,5,6,7,8,9,"A","B"}
 
     -- 768 x 768     (32 x 32)
 --[[     
@@ -185,6 +186,18 @@ function MAP.NewMap(pXScreenSize, pYScreenSize)
         y = pLine * self.TILE_HEIGHT
 
         return x, y
+    end
+
+
+    -- Return if the player can walk on the tile
+    function myMap:PlayerCanWalkOnTile(pCol, pLine)
+        for i = 1, #lstNonWalking do
+            if self.mapWalls[pCol][pLine] == lstNonWalking[i] then
+                return false
+            end
+        end
+
+        return true
     end
 
 --------------------------------------------------------------------------------------------------------

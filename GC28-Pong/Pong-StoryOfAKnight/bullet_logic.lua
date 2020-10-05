@@ -34,7 +34,7 @@ function BULLET.NewBullet(pMapObject, pXScreenSize, pYScreenSize)
     -- METHODS
     function myBullet:draw()
 
-        love.graphics.draw(self.images[math.floor(self.frame)], self.x, self.y, math.rad(self.rotation), self.sx, self.sy)  --, self.flip, 1) --, self.w/2, self.h-6) -- player.h/2)
+        love.graphics.draw(self.images[math.floor(self.frame)], self.x, self.y, math.rad(self.rotation), self.sx*SPRITE_BULLET_RATIO, self.sy*SPRITE_BULLET_RATIO)  --, self.flip, 1) --, self.w/2, self.h-6) -- player.h/2)
 
         -- DEBUG
         if DEBUG_MODE == true then
@@ -62,12 +62,12 @@ function BULLET.NewBullet(pMapObject, pXScreenSize, pYScreenSize)
 
 --------------------------------------------------------------------------------------------------------
 
-    function myBullet:InitBullet(pX, pY, pAnimationFile, pAnimationNumberFrames, pVx, pVy, pTentacleSidePosition)
+    function myBullet:InitBullet(pX, pY, pAnimationFile, pAnimationNumberFrames, pVx, pVy, pEnemySidePosition)
         self.x = pX
         self.y = pY
         self.vx = pVx
         self.vy = pVy
-        self.mapSidePosition = pTentacleSidePosition
+        self.mapSidePosition = pEnemySidePosition
 
         self:LoadAnimation(pAnimationFile, pAnimationNumberFrames)
         self:SetSidePosition()
@@ -79,8 +79,8 @@ function BULLET.NewBullet(pMapObject, pXScreenSize, pYScreenSize)
             self.images[i] = love.graphics.newImage("images/monster/"..pImageName..tostring(i)..".png")
         end
 
-        self.w = self.images[1]:getWidth()
-        self.h = self.images[1]:getHeight()
+        self.w = self.images[1]:getWidth() * SPRITE_BULLET_RATIO
+        self.h = self.images[1]:getHeight() * SPRITE_BULLET_RATIO
     end
 
 
@@ -158,24 +158,24 @@ function BULLET.NewBullet(pMapObject, pXScreenSize, pYScreenSize)
     end
 
 
-    -- Check if the bullet touch the tentacle
+    -- Check if the bullet touch the enemies
     -- ! direction is inverted, the bullet has rebounded on the player
-    function myBullet:CheckTentaculeCollision(pTentacleObject)
-        -- Check if bullet coordinates are the same as the tentacle
+    function myBullet:CheckEnemyCollision(pEnemyObject)
+        -- Check if bullet coordinates are the same as the enemy
         if self.mapSidePosition == "up" then
-            if self.y <= pTentacleObject.y then
+            if self.y <= pEnemyObject.y then
                 return true
             end
         elseif self.mapSidePosition == "down" then
-            if self.y >= pTentacleObject.y then
+            if self.y >= pEnemyObject.y then
                 return true
             end
         elseif self.mapSidePosition == "left" then
-            if self.x <= pTentacleObject.x then
+            if self.x <= pEnemyObject.x then
                 return true
             end
         elseif self.mapSidePosition == "right" then
-            if self.x >= pTentacleObject.x then
+            if self.x >= pEnemyObject.x then
                 return true
             end
         end

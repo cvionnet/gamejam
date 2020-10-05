@@ -1,6 +1,6 @@
 local MONSTER = {}
 
-local TENTACLE = require("tentacle_logic")
+local ENEMY = require("enemy_logic")
 require("param")
 
 
@@ -32,11 +32,11 @@ function MONSTER.NewMonster(pId, pMapObject, pXScreenSize, pYScreenSize)
 
     myMonster.life = 0
 
-    myMonster.maxTentacles = MAX_TENTACLE
-    myMonster.createdTentacles = 0
-    myMonster.lstTentacles = {}
+    myMonster.maxEnemies = MAX_ENEMY
+    myMonster.createdEnemies = 0
+    myMonster.lstEnemies = {}
 
-    myMonster.timeToNewTentacle = 0
+    myMonster.timeToNewEnemy = 0
     myMonster.timeWarning = TIME_WARNING
     myMonster.timeHurtPlayer = TIME_HURT_PLAYER
 
@@ -50,14 +50,14 @@ function MONSTER.NewMonster(pId, pMapObject, pXScreenSize, pYScreenSize)
             self:drawWarning()
         else
             -- Background of the monster
-            love.graphics.draw(self.images[math.floor(self.frame)], self.x, self.y, math.rad(self.rotation), self.sx, self.sy)  --, self.flip, 1) --, self.w/2, self.h-6) -- player.h/2)
+            love.graphics.draw(self.images[math.floor(self.frame)], self.x, self.y, math.rad(self.rotation), self.sx*SPRITE_MONSTER_RATIO, self.sy*SPRITE_MONSTER_RATIO)
 
-            -- Tentacles
-            for key, tentacle in pairs(self.lstTentacles) do
-                tentacle:draw()
+            -- Enemies
+            for key, enemy in pairs(self.lstEnemies) do
+                enemy:draw()
 
                 -- Bullets
-                for key1, bullet in pairs(tentacle.lstBullet) do
+                for key1, bullet in pairs(enemy.lstBullet) do
                     bullet:draw()
                 end
             end
@@ -166,16 +166,16 @@ function MONSTER.NewMonster(pId, pMapObject, pXScreenSize, pYScreenSize)
         -- Check for a collision with the player
         self:CheckPlayerCollision(dt, pPlayerObject)
 
-        -- Tentacles update
-        for tentacleID = #self.lstTentacles, 1, -1 do
-            local isTentacleToDelete = false
-            local tentacle = self.lstTentacles[tentacleID]
+        -- Enemies update
+        for EnemyID = #self.lstEnemies, 1, -1 do
+            local isEnemyToDelete = false
+            local enemy = self.lstEnemies[EnemyID]
 
-            tentacle:update(dt)
+            enemy:update(dt)
 
             -- Bullets update and collision
-            for bulletID = #tentacle.lstBullet, 1, -1 do
-                local bullet = tentacle.lstBullet[bulletID]
+            for bulletID = #enemy.lstBullet, 1, -1 do
+                local bullet = enemy.lstBullet[bulletID]
 
                 bullet:update(dt)
 
@@ -183,38 +183,38 @@ function MONSTER.NewMonster(pId, pMapObject, pXScreenSize, pYScreenSize)
                 if self:CheckBulletWithPlayerCollision(bullet, pPlayerObject) == false then     -- with the player
                     if self:CheckBulletWithOutsideCollision(bullet, pPlayerObject) then         -- outside the screen
                         self:HitVillage(pPlayerObject, bullet)
-                        table.remove(tentacle.lstBullet, bulletID)        -- delete the bullet
-                    elseif self:CheckBulletWithTentacleCollision(bullet, tentacle) then         -- with a tentacle
-                        isTentacleToDelete = self:HitTentacle(tentacle)
+                        table.remove(enemy.lstBullet, bulletID)        -- delete the bullet
+                    elseif self:CheckBulletWithEnemyCollision(bullet, enemy) then         -- with an enemy
+                        isEnemyToDelete = self:HitEnemy(enemy)
                     end
                 end
             end
 
-            -- If the tentacle is dead, remove all its bullets and remove the tentacle
-            if isTentacleToDelete then
+            -- If the enemies is dead, remove all its bullets and remove the enemy
+            if isEnemyToDelete then
                 -- Hit the monster
                 self.life = self.life - 1
 
                 -- Delete its own bullets
-                for i = #tentacle.lstBullet, 1, -1 do
-                    table.remove(tentacle.lstBullet, i)
+                for i = #enemy.lstBullet, 1, -1 do
+                    table.remove(enemy.lstBullet, i)
                 end
 
-                table.remove(self.lstTentacles, tentacleID)
+                table.remove(self.lstEnemies, EnemyID)
             end
         end
 
-        -- Create a new tentacle
-        if self.createdTentacles < self.maxTentacles  then
-            self.timeToNewTentacle = self.timeToNewTentacle - 1 * dt
-            if self.timeToNewTentacle < 0 then
-                self.timeToNewTentacle = math.random(TIME_MIN_CREATE_TENTACLE, TIME_MAX_CREATE_TENTACLE)
-                self:CreateTentacle()
+        -- Create a new enemy
+        if self.createdEnemies < self.maxEnemies  then
+            self.timeToNewEnemy = self.timeToNewEnemy - 1 * dt
+            if self.timeToNewEnemy < 0 then
+                self.timeToNewEnemy = math.random(TIME_MIN_CREATE_ENEMY, TIME_MAX_CREATE_ENEMY)
+                self:CreateEnemy()
             end
         end
 
-        -- If all tentacles have been destroyed, move the monster to another position
-        if self.createdTentacles == self.maxTentacles and #self.lstTentacles == 0 then
+        -- If all enemies have been destroyed, move the monster to another position
+        if self.createdEnemies == self.maxEnemies and #self.lstEnemies == 0 then
             if self.mapSidePosition == "up" then
                 self.vy = -50
                 self.status = "leaving"
@@ -294,14 +294,14 @@ function MONSTER.NewMonster(pId, pMapObject, pXScreenSize, pYScreenSize)
 --------------------------------------------------------------------------------------------------------
 
     function myMonster:InitMonster(pAnimationFile, pAnimationNumberFrames, pMonsterLife, pMonsterSidePosition, pNumberOfMonsters, pOtherMonsterPosition)
-        self.lstTentacles = {}
+        self.lstEnemies = {}
         self.lstBullet = {}
-        self.createdTentacles = 0
+        self.createdEnemies = 0
 
         self.status = "warning"
 
         self.life = pMonsterLife
-        self.timeToNewTentacle = math.random(TIME_MIN_CREATE_TENTACLE, TIME_MAX_CREATE_TENTACLE)
+        self.timeToNewEnemy = math.random(TIME_MIN_CREATE_ENEMY, TIME_MAX_CREATE_ENEMY)
 
         self:LoadAnimation(pAnimationFile, pAnimationNumberFrames)
         self:SetSidePosition(pMonsterSidePosition, pNumberOfMonsters, pOtherMonsterPosition)
@@ -313,8 +313,8 @@ function MONSTER.NewMonster(pId, pMapObject, pXScreenSize, pYScreenSize)
             self.images[i] = love.graphics.newImage("images/monster/"..pImageName..tostring(i)..".png")
         end
 
-        self.w = self.images[1]:getWidth()
-        self.h = self.images[1]:getHeight()
+        self.w = self.images[1]:getWidth() * SPRITE_MONSTER_RATIO
+        self.h = self.images[1]:getHeight() * SPRITE_MONSTER_RATIO
     end
 
 
@@ -331,32 +331,32 @@ function MONSTER.NewMonster(pId, pMapObject, pXScreenSize, pYScreenSize)
 
 --------------------------------------------------------------------------------------------------------
 
-    -- Display a tentacle on the monster
-    function myMonster:CreateTentacle()
+    -- Display an enemy on the monster
+    function myMonster:CreateEnemy()
 
-        local xTentacle, yTentacle = 0, 0
-        local myTentacle = TENTACLE.NewTentacle(self.map_Object, self.xScreenSize, self.yScreenSize)
+        local xEnemy, yEnemy = 0, 0
+        local myEnemy = ENEMY.NewEnemy(self.map_Object, self.xScreenSize, self.yScreenSize)
 
-        -- Calculate tentacle position on the monster
+        -- Calculate enemy position on the monster
         if self.mapSidePosition == "up" then
-            xTentacle = math.random(self.x - self.map_Object.TILE_HEIGHT, self.x + self.w - self.map_Object.TILE_HEIGHT - 20)
-            yTentacle = self.y + myTentacle.h + math.random(0, self.map_Object.TILE_HEIGHT)
+            xEnemy = math.random(self.x - self.map_Object.TILE_HEIGHT, self.x + self.w - self.map_Object.TILE_HEIGHT - 20)
+            yEnemy = self.y + myEnemy.h + math.random(0, self.map_Object.TILE_HEIGHT)
         elseif self.mapSidePosition == "down" then
-            xTentacle = math.random(self.x - self.map_Object.TILE_HEIGHT, self.x + self.w - self.map_Object.TILE_HEIGHT - 20)
-            yTentacle = self.y - myTentacle.h + math.random(0, self.map_Object.TILE_HEIGHT)
+            xEnemy = math.random(self.x - self.map_Object.TILE_HEIGHT, self.x + self.w - self.map_Object.TILE_HEIGHT - 20)
+            yEnemy = self.y - myEnemy.h + math.random(0, self.map_Object.TILE_HEIGHT)
         elseif self.mapSidePosition == "left" then
-            xTentacle = self.x + myTentacle.h + math.random(0, self.map_Object.TILE_HEIGHT)
-            yTentacle = math.random(self.y - self.map_Object.TILE_WIDTH, self.y + self.w - self.map_Object.TILE_WIDTH - 20)
+            xEnemy = self.x + myEnemy.h + math.random(0, self.map_Object.TILE_HEIGHT)
+            yEnemy = math.random(self.y - self.map_Object.TILE_WIDTH, self.y + self.w - self.map_Object.TILE_WIDTH - 20)
         elseif self.mapSidePosition == "right" then
-            xTentacle = self.x - math.random(0, self.map_Object.TILE_HEIGHT * SPRITE_RATIO) -- - myTentacle.h + math.random(0, self.map_Object.TILE_HEIGHT)
-            yTentacle = math.random(self.y - self.map_Object.TILE_WIDTH, self.y + self.w - self.map_Object.TILE_WIDTH - 20)
+            xEnemy = self.x - math.random(0, self.map_Object.TILE_HEIGHT * SPRITE_MONSTER_RATIO) -- - myEnemy.h + math.random(0, self.map_Object.TILE_HEIGHT)
+            yEnemy = math.random(self.y - self.map_Object.TILE_WIDTH, self.y + self.w - self.map_Object.TILE_WIDTH - 20)
         end
 
-        -- Set tentacle position
-        myTentacle:InitTentacle(xTentacle, yTentacle, "monster_tentacle", 4, self.mapSidePosition)
-        table.insert(self.lstTentacles, myTentacle)
+        -- Set enemy position
+        myEnemy:InitEnemy(xEnemy, yEnemy, "idle/knight_evil_side_idle", 2, self.mapSidePosition)
+        table.insert(self.lstEnemies, myEnemy)
 
-        self.createdTentacles = self.createdTentacles + 1
+        self.createdEnemies = self.createdEnemies + 1
     end
 
 --------------------------------------------------------------------------------------------------------
@@ -373,9 +373,9 @@ function MONSTER.NewMonster(pId, pMapObject, pXScreenSize, pYScreenSize)
     end
 
 
-    -- If a bullet hit the tentacle
-    function myMonster:CheckBulletWithTentacleCollision(pBullet, pTentacle)
-        return pBullet:CheckTentaculeCollision(pTentacle)
+    -- If a bullet hit the enemy
+    function myMonster:CheckBulletWithEnemyCollision(pBullet, pEnemy)
+        return pBullet:CheckEnemyCollision(pEnemy)
     end
 
 
@@ -406,12 +406,12 @@ function MONSTER.NewMonster(pId, pMapObject, pXScreenSize, pYScreenSize)
     end
 
 
-    -- If a bullet touch the tentacle, reduce its life
-    function myMonster:HitTentacle(pTentacleObject)
-        pTentacleObject.life = pTentacleObject.life - 1
+    -- If a bullet touch the enemy, reduce its life
+    function myMonster:HitEnemy(pEnemyObject)
+        pEnemyObject.life = pEnemyObject.life - 1
 
-        -- If the tentacle is dead
-        if pTentacleObject.life <= 0 then
+        -- If the enemy is dead
+        if pEnemyObject.life <= 0 then
             return true
         end
 
@@ -517,9 +517,9 @@ function MONSTER.NewMonster(pId, pMapObject, pXScreenSize, pYScreenSize)
             --print(self.id, newPositionID, otherMonsterPositionID)
         end
 
-        -- Set new position and reset tentacles created counter
+        -- Set new position and reset enemies created counter
         self.mapSidePosition = SIDE_POSITIONS[positionID]
-        self.createdTentacles = 0
+        self.createdEnemies = 0
         self.lstMessageVillageHit = {}
         --print(self.id, self.mapSidePosition, positionID, pNumberOfMonsters, SIDE_POSITIONS[pOtherMonsterPosition])
     end

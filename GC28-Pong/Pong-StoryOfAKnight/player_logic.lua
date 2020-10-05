@@ -38,7 +38,7 @@ function PLAYER.NewPlayer(pMapObject, pXScreenSize, pYScreenSize, pVillageLife, 
     -- METHODS
     function myPlayer:draw()
 
-        love.graphics.draw(self.images[math.floor(self.frame)], self.x, self.y, 0, 0.5, 0.5)  --, 0, self.flip, 1) --, self.w/2, self.h-6) -- player.h/2)
+        love.graphics.draw(self.images[math.floor(self.frame)], self.x, self.y, 0, 1 * SPRITE_PLAYER_RATIO, 1 * SPRITE_PLAYER_RATIO)  --, 0, self.flip, 1) --, self.w/2, self.h-6) -- player.h/2)
         love.graphics.print("Villageois : "..tostring(self.villageLife), 10, 30)
 
         -- DEBUG - draw player box
@@ -46,7 +46,7 @@ function PLAYER.NewPlayer(pMapObject, pXScreenSize, pYScreenSize, pVillageLife, 
             --love.graphics.setColor(1,0,0)
             --love.graphics.rectangle("line", self.x, self.y, self.w, self.h)
             --love.graphics.setColor(1,1,1)
-            
+
             love.graphics.setColor(1,0,0)
             love.graphics.circle("fill", self.x, self.y, 5)
             love.graphics.setColor(1,1,1)
@@ -94,8 +94,8 @@ function PLAYER.NewPlayer(pMapObject, pXScreenSize, pYScreenSize, pVillageLife, 
             self.images[i] = love.graphics.newImage("images/player/"..pImageName..tostring(i)..".png")
         end
 
-        self.w = self.images[1]:getWidth()
-        self.h = self.images[1]:getHeight()
+        self.w = self.images[1]:getWidth() * SPRITE_BULLET_RATIO
+        self.h = self.images[1]:getHeight() * SPRITE_BULLET_RATIO
     end
 
 
@@ -103,7 +103,7 @@ function PLAYER.NewPlayer(pMapObject, pXScreenSize, pYScreenSize, pVillageLife, 
         if math.abs(self.vx) < 1 and math.abs(self.vy) < 1 then
             self.frame = 1
         else
-            self.frame = self.frame + FRAME_PER_SECOND * dt
+            self.frame = self.frame + FRAME_PER_SECOND_PLAYER * dt
             if self.frame > #self.images then
                 self.frame = 1
             end
@@ -125,11 +125,12 @@ function PLAYER.NewPlayer(pMapObject, pXScreenSize, pYScreenSize, pVillageLife, 
             self.col, self.line = self.map_Object:GetCellCol_Line(self.x + self.w, self.y)
         end
 
+
         -- Check if player is out of the map bound
         if (self.col <= 0 or self.line <= 0) or (self.col > self.map_Object.colNumber or self.line > self.map_Object.lineNumber) then
             stopPlayer = true
         -- If the ID is not 0, the player can't walk on it
-        elseif self.map_Object.mapWalls[self.line][self.col] > 0 then
+        elseif self.map_Object:PlayerCanWalkOnTile(self.col, self.line) == false then  -- self.map_Object.mapWalls[self.line][self.col] > 0 then
             stopPlayer = true
         end
 
