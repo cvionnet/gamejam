@@ -32,6 +32,8 @@ end
 
 function love.update(dt)
     if gameState == "game" then
+        map_Obj:update(dt)
+
         player_Obj:update(dt)
 
         ActivateBulletTime(dt)

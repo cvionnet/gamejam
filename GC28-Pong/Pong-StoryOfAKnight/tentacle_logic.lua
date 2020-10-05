@@ -36,7 +36,7 @@ function TENTACLE.NewTentacle(pMapObject, pXScreenSize, pYScreenSize)
 --------------------------------------------------------------------------------------------------------
     -- METHODS
     function myTentacle:draw()
-        love.graphics.draw(self.images[math.floor(self.frame)], self.x, self.y, math.rad(self.rotation), self.sx, self.sy)  --, self.flip, 1) --, self.w/2, self.h-6) -- player.h/2)
+        love.graphics.draw(self.images[math.floor(self.frame)], self.x, self.y, math.rad(self.rotation), self.sx*SPRITE_RATIO, self.sy*SPRITE_RATIO)  --, self.flip, 1) --, self.w/2, self.h-6) -- player.h/2)
 
         -- DEBUG
         if DEBUG_MODE == true then
@@ -83,19 +83,15 @@ function TENTACLE.NewTentacle(pMapObject, pXScreenSize, pYScreenSize)
             self.images[i] = love.graphics.newImage("images/monster/"..pImageName..tostring(i)..".png")
         end
 
-        self.w = self.images[1]:getWidth()
-        self.h = self.images[1]:getHeight()
+        self.w = self.images[1]:getWidth() * SPRITE_RATIO
+        self.h = self.images[1]:getHeight() * SPRITE_RATIO
     end
 
 
     function myTentacle:PlayAnimation(dt)
-        if math.abs(self.vx) < 1 and math.abs(self.vy) < 1 then
+        self.frame = self.frame + FRAME_PER_SECOND_TENTACLE * dt
+        if self.frame > #self.images then
             self.frame = 1
-        else
-            self.frame = self.frame + FRAME_PER_SECOND * dt
-            if self.frame > #self.images then
-                self.frame = 1
-            end
         end
     end
 

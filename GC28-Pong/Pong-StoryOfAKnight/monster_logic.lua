@@ -348,12 +348,12 @@ function MONSTER.NewMonster(pId, pMapObject, pXScreenSize, pYScreenSize)
             xTentacle = self.x + myTentacle.h + math.random(0, self.map_Object.TILE_HEIGHT)
             yTentacle = math.random(self.y - self.map_Object.TILE_WIDTH, self.y + self.w - self.map_Object.TILE_WIDTH - 20)
         elseif self.mapSidePosition == "right" then
-            xTentacle = self.x - myTentacle.h + math.random(0, self.map_Object.TILE_HEIGHT)
+            xTentacle = self.x - math.random(0, self.map_Object.TILE_HEIGHT * SPRITE_RATIO) -- - myTentacle.h + math.random(0, self.map_Object.TILE_HEIGHT)
             yTentacle = math.random(self.y - self.map_Object.TILE_WIDTH, self.y + self.w - self.map_Object.TILE_WIDTH - 20)
         end
 
         -- Set tentacle position
-        myTentacle:InitTentacle(xTentacle, yTentacle, "monster_tentacle", 1, self.mapSidePosition)
+        myTentacle:InitTentacle(xTentacle, yTentacle, "monster_tentacle", 4, self.mapSidePosition)
         table.insert(self.lstTentacles, myTentacle)
 
         self.createdTentacles = self.createdTentacles + 1

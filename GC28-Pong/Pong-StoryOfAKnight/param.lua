@@ -10,8 +10,14 @@ MONSTER_PERCENT_APPEAR_2ND_MONSTER = 50 --20
 BULLET_TIME_SPEED = 15
 
 
+-- MAP
+SPRITE_MAP_RATIO = 2
+FRAME_PER_SECOND_MAP = 4
+
+
 -- COMMON
 FRAME_PER_SECOND = 24
+SPRITE_RATIO = 2
 
 fontBig = love.graphics.newFont("fonts/Gameplay.ttf", 70)
 
@@ -33,8 +39,8 @@ SIDE_POSITIONS = {"up", "right", "down", "left"}     -- 4th positions on the scr
 
 
 -- TENTACLE
+FRAME_PER_SECOND_TENTACLE = 4
 TIME_MIN_SHOOT_BULLET = 0.5
 TIME_MAX_SHOOT_BULLET = 1
 TENTACLE_MIN_LIFE = 2
 TENTACLE_MAX_LIFE = 5
-
