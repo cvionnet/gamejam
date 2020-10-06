@@ -25,20 +25,20 @@ function MAP.NewMap(pXScreenSize, pYScreenSize)
 
     -- 768 x 768
     myMap.mapWalls = {}     -- map the walls of the room (12 x 12 cells of 64px each)
-    myMap.mapWalls[1]  = { 2,  9,  0,  1,  1, "C","C",  1,  1,  1, "A", 2}
-    myMap.mapWalls[2]  = {"B","B", 1,  1,  0, "C","C",  1,  1,  1, "B","B"}
-    myMap.mapWalls[3]  = { 1,  1,  1,  0,  0, "C","C",  1,  1,  1,  1,  1}
-    myMap.mapWalls[4]  = { 1,  1,  0,  0,  0, "C","C",  0,  1,  1,  1,  0}
-    myMap.mapWalls[5]  = { 1,  1,  0,  0,  0, "C","C",  0,  0,  0,  0,  0}
+    myMap.mapWalls[1]  = { 2,  9,  1,  1,  1, "C","C",  1,  1,  1, "A", 2}
+    myMap.mapWalls[2]  = {"B","B", 1,  1,  1, "C","C",  1,  1,  1, "B","B"}
+    myMap.mapWalls[3]  = { 1,  1,  1,  1,  1, "C","C",  1,  1,  1,  1,  1}
+    myMap.mapWalls[4]  = { 1,  1,  1,  1,  1, "C","C",  1,  1,  1,  1,  1}
+    myMap.mapWalls[5]  = { 1,  1,  1,  1,  0, "C","C",  0,  1,  1,  1,  1}
     myMap.mapWalls[6]  = {"C","C","C","C","C","C","C","C","C","C","C","C"}
     myMap.mapWalls[7]  = {"C","C","C","C","C","C","C","C","C","C","C","C"}
-    myMap.mapWalls[8]  = { 1,  0,  0,  0,  0, "C","C",  0,  0,  0,  0,  0}
-    myMap.mapWalls[9]  = { 1,  1,  1,  1,  0, "C","C",  0,  0,  1,  1,  1}
-    myMap.mapWalls[10] = { 1,  1,  0,  1,  0, "C","C",  0,  1,  1,  1,  1}
-    myMap.mapWalls[11] = { 6,  4,  1,  1,  0, "C","C",  0,  1,  1,  3,  5}
-    myMap.mapWalls[12] = { 2,  8,  1,  1,  0, "C","C",  1,  1,  1,  7,  2}
+    myMap.mapWalls[8]  = { 1,  1,  1,  1,  0, "C","C",  0,  1,  1,  1,  1}
+    myMap.mapWalls[9]  = { 1,  1,  1,  1,  1, "C","C",  1,  1,  1,  1,  1}
+    myMap.mapWalls[10] = { 1,  1,  1,  1,  1, "C","C",  1,  1,  1,  1,  1}
+    myMap.mapWalls[11] = { 6,  4,  1,  1,  1, "C","C",  1,  1,  1,  3,  5}
+    myMap.mapWalls[12] = { 2,  8,  1,  1,  1, "C","C",  1,  1,  1,  7,  2}
 
-    local lstNonWalking = {2,3,4,5,6,7,8,9,"A","B"}
+    local lstWalkingTiles = {0,1,"C"}   -- {2,3,4,5,6,7,8,9,"A","B"}
 
     -- 768 x 768     (32 x 32)
 --[[     
@@ -191,13 +191,13 @@ function MAP.NewMap(pXScreenSize, pYScreenSize)
 
     -- Return if the player can walk on the tile
     function myMap:PlayerCanWalkOnTile(pCol, pLine)
-        for i = 1, #lstNonWalking do
-            if self.mapWalls[pCol][pLine] == lstNonWalking[i] then
-                return false
+        for i = 1, #lstWalkingTiles do
+            if self.mapWalls[pCol][pLine] == lstWalkingTiles[i] then
+                return true
             end
         end
 
-        return true
+        return false
     end
 
 --------------------------------------------------------------------------------------------------------

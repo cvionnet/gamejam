@@ -125,7 +125,7 @@ function ENEMY.NewEnemy(pMapObject, pXScreenSize, pYScreenSize)
         end
 
         local myBullet = BULLET.NewBullet(self.map_Object, self.xScreenSize, self.yScreenSize)
-        myBullet:InitBullet(xEnemy, yEnemy, "monster_bullet", 1, vxEnemy, vyEnemy, self.mapSidePosition)
+        myBullet:InitBullet(xEnemy, yEnemy, "frame", 11, vxEnemy, vyEnemy, self.mapSidePosition)
         table.insert(self.lstBullet, myBullet)
     end
 

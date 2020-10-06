@@ -41,8 +41,8 @@ SIDE_POSITIONS = {"up", "right", "down", "left"}     -- 4th positions on the scr
 
 
 -- ENEMY
+SPRITE_ENEMY_RATIO = 6
 FRAME_PER_SECOND_ENEMY = 4
-SPRITE_ENEMY_RATIO = 4
 TIME_MIN_SHOOT_BULLET = 0.5
 TIME_MAX_SHOOT_BULLET = 1
 ENEMY_MIN_LIFE = 2

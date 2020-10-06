@@ -11,6 +11,8 @@ require("param")
 
 local gameState = ""            -- game / gameover / victory
 
+local imgFog = love.graphics.newImage("images/map/fog.png")
+
 local lstMonsters = {}
 
 local bulletTimeMode = false
@@ -58,6 +60,13 @@ function love.draw()
         end
 
         player_Obj:draw()
+
+        -- Fog
+        local fg_r, fg_g, fg_b, fg_a = love.graphics.getColor()
+        love.graphics.setColor(fg_r, fg_g, fg_b, 0.4)
+        love.graphics.draw(imgFog, 1 , 1)
+        love.graphics.setColor(fg_r, fg_g, fg_b, fg_a)
+
 
         if DEBUG_MODE then
             love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), 10, 10)

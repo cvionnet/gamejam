@@ -76,7 +76,7 @@ function BULLET.NewBullet(pMapObject, pXScreenSize, pYScreenSize)
 
     function myBullet:LoadAnimation(pImageName, pImageNumber)
         for i = 1, pImageNumber do
-            self.images[i] = love.graphics.newImage("images/monster/"..pImageName..tostring(i)..".png")
+            self.images[i] = love.graphics.newImage("images/shoot/"..pImageName..tostring(i)..".png")
         end
 
         self.w = self.images[1]:getWidth() * SPRITE_BULLET_RATIO
@@ -190,19 +190,19 @@ function BULLET.NewBullet(pMapObject, pXScreenSize, pYScreenSize)
         if self.mapSidePosition == "up" then
             self.sx = -1
             self.sy = 1
-            self.rotation = 180
+            self.rotation = 0 --180
         elseif self.mapSidePosition == "down" then
             self.sx = -1
             self.sy = -1
-            self.rotation = 180
+            self.rotation = 0 --180
         elseif self.mapSidePosition == "left" then
             self.sx = 1
             self.sy = 1
             self.rotation = 90
         elseif self.mapSidePosition == "right" then
-            self.sx = 1
+            self.sx = -1
             self.sy = -1
-            self.rotation = 90
+            self.rotation = 180 --90
         end
     end
 
