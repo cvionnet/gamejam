@@ -202,6 +202,14 @@ function MAP.NewMap(pXScreenSize, pYScreenSize)
 
 --------------------------------------------------------------------------------------------------------
 
+    -- Return the size of an image
+    function myMap:GetImageH_W(pFullImagePath)
+        local image = love.graphics.newImage(pFullImagePath)
+        return image:getHeight(), image:getWidth()
+    end
+
+--------------------------------------------------------------------------------------------------------
+
     return myMap
 end
 

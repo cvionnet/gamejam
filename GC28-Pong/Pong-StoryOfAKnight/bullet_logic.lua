@@ -16,6 +16,8 @@ function BULLET.NewBullet(pMapObject, pXScreenSize, pYScreenSize)
     myBullet.sx = 0    -- used to flip the sprite
     myBullet.sy = 0
     myBullet.rotation = 0
+    myBullet.ox = 0
+    myBullet.oy = 0
 
     myBullet.xScreenSize = pXScreenSize
     myBullet.yScreenSize = pYScreenSize
@@ -34,7 +36,7 @@ function BULLET.NewBullet(pMapObject, pXScreenSize, pYScreenSize)
     -- METHODS
     function myBullet:draw()
 
-        love.graphics.draw(self.images[math.floor(self.frame)], self.x, self.y, math.rad(self.rotation), self.sx*SPRITE_BULLET_RATIO, self.sy*SPRITE_BULLET_RATIO)  --, self.flip, 1) --, self.w/2, self.h-6) -- player.h/2)
+        love.graphics.draw(self.images[math.floor(self.frame)], self.x, self.y, math.rad(self.rotation), self.sx*SPRITE_BULLET_RATIO, self.sy*SPRITE_BULLET_RATIO, self.ox, self.oy)
 
         -- DEBUG
         if DEBUG_MODE == true then
@@ -101,31 +103,35 @@ function BULLET.NewBullet(pMapObject, pXScreenSize, pYScreenSize)
     function myBullet:CheckPlayerCollision(pPlayerObject)
         -- Check if bullet coordinates are the same as the player
         if self.mapSidePosition == "up" then
-            if (self.y >= pPlayerObject.y) and (self.x >= pPlayerObject.x and self.x <= pPlayerObject.x + pPlayerObject.w) then
+            if (self.x >= pPlayerObject.x and self.x <= pPlayerObject.x + pPlayerObject.w)
+            and (self.y >= pPlayerObject.y + 10) then
                 self.vy = self.vy * -1
                 self.sy = self.sy * -1      -- invert the bullet image
-                self.y = pPlayerObject.y
+                self.y = pPlayerObject.y + 10
                 return true
             end
         elseif self.mapSidePosition == "down" then
-            if (self.y <= pPlayerObject.y + pPlayerObject.h) and (self.x >= pPlayerObject.x and self.x <= pPlayerObject.x + pPlayerObject.w) then
+            if (self.x >= pPlayerObject.x and self.x <= pPlayerObject.x + pPlayerObject.w)
+            and (self.y <= pPlayerObject.y + pPlayerObject.h) then
                 self.vy = self.vy * -1
                 self.sy = self.sy * -1      -- invert the bullet image
                 self.y = pPlayerObject.y + pPlayerObject.h
                 return true
             end
         elseif self.mapSidePosition == "left" then
-            if (self.x >= pPlayerObject.x) and (self.y >= pPlayerObject.y and self.y <= pPlayerObject.y + pPlayerObject.h) then
+            if (self.x >= pPlayerObject.x + pPlayerObject.w/2 - 20)
+            and (self.y >= pPlayerObject.y + 5 and self.y <= pPlayerObject.y + pPlayerObject.h) then
                 self.vx = self.vx * -1
                 self.sy = self.sy * -1      -- invert the bullet image
-                self.x = pPlayerObject.x
+                self.x = pPlayerObject.x -- + pPlayerObject.w/2 - 20
                 return true
             end
         elseif self.mapSidePosition == "right" then
-            if (self.x <= pPlayerObject.x + pPlayerObject.w) and (self.y >= pPlayerObject.y and self.y <= pPlayerObject.y + pPlayerObject.h) then
+            if (self.x <= pPlayerObject.x + pPlayerObject.w/2 + 20)
+            and (self.y >= pPlayerObject.y + 5 and self.y <= pPlayerObject.y + pPlayerObject.h) then
                 self.vx = self.vx * -1
                 self.sy = self.sy * -1      -- invert the bullet image
-                self.x = pPlayerObject.x + pPlayerObject.w
+                self.x = pPlayerObject.x + pPlayerObject.w/2 + 20
                 return true
             end
         end
@@ -197,13 +203,16 @@ function BULLET.NewBullet(pMapObject, pXScreenSize, pYScreenSize)
             self.rotation = 0 --180
         elseif self.mapSidePosition == "left" then
             self.sx = 1
-            self.sy = 1
+            self.sy = -1
             self.rotation = 90
         elseif self.mapSidePosition == "right" then
             self.sx = -1
-            self.sy = -1
-            self.rotation = 180 --90
+            self.sy = 1
+            self.rotation = 90 --90
         end
+
+        self.ox = self.w/2
+        self.oy = self.h
     end
 
 --------------------------------------------------------------------------------------------------------

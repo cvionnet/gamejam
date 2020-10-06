@@ -94,8 +94,8 @@ function PLAYER.NewPlayer(pMapObject, pXScreenSize, pYScreenSize, pVillageLife, 
             self.images[i] = love.graphics.newImage("images/player/"..pImageName..tostring(i)..".png")
         end
 
-        self.w = self.images[1]:getWidth() * SPRITE_BULLET_RATIO
-        self.h = self.images[1]:getHeight() * SPRITE_BULLET_RATIO
+        self.w = self.images[1]:getWidth() * SPRITE_PLAYER_RATIO
+        self.h = self.images[1]:getHeight() * SPRITE_PLAYER_RATIO
     end
 
 

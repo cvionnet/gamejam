@@ -38,7 +38,6 @@ function MONSTER.NewMonster(pId, pMapObject, pXScreenSize, pYScreenSize)
 
     myMonster.timeToNewEnemy = 0
     myMonster.timeWarning = TIME_WARNING
-    myMonster.timeHurtPlayer = TIME_HURT_PLAYER
 
     myMonster.lstMessageVillageHit = {}         -- to display a message when the village is hitten
 
@@ -50,7 +49,7 @@ function MONSTER.NewMonster(pId, pMapObject, pXScreenSize, pYScreenSize)
             self:drawWarning()
         else
             -- Background of the monster
-            love.graphics.draw(self.images[math.floor(self.frame)], self.x, self.y, math.rad(self.rotation), self.sx*SPRITE_MONSTER_RATIO, self.sy*SPRITE_MONSTER_RATIO)
+            --love.graphics.draw(self.images[math.floor(self.frame)], self.x, self.y, math.rad(self.rotation), self.sx*SPRITE_MONSTER_RATIO, self.sy*SPRITE_MONSTER_RATIO)
 
             -- Enemies
             for key, enemy in pairs(self.lstEnemies) do
@@ -120,15 +119,13 @@ function MONSTER.NewMonster(pId, pMapObject, pXScreenSize, pYScreenSize)
         end
     end
 
+--------------------------------------------------------------------------------------------------------
 
     -- Move the monster on the field
     function myMonster:updateComing(dt, pPlayerObject)
         -- Move the monster
         self.x = self.x + self.vx * dt
         self.y = self.y + self.vy * dt
-
-        -- Check for a collision with the player
-        self:CheckPlayerCollision(dt, pPlayerObject)
 
         -- Check if final position is reached, and then set the monster to fighting mode
         if self.mapSidePosition == "up" then
@@ -158,20 +155,15 @@ function MONSTER.NewMonster(pId, pMapObject, pXScreenSize, pYScreenSize)
         end
     end
 
+--------------------------------------------------------------------------------------------------------
 
     function myMonster:updateFighting(dt, pPlayerObject)
-        -- Monster animation
-        self:PlayAnimation(dt)
-
-        -- Check for a collision with the player
-        self:CheckPlayerCollision(dt, pPlayerObject)
-
         -- Enemies update
         for EnemyID = #self.lstEnemies, 1, -1 do
             local isEnemyToDelete = false
             local enemy = self.lstEnemies[EnemyID]
 
-            enemy:update(dt)
+            enemy:update(dt, pPlayerObject)
 
             -- Bullets update and collision
             for bulletID = #enemy.lstBullet, 1, -1 do
@@ -216,16 +208,16 @@ function MONSTER.NewMonster(pId, pMapObject, pXScreenSize, pYScreenSize)
         -- If all enemies have been destroyed, move the monster to another position
         if self.createdEnemies == self.maxEnemies and #self.lstEnemies == 0 then
             if self.mapSidePosition == "up" then
-                self.vy = -50
+                self.vy = -150
                 self.status = "leaving"
             elseif self.mapSidePosition == "down" then
-                self.vy = 50
+                self.vy = 150
                 self.status = "leaving"
             elseif self.mapSidePosition == "left" then
-                self.vx = -50
+                self.vx = -150
                 self.status = "leaving"
             elseif self.mapSidePosition == "right" then
-                self.vx = 50
+                self.vx = 150
                 self.status = "leaving"
             end
         end
@@ -234,6 +226,7 @@ function MONSTER.NewMonster(pId, pMapObject, pXScreenSize, pYScreenSize)
         self:updateMessageHitVillage(dt)
     end
 
+--------------------------------------------------------------------------------------------------------
 
     -- Move the monster out of the field
     function myMonster:updateLeaving(dt, pNumberOfMonsters, pOtherMonsterPosition)
@@ -293,40 +286,20 @@ function MONSTER.NewMonster(pId, pMapObject, pXScreenSize, pYScreenSize)
 
 --------------------------------------------------------------------------------------------------------
 
-    function myMonster:InitMonster(pAnimationFile, pAnimationNumberFrames, pMonsterLife, pMonsterSidePosition, pNumberOfMonsters, pOtherMonsterPosition)
+    function myMonster:InitMonster(pMonsterLife, pMonsterSidePosition, pNumberOfMonsters, pOtherMonsterPosition)
         self.lstEnemies = {}
         self.lstBullet = {}
         self.createdEnemies = 0
 
         self.status = "warning"
 
+        self.w = self.map_Object.TILE_WIDTH * 2
+        self.h = self.map_Object.TILE_HEIGHT * (#self.map_Object.mapWalls - 4)
+
         self.life = pMonsterLife
         self.timeToNewEnemy = math.random(TIME_MIN_CREATE_ENEMY, TIME_MAX_CREATE_ENEMY)
 
-        self:LoadAnimation(pAnimationFile, pAnimationNumberFrames)
         self:SetSidePosition(pMonsterSidePosition, pNumberOfMonsters, pOtherMonsterPosition)
-    end
-
-
-    function myMonster:LoadAnimation(pImageName, pImageNumber)
-        for i = 1, pImageNumber do
-            self.images[i] = love.graphics.newImage("images/monster/"..pImageName..tostring(i)..".png")
-        end
-
-        self.w = self.images[1]:getWidth() * SPRITE_MONSTER_RATIO
-        self.h = self.images[1]:getHeight() * SPRITE_MONSTER_RATIO
-    end
-
-
-    function myMonster:PlayAnimation(dt)
-        if math.abs(self.vx) < 1 and math.abs(self.vy) < 1 then
-            self.frame = 1
-        else
-            self.frame = self.frame + FRAME_PER_SECOND * dt
-            if self.frame > #self.images then
-                self.frame = 1
-            end
-        end
     end
 
 --------------------------------------------------------------------------------------------------------
@@ -336,20 +309,22 @@ function MONSTER.NewMonster(pId, pMapObject, pXScreenSize, pYScreenSize)
 
         local xEnemy, yEnemy = 0, 0
         local myEnemy = ENEMY.NewEnemy(self.map_Object, self.xScreenSize, self.yScreenSize)
+        local imageEnemyH, imageEnemyW = self.map_Object:GetImageH_W("/images/monster/walk/knight_evil_side_walk1.png")
+        imageEnemyH, imageEnemyW = imageEnemyH*SPRITE_ENEMY_RATIO, imageEnemyW*SPRITE_ENEMY_RATIO
 
         -- Calculate enemy position on the monster
         if self.mapSidePosition == "up" then
-            xEnemy = math.random(self.x - self.map_Object.TILE_HEIGHT, self.x + self.w - self.map_Object.TILE_HEIGHT - 20)
-            yEnemy = self.y + myEnemy.h + math.random(0, self.map_Object.TILE_HEIGHT)
+            xEnemy = math.random(self.x + (imageEnemyW)/2 + 10, self.x + self.h - (imageEnemyW)/2 - 10)
+            yEnemy = math.random(10, imageEnemyH)
         elseif self.mapSidePosition == "down" then
-            xEnemy = math.random(self.x - self.map_Object.TILE_HEIGHT, self.x + self.w - self.map_Object.TILE_HEIGHT - 20)
-            yEnemy = self.y - myEnemy.h + math.random(0, self.map_Object.TILE_HEIGHT)
+            xEnemy = math.random(self.x + (imageEnemyW)/2 + 10, self.x + self.h - (imageEnemyW)/2 - 10)
+            yEnemy = self.yScreenSize - imageEnemyH - math.random(10, imageEnemyH)
         elseif self.mapSidePosition == "left" then
-            xEnemy = self.x + myEnemy.h + math.random(0, self.map_Object.TILE_HEIGHT)
-            yEnemy = math.random(self.y - self.map_Object.TILE_WIDTH, self.y + self.w - self.map_Object.TILE_WIDTH - 20)
+            xEnemy = math.random(10, imageEnemyW)
+            yEnemy = math.random(self.y - (imageEnemyH)/2 + 10, self.y + self.h - (imageEnemyH)/2 - 10)     -- (imageH*SPRITE_ENEMY_RATIO)/2 : shoots are send from the center of the enemy
         elseif self.mapSidePosition == "right" then
-            xEnemy = self.x - math.random(0, self.map_Object.TILE_HEIGHT * SPRITE_MONSTER_RATIO) -- - myEnemy.h + math.random(0, self.map_Object.TILE_HEIGHT)
-            yEnemy = math.random(self.y - self.map_Object.TILE_WIDTH, self.y + self.w - self.map_Object.TILE_WIDTH - 20)
+            xEnemy = self.x + math.random(0, imageEnemyW)
+            yEnemy = math.random(self.y - (imageEnemyH)/2 + 10, self.y + self.h - (imageEnemyH)/2 - 10)     -- (imageH*SPRITE_ENEMY_RATIO)/2 : shoots are send from the center of the enemy
         end
 
         -- Set enemy position
@@ -434,7 +409,7 @@ function MONSTER.NewMonster(pId, pMapObject, pXScreenSize, pYScreenSize)
             self.x = map_Obj.TILE_WIDTH*2
             self.y = 0
             self.vx = 0
-            self.vy = 50
+            self.vy = 150
 
             self.sx = -1
             self.sy = 1
@@ -443,7 +418,7 @@ function MONSTER.NewMonster(pId, pMapObject, pXScreenSize, pYScreenSize)
             self.x = map_Obj.TILE_WIDTH*2
             self.y = yScreenSize
             self.vx = 0
-            self.vy = -50
+            self.vy = -150
 
             self.sx = -1
             self.sy = -1
@@ -451,7 +426,7 @@ function MONSTER.NewMonster(pId, pMapObject, pXScreenSize, pYScreenSize)
         elseif self.mapSidePosition == "left" then
             self.x = 0
             self.y = map_Obj.TILE_HEIGHT*2
-            self.vx = 50
+            self.vx = 150
             self.vy = 0
 
             self.sx = 1
@@ -460,7 +435,7 @@ function MONSTER.NewMonster(pId, pMapObject, pXScreenSize, pYScreenSize)
         elseif self.mapSidePosition == "right" then
             self.x = xScreenSize
             self.y = map_Obj.TILE_HEIGHT*2
-            self.vx = -50
+            self.vx = -150
             self.vy = 0
 
             self.sx = 1
@@ -554,34 +529,6 @@ function MONSTER.NewMonster(pId, pMapObject, pXScreenSize, pYScreenSize)
             return SIDE_POSITIONS[actualpositionID + newPositionID]
         end
     end ]]
-
---------------------------------------------------------------------------------------------------------
-
-    -- Check collision with the player
-    function myMonster:CheckPlayerCollision(dt, pPlayerObject)
-        local isPlayerHurt = false
-
-        -- Check if monster coordinates are the same as the player
-        if self.mapSidePosition == "up" then
-            if self.y >= pPlayerObject.y then isPlayerHurt = true end
-        elseif self.mapSidePosition == "down" then
-            if self.y <= pPlayerObject.y + pPlayerObject.h then isPlayerHurt = true end
-        elseif self.mapSidePosition == "left" then
-            if self.x >= pPlayerObject.x then isPlayerHurt = true end
-        elseif self.mapSidePosition == "right" then
-            if self.x <= pPlayerObject.x + pPlayerObject.w then isPlayerHurt = true end
-        end
-
-        -- Decrease player's life
-        if isPlayerHurt then
-            self.timeHurtPlayer = self.timeHurtPlayer - 1 * dt
-            if self.timeHurtPlayer <= 0 then
-                self.timeHurtPlayer = TIME_HURT_PLAYER
-                pPlayerObject.life = pPlayerObject.life - 1
-            end
-        end
-
-    end
 
 --------------------------------------------------------------------------------------------------------
 

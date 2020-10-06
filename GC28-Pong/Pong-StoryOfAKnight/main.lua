@@ -55,15 +55,15 @@ function love.draw()
     if gameState == "game" then
         map_Obj:draw()
 
+        player_Obj:draw()
+
         for key, monster in pairs(lstMonsters) do
             monster:draw()
         end
 
-        player_Obj:draw()
-
         -- Fog
         local fg_r, fg_g, fg_b, fg_a = love.graphics.getColor()
-        love.graphics.setColor(fg_r, fg_g, fg_b, 0.4)
+        love.graphics.setColor(fg_r, fg_g, fg_b, 0.3)
         love.graphics.draw(imgFog, 1 , 1)
         love.graphics.setColor(fg_r, fg_g, fg_b, fg_a)
 
@@ -111,14 +111,13 @@ function love.keypressed(key)
         if key == "m" then
             --local newPosition = monster_Obj:GetNextSidePosition_MultipleMonsters()
             tempmonster_Obj = MONSTER.NewMonster(2, map_Obj, xScreenSize, yScreenSize)
-            tempmonster_Obj:InitMonster("monster_background", 1, MONSTER_LIFE, "", #lstMonsters, monster_Obj.mapSidePosition)
+            tempmonster_Obj:InitMonster(MONSTER_LIFE, "", #lstMonsters, monster_Obj.mapSidePosition)
             table.insert(lstMonsters, tempmonster_Obj)
-
         end
 
         -- Force monster position
         if key == "x" then
-            monster_Obj:SetSidePosition("down")
+            monster_Obj:SetSidePosition("up")
             monster_Obj.status = "warning"
         end
     end
@@ -133,7 +132,7 @@ function InitGame()
     player_Obj:InitPlayer(0, yScreenSize/2, "running/knight_hero_side_defend", 4)
 
     monster_Obj = MONSTER.NewMonster(1, map_Obj, xScreenSize, yScreenSize)
-    monster_Obj:InitMonster("monster_background", 1, MONSTER_LIFE, "right", 1, "")
+    monster_Obj:InitMonster(MONSTER_LIFE, "right", 1, "")
     table.insert(lstMonsters, monster_Obj)
 
     gameState = "game"
@@ -148,7 +147,7 @@ function CheckforSecondMonster()
     if monsterPercentLife <= MONSTER_PERCENT_APPEAR_2ND_MONSTER and monster_Obj.status == "coming" then
         -- Create the second monster
         monster_Obj2 = MONSTER.NewMonster(2, map_Obj, xScreenSize, yScreenSize)
-        monster_Obj2:InitMonster("monster_background", 1, MONSTER_LIFE, "", 2, monster_Obj.mapSidePosition)
+        monster_Obj2:InitMonster(MONSTER_LIFE, "", 2, monster_Obj.mapSidePosition)
         table.insert(lstMonsters, monster_Obj2)
     end
 end

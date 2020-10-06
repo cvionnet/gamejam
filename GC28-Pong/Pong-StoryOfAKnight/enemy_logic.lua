@@ -30,6 +30,7 @@ function ENEMY.NewEnemy(pMapObject, pXScreenSize, pYScreenSize)
 
     myEnemy.life = 0
     myEnemy.timeToShoot = 0
+    myEnemy.timeHurtPlayer = TIME_HURT_PLAYER
 
     myEnemy.lstBullet = {}
 
@@ -49,9 +50,12 @@ function ENEMY.NewEnemy(pMapObject, pXScreenSize, pYScreenSize)
     end
 
 
-    function myEnemy:update(dt)
+    function myEnemy:update(dt, pPlayerObject)
         -- Monster animation
         self:PlayAnimation(dt)
+
+        -- Check for a collision with the player
+        self:CheckPlayerCollision(dt, pPlayerObject)
 
         -- Shoot a new bullet
         self.timeToShoot = self.timeToShoot - 1 * dt
@@ -97,35 +101,66 @@ function ENEMY.NewEnemy(pMapObject, pXScreenSize, pYScreenSize)
 
 --------------------------------------------------------------------------------------------------------
 
+    -- Check collision with the player
+    function myEnemy:CheckPlayerCollision(dt, pPlayerObject)
+        local isPlayerHurt = false
+
+        -- Check if enemy coordinates are the same as the player
+        if self.mapSidePosition == "up" then
+            if self.y >= pPlayerObject.y then isPlayerHurt = true end
+        elseif self.mapSidePosition == "down" then
+            if self.y <= pPlayerObject.y + pPlayerObject.h then isPlayerHurt = true end
+        elseif self.mapSidePosition == "left" then
+            if self.x >= pPlayerObject.x then isPlayerHurt = true end
+            if (pPlayerObject.x >= self.x and pPlayerObject.x <= self.x + self.w) and (pPlayerObject.y >= self.y and pPlayerObject.y <= self.y + self.h) then isPlayerHurt = true end
+        elseif self.mapSidePosition == "right" then
+            if (pPlayerObject.x >= self.x and pPlayerObject.x <= self.x + self.w) and (pPlayerObject.y >= self.y and pPlayerObject.y <= self.y + self.h) then isPlayerHurt = true end
+        end
+
+        -- Decrease player's life
+        if isPlayerHurt then
+            self.timeHurtPlayer = self.timeHurtPlayer - 1 * dt
+            if self.timeHurtPlayer <= 0 then
+                self.timeHurtPlayer = TIME_HURT_PLAYER
+                pPlayerObject.life = pPlayerObject.life - 1
+            end
+        end
+
+    end
+
+--------------------------------------------------------------------------------------------------------
+
     -- Create a new bullet
     function myEnemy:ShootBullet()
-        local xEnemy, yEnemy = 0, 0
-        local vxEnemy, vyEnemy = 0, 0
+        local xBullet, yBullet = 0, 0
+        local vxBullet, vyBullet = 0, 0
+        local imageBulletH, imageBulletW = self.map_Object:GetImageH_W("/images/shoot/frame1.png")
+        imageBulletH, imageBulletW = imageBulletH*SPRITE_BULLET_RATIO, imageBulletW*SPRITE_BULLET_RATIO
 
         if self.mapSidePosition == "up" then
-            xEnemy = self.x + self.w/2
-            yEnemy = self.y + 5
-            vxEnemy = 0
-            vyEnemy = math.random(300, 200)
+            xBullet = self.x - self.w/2 + imageBulletW/2
+            yBullet = self.y + self.h/2 + 5
+            vxBullet = 0
+            vyBullet = math.random(BULLET_MIN_SPEED, BULLET_MAX_SPEED)
         elseif self.mapSidePosition == "down" then
-            xEnemy = self.x + self.w/2
-            yEnemy = self.y - 5
-            vxEnemy = 0
-            vyEnemy = math.random(-300, -200)
+            xBullet = self.x - self.w/2 + imageBulletW/2
+            yBullet = self.y + self.h/2 - 5
+            vxBullet = 0
+            vyBullet = math.random(-BULLET_MAX_SPEED, -BULLET_MIN_SPEED)
         elseif self.mapSidePosition == "left" then
-            xEnemy = self.x + 5-- + 16                 -- 16px = bullet sprite size
-            yEnemy = self.y + self.w/2
-            vxEnemy = math.random(300, 200)
-            vyEnemy = 0
+            xBullet = self.x + self.w/2 + 5
+            yBullet = self.y + self.h/2 -- - imageBulletH/2
+            vxBullet = math.random(BULLET_MIN_SPEED, BULLET_MAX_SPEED)
+            vyBullet = 0
         elseif self.mapSidePosition == "right" then
-            xEnemy = self.x - 5
-            yEnemy = self.y + self.w/2
-            vxEnemy = math.random(-300, -200)
-            vyEnemy = 0
+            xBullet = self.x - self.w/2 - 5
+            yBullet = self.y + self.h/2 + imageBulletH/2
+            vxBullet = math.random(-BULLET_MAX_SPEED, -BULLET_MIN_SPEED)
+            vyBullet = 0
         end
 
         local myBullet = BULLET.NewBullet(self.map_Object, self.xScreenSize, self.yScreenSize)
-        myBullet:InitBullet(xEnemy, yEnemy, "frame", 11, vxEnemy, vyEnemy, self.mapSidePosition)
+        myBullet:InitBullet(xBullet, yBullet, "frame", 11, vxBullet, vyBullet, self.mapSidePosition)
         table.insert(self.lstBullet, myBullet)
     end
 
@@ -138,7 +173,7 @@ function ENEMY.NewEnemy(pMapObject, pXScreenSize, pYScreenSize)
             self.rotation = 0 --180
         elseif self.mapSidePosition == "down" then
             self.sx = -1
-            self.sy = -1
+            self.sy = 1
             self.rotation = 0 --180
         elseif self.mapSidePosition == "left" then
             self.sx = -1
