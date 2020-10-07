@@ -3,7 +3,7 @@ local PLAYER = {}
 require("param")
 
 
-function PLAYER.NewPlayer(pMapObject, pXScreenSize, pYScreenSize, pVillageLife, pPlayerLife)
+function PLAYER.NewPlayer(pMapObject, pVillageLife, pPlayerLife)
     -- PROPERTIES
     local myPlayer = {}
 
@@ -15,9 +15,6 @@ function PLAYER.NewPlayer(pMapObject, pXScreenSize, pYScreenSize, pVillageLife, 
     myPlayer.w = 0
     myPlayer.col = 0
     myPlayer.line = 0
-
-    myPlayer.xScreenSize = pXScreenSize
-    myPlayer.yScreenSize = pYScreenSize
 
     myPlayer.vx = 0
     myPlayer.vy = 0
@@ -104,7 +101,7 @@ function PLAYER.NewPlayer(pMapObject, pXScreenSize, pYScreenSize, pVillageLife, 
             self.frame = 1
         else
             self.frame = self.frame + FRAME_PER_SECOND_PLAYER * dt
-            if self.frame > #self.images then
+            if self.frame > #self.images+1 then
                 self.frame = 1
             end
         end
@@ -165,16 +162,16 @@ function PLAYER.NewPlayer(pMapObject, pXScreenSize, pYScreenSize, pVillageLife, 
             if self.mapSidePosition == "down" then
                 self:ResetPosition_Velocity(self.x, 0)
             else
-                self:ResetPosition_Velocity(self.xScreenSize/2, 0)
+                self:ResetPosition_Velocity(X_SCREENSIZE/2, 0)
             end
             self.mapSidePosition = "up"
         end
         if key == "s" then
             -- If previous position was up, keep the same x ; else set position at the middle of the screen
             if self.mapSidePosition == "up" then
-                self:ResetPosition_Velocity(self.x, self.yScreenSize - self.map_Object.TILE_HEIGHT)
+                self:ResetPosition_Velocity(self.x, Y_SCREENSIZE - self.map_Object.TILE_HEIGHT)
             else
-                self:ResetPosition_Velocity(self.xScreenSize/2, self.yScreenSize - self.map_Object.TILE_HEIGHT)
+                self:ResetPosition_Velocity(X_SCREENSIZE/2, Y_SCREENSIZE - self.map_Object.TILE_HEIGHT)
             end
             self.mapSidePosition = "down"
         end
@@ -183,7 +180,7 @@ function PLAYER.NewPlayer(pMapObject, pXScreenSize, pYScreenSize, pVillageLife, 
             if self.mapSidePosition == "right" then
                 self:ResetPosition_Velocity(0, self.y)
             else
-                self:ResetPosition_Velocity(0, self.yScreenSize/2)
+                self:ResetPosition_Velocity(0, Y_SCREENSIZE/2)
             end
 
             self.mapSidePosition = "left"
@@ -191,9 +188,9 @@ function PLAYER.NewPlayer(pMapObject, pXScreenSize, pYScreenSize, pVillageLife, 
         if key == "d" then
             -- If previous position was left, keep the same y ; else set position at the middle of the screen
             if self.mapSidePosition == "left" then
-                self:ResetPosition_Velocity(self.xScreenSize - self.map_Object.TILE_WIDTH, self.y)
+                self:ResetPosition_Velocity(X_SCREENSIZE - self.map_Object.TILE_WIDTH, self.y)
             else
-                self:ResetPosition_Velocity(self.xScreenSize - self.map_Object.TILE_WIDTH, self.yScreenSize/2)
+                self:ResetPosition_Velocity(X_SCREENSIZE - self.map_Object.TILE_WIDTH, Y_SCREENSIZE/2)
             end
 
             self.mapSidePosition = "right"

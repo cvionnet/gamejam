@@ -4,7 +4,7 @@ local ENEMY = require("enemy_logic")
 require("param")
 
 
-function MONSTER.NewMonster(pId, pMapObject, pXScreenSize, pYScreenSize)
+function MONSTER.NewMonster(pId, pMapObject)
     -- PROPERTIES
     local myMonster = {}
 
@@ -18,9 +18,6 @@ function MONSTER.NewMonster(pId, pMapObject, pXScreenSize, pYScreenSize)
     myMonster.sx = 0    -- used to flip the sprite
     myMonster.sy = 0
     myMonster.rotation = 0
-
-    myMonster.xScreenSize = pXScreenSize
-    myMonster.yScreenSize = pYScreenSize
 
     myMonster.vx = 0
     myMonster.vy = 0
@@ -98,13 +95,13 @@ function MONSTER.NewMonster(pId, pMapObject, pXScreenSize, pYScreenSize)
     -- Display a warning where the monster will appear
     function myMonster:drawWarning()
         if self.mapSidePosition == "up" then
-            love.graphics.print(math.floor(self.timeWarning), fontBig, xScreenSize/2 - fontBig:getHeight()/2, self.map_Object.TILE_HEIGHT*2)
+            love.graphics.print(math.floor(self.timeWarning), fontBig, X_SCREENSIZE/2 - fontBig:getHeight()/2, self.map_Object.TILE_HEIGHT*2)
         elseif self.mapSidePosition == "down" then
-            love.graphics.print(math.floor(self.timeWarning), fontBig, xScreenSize/2 - fontBig:getHeight()/2, yScreenSize - self.map_Object.TILE_HEIGHT*3)
+            love.graphics.print(math.floor(self.timeWarning), fontBig, X_SCREENSIZE/2 - fontBig:getHeight()/2, Y_SCREENSIZE - self.map_Object.TILE_HEIGHT*3)
         elseif self.mapSidePosition == "left" then
-            love.graphics.print(math.floor(self.timeWarning), fontBig, self.map_Object.TILE_WIDTH*2, yScreenSize/2 - fontBig:getHeight()/2)
+            love.graphics.print(math.floor(self.timeWarning), fontBig, self.map_Object.TILE_WIDTH*2, Y_SCREENSIZE/2 - fontBig:getHeight()/2)
         elseif self.mapSidePosition == "right" then
-            love.graphics.print(math.floor(self.timeWarning), fontBig, xScreenSize - self.map_Object.TILE_WIDTH*3, yScreenSize/2 - fontBig:getHeight()/2)
+            love.graphics.print(math.floor(self.timeWarning), fontBig, X_SCREENSIZE - self.map_Object.TILE_WIDTH*3, Y_SCREENSIZE/2 - fontBig:getHeight()/2)
         end
     end
 
@@ -135,8 +132,8 @@ function MONSTER.NewMonster(pId, pMapObject, pXScreenSize, pYScreenSize)
                 self.status = "fighting"
             end
         elseif self.mapSidePosition == "down" then
-            if self.y <= yScreenSize - map_Obj.TILE_HEIGHT*2 then
-                self.y = yScreenSize - map_Obj.TILE_HEIGHT*2
+            if self.y <= Y_SCREENSIZE - map_Obj.TILE_HEIGHT*2 then
+                self.y = Y_SCREENSIZE - map_Obj.TILE_HEIGHT*2
                 self.vy = 0
                 self.status = "fighting"
             end
@@ -147,8 +144,8 @@ function MONSTER.NewMonster(pId, pMapObject, pXScreenSize, pYScreenSize)
                 self.status = "fighting"
             end
         elseif self.mapSidePosition == "right" then
-            if self.x <= xScreenSize - map_Obj.TILE_WIDTH*2 then
-                self.x = xScreenSize - map_Obj.TILE_WIDTH*2
+            if self.x <= X_SCREENSIZE - map_Obj.TILE_WIDTH*2 then
+                self.x = X_SCREENSIZE - map_Obj.TILE_WIDTH*2
                 self.vx = 0
                 self.status = "fighting"
             end
@@ -178,6 +175,7 @@ function MONSTER.NewMonster(pId, pMapObject, pXScreenSize, pYScreenSize)
                         table.remove(enemy.lstBullet, bulletID)        -- delete the bullet
                     elseif self:CheckBulletWithEnemyCollision(bullet, enemy) then         -- with an enemy
                         isEnemyToDelete = self:HitEnemy(enemy)
+                        table.remove(enemy.lstBullet, bulletID)        -- delete the bullet
                     end
                 end
             end
@@ -242,7 +240,7 @@ function MONSTER.NewMonster(pId, pMapObject, pXScreenSize, pYScreenSize)
                 self.status = "warning"
             end
         elseif self.mapSidePosition == "down" then
-            if self.y >= yScreenSize then
+            if self.y >= Y_SCREENSIZE then
                 self.vy = 0
                 self:SetSidePosition("", pNumberOfMonsters, pOtherMonsterPosition)
                 self.status = "warning"
@@ -254,7 +252,7 @@ function MONSTER.NewMonster(pId, pMapObject, pXScreenSize, pYScreenSize)
                 self.status = "warning"
             end
         elseif self.mapSidePosition == "right" then
-            if self.x >= xScreenSize then
+            if self.x >= X_SCREENSIZE then
                 self.vx = 0
                 self:SetSidePosition("", pNumberOfMonsters, pOtherMonsterPosition)
                 self.status = "warning"
@@ -308,8 +306,8 @@ function MONSTER.NewMonster(pId, pMapObject, pXScreenSize, pYScreenSize)
     function myMonster:CreateEnemy()
 
         local xEnemy, yEnemy = 0, 0
-        local myEnemy = ENEMY.NewEnemy(self.map_Object, self.xScreenSize, self.yScreenSize)
-        local imageEnemyH, imageEnemyW = self.map_Object:GetImageH_W("/images/monster/walk/knight_evil_side_walk1.png")
+        local myEnemy = ENEMY.NewEnemy(self.map_Object)
+        local imageEnemyH, imageEnemyW = self.map_Object:GetImageH_W("/images/monster/idle/knight_evil_side_idle1.png")
         imageEnemyH, imageEnemyW = imageEnemyH*SPRITE_ENEMY_RATIO, imageEnemyW*SPRITE_ENEMY_RATIO
 
         -- Calculate enemy position on the monster
@@ -318,7 +316,7 @@ function MONSTER.NewMonster(pId, pMapObject, pXScreenSize, pYScreenSize)
             yEnemy = math.random(10, imageEnemyH)
         elseif self.mapSidePosition == "down" then
             xEnemy = math.random(self.x + (imageEnemyW)/2 + 10, self.x + self.h - (imageEnemyW)/2 - 10)
-            yEnemy = self.yScreenSize - imageEnemyH - math.random(10, imageEnemyH)
+            yEnemy = Y_SCREENSIZE - imageEnemyH - math.random(10, imageEnemyH)
         elseif self.mapSidePosition == "left" then
             xEnemy = math.random(10, imageEnemyW)
             yEnemy = math.random(self.y - (imageEnemyH)/2 + 10, self.y + self.h - (imageEnemyH)/2 - 10)     -- (imageH*SPRITE_ENEMY_RATIO)/2 : shoots are send from the center of the enemy
@@ -416,7 +414,7 @@ function MONSTER.NewMonster(pId, pMapObject, pXScreenSize, pYScreenSize)
             self.rotation = 180
         elseif self.mapSidePosition == "down" then
             self.x = map_Obj.TILE_WIDTH*2
-            self.y = yScreenSize
+            self.y = Y_SCREENSIZE
             self.vx = 0
             self.vy = -150
 
@@ -433,7 +431,7 @@ function MONSTER.NewMonster(pId, pMapObject, pXScreenSize, pYScreenSize)
             self.sy = 1
             self.rotation = 90
         elseif self.mapSidePosition == "right" then
-            self.x = xScreenSize
+            self.x = X_SCREENSIZE
             self.y = map_Obj.TILE_HEIGHT*2
             self.vx = -150
             self.vy = 0

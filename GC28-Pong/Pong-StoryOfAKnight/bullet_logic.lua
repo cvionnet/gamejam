@@ -3,7 +3,7 @@ local BULLET = {}
 require("param")
 
 
-function BULLET.NewBullet(pMapObject, pXScreenSize, pYScreenSize)
+function BULLET.NewBullet(pMapObject)
     -- PROPERTIES
     local myBullet = {}
 
@@ -18,9 +18,6 @@ function BULLET.NewBullet(pMapObject, pXScreenSize, pYScreenSize)
     myBullet.rotation = 0
     myBullet.ox = 0
     myBullet.oy = 0
-
-    myBullet.xScreenSize = pXScreenSize
-    myBullet.yScreenSize = pYScreenSize
 
     myBullet.vx = 0
     myBullet.vy = 0
@@ -87,13 +84,9 @@ function BULLET.NewBullet(pMapObject, pXScreenSize, pYScreenSize)
 
 
     function myBullet:PlayAnimation(dt)
-        if math.abs(self.vx) < 1 and math.abs(self.vy) < 1 then
+        self.frame = self.frame + FRAME_PER_SECOND * dt
+        if self.frame > #self.images+1 then
             self.frame = 1
-        else
-            self.frame = self.frame + FRAME_PER_SECOND * dt
-            if self.frame > #self.images then
-                self.frame = 1
-            end
         end
     end
 
@@ -143,7 +136,7 @@ function BULLET.NewBullet(pMapObject, pXScreenSize, pYScreenSize)
     -- Check if the bullet go outside the screen
     function myBullet:CheckOutboundCollision()
         if self.mapSidePosition == "up" then
-            if self.y >= self.yScreenSize then
+            if self.y >= Y_SCREENSIZE then
                 return true
             end
         elseif self.mapSidePosition == "down" then
@@ -151,7 +144,7 @@ function BULLET.NewBullet(pMapObject, pXScreenSize, pYScreenSize)
                 return true
             end
         elseif self.mapSidePosition == "left" then
-            if self.x >= self.xScreenSize then
+            if self.x >= X_SCREENSIZE then
                 return true
             end
         elseif self.mapSidePosition == "right" then
@@ -169,19 +162,19 @@ function BULLET.NewBullet(pMapObject, pXScreenSize, pYScreenSize)
     function myBullet:CheckEnemyCollision(pEnemyObject)
         -- Check if bullet coordinates are the same as the enemy
         if self.mapSidePosition == "up" then
-            if self.y <= pEnemyObject.y then
+            if self.y <= pEnemyObject.y + pEnemyObject.h/2 then
                 return true
             end
         elseif self.mapSidePosition == "down" then
-            if self.y >= pEnemyObject.y then
+            if self.y >= pEnemyObject.y + pEnemyObject.h/2 then
                 return true
             end
         elseif self.mapSidePosition == "left" then
-            if self.x <= pEnemyObject.x then
+            if self.x <= pEnemyObject.x + pEnemyObject.w/2 then
                 return true
             end
         elseif self.mapSidePosition == "right" then
-            if self.x >= pEnemyObject.x then
+            if self.x >= pEnemyObject.x - pEnemyObject.w/2 then
                 return true
             end
         end

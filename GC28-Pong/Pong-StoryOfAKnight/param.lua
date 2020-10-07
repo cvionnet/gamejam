@@ -10,6 +10,10 @@ MONSTER_PERCENT_APPEAR_2ND_MONSTER = 50 --20
 BULLET_TIME_SPEED = 15
 
 
+-- MENU
+FRAME_PER_SECOND_HEAD = 4
+
+
 -- MAP
 SPRITE_MAP_RATIO = 2
 FRAME_PER_SECOND_MAP = 4
@@ -17,8 +21,17 @@ FRAME_PER_SECOND_MAP = 4
 
 -- COMMON
 FRAME_PER_SECOND = 24
+X_SCREENSIZE = 0
+Y_SCREENSIZE = 0
 
-fontBig = love.graphics.newFont("fonts/Gameplay.ttf", 50)
+TITLE = "PONG, the Knight"
+SUB_TITLE = "Story of a fight"
+
+fontTitle = love.graphics.newFont("fonts/jabjai_heavy.ttf", 85)
+fontSubTitle = love.graphics.newFont("fonts/jabjai_heavy.ttf", 25)
+fontMenu = love.graphics.newFont("fonts/jabjai_heavy.ttf", 35)
+fontDialog = love.graphics.newFont("fonts/Computerfont.ttf", 30)
+fontBig = love.graphics.newFont("fonts/Computerfont.ttf", 50)
 
 
 -- PLAYER
@@ -42,11 +55,11 @@ SIDE_POSITIONS = {"up", "right", "down", "left"}     -- 4th positions on the scr
 
 -- ENEMY
 SPRITE_ENEMY_RATIO = 4
-FRAME_PER_SECOND_ENEMY = 4
+FRAME_PER_SECOND_ENEMY = 6
 TIME_MIN_SHOOT_BULLET = 0.5
 TIME_MAX_SHOOT_BULLET = 1
-ENEMY_MIN_LIFE = 50  -- 2
-ENEMY_MAX_LIFE = 50  -- 5
+ENEMY_MIN_LIFE = 2
+ENEMY_MAX_LIFE = 5
 
 
 -- BULLET

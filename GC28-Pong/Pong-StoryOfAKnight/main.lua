@@ -6,10 +6,12 @@ if arg[#arg] == "-debug" then require("mobdebug").start() end   -- To debug step
 local MAP = require("map_logic")
 local PLAYER = require("player_logic")
 local MONSTER = require("monster_logic")
+
+require("menu_logic")
 require("param")
 
 
-local gameState = ""            -- game / gameover / victory
+local gameState = ""            -- menu / game / gameover / victory
 
 local imgFog = love.graphics.newImage("images/map/fog.png")
 
@@ -25,15 +27,17 @@ function love.load()
     love.window.setMode(768, 768) --, {fullscreen=false, vsync=true})
     --love.keyboard.setKeyRepeat(true)
 
-    xScreenSize = love.graphics.getWidth()
-    yScreenSize = love.graphics.getHeight()
+    X_SCREENSIZE = love.graphics.getWidth()
+    Y_SCREENSIZE = love.graphics.getHeight()
 
     InitGame()
 end
 
 
 function love.update(dt)
-    if gameState == "game" then
+    if gameState == "menu" then
+        updateMenu(dt)
+    elseif gameState == "game" then
         map_Obj:update(dt)
 
         player_Obj:update(dt)
@@ -52,7 +56,9 @@ end
 
 
 function love.draw()
-    if gameState == "game" then
+    if gameState == "menu" then
+        drawMenu()
+    elseif gameState == "game" then
         map_Obj:draw()
 
         player_Obj:draw()
@@ -72,15 +78,17 @@ function love.draw()
             love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), 10, 10)
         end
     elseif gameState == "gameover" then
-        love.graphics.print("GAME OVER", fontBig, xScreenSize/2, yScreenSize/2)
+        love.graphics.print("GAME OVER", fontBig, X_SCREENSIZE/2, Y_SCREENSIZE/2)
     elseif gameState == "victory" then
-        love.graphics.print("VICTORY", fontBig, xScreenSize/2, yScreenSize/2)
+        love.graphics.print("VICTORY", fontBig, X_SCREENSIZE/2, Y_SCREENSIZE/2)
     end
 end
 
 
 function love.keypressed(key)
-    if gameState == "game" then
+    if gameState == "menu" then
+        MenuKeyboardCommands(key)
+    elseif gameState == "game" then
         -- Check if the player have to change side (left, right, up, down)
         player_Obj:SwitchSidePosition(key)
     end
@@ -110,14 +118,14 @@ function love.keypressed(key)
         -- force 2nd monster to appear
         if key == "m" then
             --local newPosition = monster_Obj:GetNextSidePosition_MultipleMonsters()
-            tempmonster_Obj = MONSTER.NewMonster(2, map_Obj, xScreenSize, yScreenSize)
+            tempmonster_Obj = MONSTER.NewMonster(2, map_Obj)
             tempmonster_Obj:InitMonster(MONSTER_LIFE, "", #lstMonsters, monster_Obj.mapSidePosition)
             table.insert(lstMonsters, tempmonster_Obj)
         end
 
         -- Force monster position
         if key == "x" then
-            monster_Obj:SetSidePosition("up")
+            monster_Obj:SetSidePosition("down")
             monster_Obj.status = "warning"
         end
     end
@@ -126,18 +134,28 @@ end
 --------------------------------------------------------------------------------------------------------
 
 function InitGame()
-    map_Obj = MAP.NewMap(xScreenSize, yScreenSize)
+    EnterMenu()
+    gameState = "menu"
 
-    player_Obj = PLAYER.NewPlayer(map_Obj, xScreenSize, yScreenSize, VILLAGE_LIFE, PLAYER_LIFE)
-    player_Obj:InitPlayer(0, yScreenSize/2, "running/knight_hero_side_defend", 4)
+    --InitMap()
+end
 
-    monster_Obj = MONSTER.NewMonster(1, map_Obj, xScreenSize, yScreenSize)
+
+function InitMap()
+    map_Obj = MAP.NewMap()
+    map_Obj:InitAnimation()
+
+    player_Obj = PLAYER.NewPlayer(map_Obj, VILLAGE_LIFE, PLAYER_LIFE)
+    player_Obj:InitPlayer(0, Y_SCREENSIZE/2, "running/knight_hero_side_defend", 4)
+
+    monster_Obj = MONSTER.NewMonster(1, map_Obj)
     monster_Obj:InitMonster(MONSTER_LIFE, "right", 1, "")
     table.insert(lstMonsters, monster_Obj)
 
     gameState = "game"
 end
 
+--------------------------------------------------------------------------------------------------------
 
 -- Check if we add a 2nd monster
 function CheckforSecondMonster()
@@ -146,7 +164,7 @@ function CheckforSecondMonster()
     -- Check the status to be sure that the 1st monster has already take his new position  (to avoid to have 2 monster face to face)
     if monsterPercentLife <= MONSTER_PERCENT_APPEAR_2ND_MONSTER and monster_Obj.status == "coming" then
         -- Create the second monster
-        monster_Obj2 = MONSTER.NewMonster(2, map_Obj, xScreenSize, yScreenSize)
+        monster_Obj2 = MONSTER.NewMonster(2, map_Obj)
         monster_Obj2:InitMonster(MONSTER_LIFE, "", 2, monster_Obj.mapSidePosition)
         table.insert(lstMonsters, monster_Obj2)
     end

@@ -4,7 +4,7 @@ local BULLET = require("bullet_logic")
 require("param")
 
 
-function ENEMY.NewEnemy(pMapObject, pXScreenSize, pYScreenSize)
+function ENEMY.NewEnemy(pMapObject)
     -- PROPERTIES
     local myEnemy = {}
 
@@ -17,9 +17,6 @@ function ENEMY.NewEnemy(pMapObject, pXScreenSize, pYScreenSize)
     myEnemy.sx = 0    -- used to flip the sprite
     myEnemy.sy = 0
     myEnemy.rotation = 0
-
-    myEnemy.xScreenSize = pXScreenSize
-    myEnemy.yScreenSize = pYScreenSize
 
     myEnemy.vx = 0
     myEnemy.vy = 0
@@ -37,7 +34,7 @@ function ENEMY.NewEnemy(pMapObject, pXScreenSize, pYScreenSize)
 --------------------------------------------------------------------------------------------------------
     -- METHODS
     function myEnemy:draw()
-        love.graphics.draw(self.images[math.floor(self.frame)], self.x, self.y, math.rad(self.rotation), self.sx*SPRITE_ENEMY_RATIO, self.sy*SPRITE_ENEMY_RATIO)  --, self.flip, 1) --, self.w/2, self.h-6) -- player.h/2)
+        love.graphics.draw(self.images[math.floor(self.frame)], self.x, self.y, math.rad(self.rotation), self.sx*SPRITE_ENEMY_RATIO, self.sy*SPRITE_ENEMY_RATIO)
 
         -- DEBUG
         if DEBUG_MODE == true then
@@ -93,8 +90,8 @@ function ENEMY.NewEnemy(pMapObject, pXScreenSize, pYScreenSize)
 
 
     function myEnemy:PlayAnimation(dt)
-        self.frame = self.frame + FRAME_PER_SECOND_ENEMY * dt
-        if self.frame > #self.images then
+        self.frame = self.frame + dt -- + FRAME_PER_SECOND_ENEMY * dt
+        if self.frame > #self.images+1 then
             self.frame = 1
         end
     end
@@ -159,7 +156,7 @@ function ENEMY.NewEnemy(pMapObject, pXScreenSize, pYScreenSize)
             vyBullet = 0
         end
 
-        local myBullet = BULLET.NewBullet(self.map_Object, self.xScreenSize, self.yScreenSize)
+        local myBullet = BULLET.NewBullet(self.map_Object)
         myBullet:InitBullet(xBullet, yBullet, "frame", 11, vxBullet, vyBullet, self.mapSidePosition)
         table.insert(self.lstBullet, myBullet)
     end
