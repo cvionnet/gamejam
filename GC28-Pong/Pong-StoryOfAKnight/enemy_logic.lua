@@ -1,6 +1,8 @@
 local ENEMY = {}
 
 local BULLET = require("bullet_logic")
+local EXPLOSION = require("explosion_logic")
+
 require("param")
 
 
@@ -21,20 +23,41 @@ function ENEMY.NewEnemy(pMapObject)
     myEnemy.vx = 0
     myEnemy.vy = 0
     myEnemy.mapSidePosition = ""       -- up, down, left, right
+    myEnemy.finalPositionX = 0
+    myEnemy.finalPositionY = 0
+    myEnemy.alpha = 0
 
-    myEnemy.images = {}
     myEnemy.frame = 1
+    myEnemy.currentAnimation = ""
+    myEnemy.lstAnimations = {}                         -- stock all images of an animation ("run1", "run2"...), indexed by a name (eg :  lstAnimations["run"])
+    myEnemy.lstAnimationsImages = {}                   -- stock all images (Love2d object) used in all animations, indexed by mage name (eg : "run1", "run2"...)
 
     myEnemy.life = 0
+    myEnemy.isHit = false
+    myEnemy.isDead = false
+    myEnemy.IsToDelete = false
+
     myEnemy.timeToShoot = 0
     myEnemy.timeHurtPlayer = TIME_HURT_PLAYER
 
     myEnemy.lstBullet = {}
 
+    myEnemy.explosion = {}                -- to display an explosion when the enemy die
+    myEnemy.explosion.obj = EXPLOSION.NewExplosion()
+    myEnemy.explosion.x = 0
+    myEnemy.explosion.y = 0
+    myEnemy.explosion.ratio = SPRITE_ENEMY_RATIO
+
 --------------------------------------------------------------------------------------------------------
     -- METHODS
     function myEnemy:draw()
-        love.graphics.draw(self.images[math.floor(self.frame)], self.x, self.y, math.rad(self.rotation), self.sx*SPRITE_ENEMY_RATIO, self.sy*SPRITE_ENEMY_RATIO)
+        if self.isDead then
+            if self.explosion.obj.isFinished == false then
+                self.explosion.obj:draw()
+            end
+        else
+            self:drawAnimation()
+        end
 
         -- DEBUG
         if DEBUG_MODE == true then
@@ -48,51 +71,173 @@ function ENEMY.NewEnemy(pMapObject)
 
 
     function myEnemy:update(dt, pPlayerObject)
-        -- Monster animation
-        self:PlayAnimation(dt)
+        if self.isDead then
+            self.explosion.obj:update(dt)
 
-        -- Check for a collision with the player
-        self:CheckPlayerCollision(dt, pPlayerObject)
+            -- To remove the enemy in the list in "monster_logic" when the animation is finished
+            if self.explosion.obj.isFinished then
+                self.IsToDelete = true
+            end
+        else
+            -- Monster animation
+            if self.currentAnimation == "walk" then
+                self:updateComing(dt)
+            end
 
-        -- Shoot a new bullet
-        self.timeToShoot = self.timeToShoot - 1 * dt
-        if self.timeToShoot < 0 then
-            self.timeToShoot = math.random(TIME_MIN_SHOOT_BULLET, TIME_MAX_SHOOT_BULLET)
-            self:ShootBullet()
+            self:updateAnimation(dt)
+
+            -- Check for a collision with the player
+            self:CheckPlayerCollision(dt, pPlayerObject)
+
+            -- Shoot a new bullet
+            if self.currentAnimation ~= "walk" then
+                self.timeToShoot = self.timeToShoot - 1 * dt
+                if self.timeToShoot < 0 then
+                    self:PlayAnimation("attack")
+
+                    self.timeToShoot = math.random(TIME_MIN_SHOOT_BULLET, TIME_MAX_SHOOT_BULLET)
+                    self:ShootBullet()
+                end
+            end
+
+            -- Check if the enemy is dead
+            self:CheckIfDead()
         end
     end
 
 --------------------------------------------------------------------------------------------------------
 
-    function myEnemy:InitEnemy(pX, pY, pAnimationFile, pAnimationNumberFrames, pMonsterSidePosition)
+    function myEnemy:InitEnemy(pX, pY, pMonsterSidePosition)
         self.lstBullet = {}
 
-        self.x = pX
-        self.y = pY
+        self.finalPositionX = pX
+        self.finalPositionY = pY
         self.mapSidePosition = pMonsterSidePosition
+        self.alpha = 0
 
         self.life = math.random(ENEMY_MIN_LIFE, ENEMY_MAX_LIFE)
         self.timeToShoot = math.random(TIME_MIN_SHOOT_BULLET, TIME_MAX_SHOOT_BULLET)
 
-        self:LoadAnimation(pAnimationFile, pAnimationNumberFrames)
+        self:AddNewAnimation("idle", "images/monster/idle", { "knight_evil_side_idle1", "knight_evil_side_idle2" })
+        self:AddNewAnimation("walk", "images/monster/walk", { "knight_evil_side_walk1", "knight_evil_side_walk2", "knight_evil_side_walk3", "knight_evil_side_walk4" })
+        self:AddNewAnimation("attack", "images/monster/attack", { "knight_evil_side_attack1", "knight_evil_side_attack2", "knight_evil_side_attack3", "knight_evil_side_attack4", "knight_evil_side_attack5", "knight_evil_side_attack6" })
+        self:PlayAnimation("walk")
+
         self:SetSidePosition()
     end
 
+--------------------------------------------------------------------------------------------------------
 
-    function myEnemy:LoadAnimation(pImageName, pImageNumber)
-        for i = 1, pImageNumber do
-            self.images[i] = love.graphics.newImage("images/monster/"..pImageName..tostring(i)..".png")
+    -- Move the monster on the field
+    function myEnemy:updateComing(dt)
+        -- Move the monster
+        self.x = self.x + self.vx * dt
+        self.y = self.y + self.vy * dt
+
+        -- Make the monster appear from the fog
+        if self.alpha < 1 then
+            self.alpha = self.alpha + dt/3
+        else
+            self.alpha = 1
         end
 
-        self.w = self.images[1]:getWidth() * SPRITE_ENEMY_RATIO
-        self.h = self.images[1]:getHeight() * SPRITE_ENEMY_RATIO
+        -- Check if final position is reached, and then set the monster to fighting mode
+        if self.mapSidePosition == "up" then
+            if self.y >= self.finalPositionY then
+                self.y = self.finalPositionY
+                self.vy = 0
+                self:PlayAnimation("idle")
+            end
+        elseif self.mapSidePosition == "down" then
+            if self.y <= self.finalPositionY then
+                self.y = self.finalPositionY
+                self.vy = 0
+                self:PlayAnimation("idle")
+            end
+        elseif self.mapSidePosition == "left" then
+            if self.x >= self.finalPositionX then
+                self.x = self.finalPositionX
+                self.vx = 0
+                self:PlayAnimation("idle")
+            end
+        elseif self.mapSidePosition == "right" then
+            if self.x <= self.finalPositionX then
+                self.x = self.finalPositionX
+                self.vx = 0
+                self:PlayAnimation("idle")
+            end
+        end
+    end
+
+--------------------------------------------------------------------------------------------------------
+
+    -- Create a new animation
+    function myEnemy:AddNewAnimation(pName, pFolder, pListImages)
+        self:AddAnimationImages(pFolder, pListImages)
+        self.lstAnimations[pName] = pListImages
     end
 
 
-    function myEnemy:PlayAnimation(dt)
-        self.frame = self.frame + dt -- + FRAME_PER_SECOND_ENEMY * dt
-        if self.frame > #self.images+1 then
+    -- Load images used for an animation (from a folder)
+    function myEnemy:AddAnimationImages(pFolder, pListImages)
+        for key, image in pairs(pListImages) do
+            local fileName = pFolder.."/"..image..".png"
+            self.lstAnimationsImages[image] = love.graphics.newImage(fileName)
+        end
+
+        self.w = self.lstAnimationsImages["knight_evil_side_idle1"]:getWidth() * SPRITE_ENEMY_RATIO
+        self.h = self.lstAnimationsImages["knight_evil_side_idle1"]:getHeight() * SPRITE_ENEMY_RATIO
+    end
+
+
+    -- Prepare the animation before being played
+    function myEnemy:PlayAnimation(pName)
+        if self.currentAnimation ~= pName then
+            self.currentAnimation = pName
             self.frame = 1
+        end
+    end
+
+
+    function myEnemy:drawAnimation()
+        local imgName = self.lstAnimations[self.currentAnimation][math.floor(self.frame)]    -- get image name for the current animation and the current fame  (eg : for "run" and frame=1, get "run1")
+        local img = self.lstAnimationsImages[imgName]       -- get Love2d image object from the name of the image
+
+
+        if myEnemy.isHit then
+            love.graphics.setShader(shaderBlink)
+            shaderBlink:send("WhiteFactor", 1)
+
+            love.graphics.draw(img, self.x, self.y, math.rad(self.rotation), self.sx*SPRITE_ENEMY_RATIO, self.sy*SPRITE_ENEMY_RATIO)
+
+            love.graphics.setShader()
+            self.isHit = false
+        else
+            love.graphics.setColor(1,1,1,self.alpha)
+            love.graphics.draw(img, self.x, self.y, math.rad(self.rotation), self.sx*SPRITE_ENEMY_RATIO, self.sy*SPRITE_ENEMY_RATIO)
+            love.graphics.setColor(1,1,1,1)
+        end
+    end
+
+
+    function myEnemy:updateAnimation(dt)
+        if self.currentAnimation ~= "" then
+            if self.currentAnimation == "walk" then
+                self.frame = self.frame + FRAME_PER_SECOND_ENEMY * dt
+            elseif self.currentAnimation == "attack" then
+                self.frame = self.frame + FRAME_PER_SECOND_ENEMY_ATTACK * dt
+            elseif self.currentAnimation == "idle" then
+                self.frame = self.frame + FRAME_PER_SECOND_ENEMY * dt
+            end
+
+            -- Reset timer
+            if self.frame > #self.lstAnimations[self.currentAnimation]+1 then
+                self.frame = 1
+
+                if self.currentAnimation == "attack" then       -- after an attack, back to idle animation
+                    self:PlayAnimation("idle")
+                end
+            end
         end
     end
 
@@ -123,6 +268,48 @@ function ENEMY.NewEnemy(pMapObject)
             end
         end
 
+    end
+
+
+    -- Set enemy side position
+    function myEnemy:SetSidePosition()
+        if self.mapSidePosition == "up" then
+            self.x = self.finalPositionX
+            self.y = -self.h
+            self.vx = 0
+            self.vy = ENEMY_WALKING_SPEED
+
+            self.sx = -1
+            self.sy = 1
+            self.rotation = 0 --180
+        elseif self.mapSidePosition == "down" then
+            self.x = self.finalPositionX
+            self.y = Y_SCREENSIZE
+            self.vx = 0
+            self.vy = -ENEMY_WALKING_SPEED
+
+            self.sx = -1
+            self.sy = 1
+            self.rotation = 0 --180
+        elseif self.mapSidePosition == "left" then
+            self.x = -self.w
+            self.y = self.finalPositionY
+            self.vx = ENEMY_WALKING_SPEED
+            self.vy = 0
+
+            self.sx = -1
+            self.sy = -1
+            self.rotation = 180 --90
+        elseif self.mapSidePosition == "right" then
+            self.x = X_SCREENSIZE + self.w
+            self.y = self.finalPositionY
+            self.vx = -ENEMY_WALKING_SPEED
+            self.vy = 0
+
+            self.sx = 1
+            self.sy = -1
+            self.rotation = 180 --90
+        end
     end
 
 --------------------------------------------------------------------------------------------------------
@@ -162,26 +349,17 @@ function ENEMY.NewEnemy(pMapObject)
     end
 
 
-    -- Set enemy side position
-    function myEnemy:SetSidePosition()
-        if self.mapSidePosition == "up" then
-            self.sx = -1
-            self.sy = 1
-            self.rotation = 0 --180
-        elseif self.mapSidePosition == "down" then
-            self.sx = -1
-            self.sy = 1
-            self.rotation = 0 --180
-        elseif self.mapSidePosition == "left" then
-            self.sx = -1
-            self.sy = -1
-            self.rotation = 180 --90
-        elseif self.mapSidePosition == "right" then
-            self.sx = 1
-            self.sy = -1
-            self.rotation = 180 --90
+    -- Action to perform when the enemy is dead
+    function myEnemy:CheckIfDead()
+        if self.life <= 0 then
+            self.explosion.x = self.x
+            self.explosion.y = self.y
+            self.explosion.obj:InitExplosion(self.explosion.x, self.explosion.y, self.explosion.ratio, 0, "explosion", 8)
+
+            self.isDead = true
         end
     end
+
 
 --------------------------------------------------------------------------------------------------------
 

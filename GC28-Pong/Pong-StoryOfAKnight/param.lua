@@ -2,6 +2,8 @@
 
 -- MAIN
 DEBUG_MODE = true
+DEBUG_PASS_MENU = true
+
 
 PLAYER_LIFE = 10
 VILLAGE_LIFE = 100
@@ -36,13 +38,15 @@ fontBig = love.graphics.newFont("fonts/Computerfont.ttf", 50)
 
 -- PLAYER
 SPRITE_PLAYER_RATIO = 2
-FRAME_PER_SECOND_PLAYER = 12
+FRAME_PER_SECOND_PLAYER_IDLE = 4
+FRAME_PER_SECOND_PLAYER_RUN = 12
 GRAVITY = .9
 STOP_PLAYER = .5  --.01
 PLAYER_FEET_HEIGHT = 6
 
 
 -- MONSTER
+MONSTER_WALKING_SPEED = 250
 SPRITE_MONSTER_RATIO = 1
 TIME_WARNING = 1  --4
 TIME_HURT_PLAYER = 0.3
@@ -55,7 +59,9 @@ SIDE_POSITIONS = {"up", "right", "down", "left"}     -- 4th positions on the scr
 
 -- ENEMY
 SPRITE_ENEMY_RATIO = 4
-FRAME_PER_SECOND_ENEMY = 6
+FRAME_PER_SECOND_ENEMY = 2
+FRAME_PER_SECOND_ENEMY_ATTACK = 20
+ENEMY_WALKING_SPEED = 50
 TIME_MIN_SHOOT_BULLET = 0.5
 TIME_MAX_SHOOT_BULLET = 1
 ENEMY_MIN_LIFE = 2
@@ -66,3 +72,20 @@ ENEMY_MAX_LIFE = 5
 SPRITE_BULLET_RATIO = 1
 BULLET_MIN_SPEED = 200 --200
 BULLET_MAX_SPEED = 200 --300
+
+
+-- EXPLOSION
+FRAME_PER_SECOND_EXPLOSION = 8
+
+
+-- To make a sprite blinking
+shaderBlink = love.graphics.newShader[[
+    extern float WhiteFactor;
+
+    vec4 effect(vec4 vcolor, Image tex, vec2 texcoord, vec2 pixcoord)
+    {
+        vec4 outputcolor = Texel(tex, texcoord) * vcolor;
+        outputcolor.rgb += vec3(WhiteFactor);
+        return outputcolor;
+    }
+]]

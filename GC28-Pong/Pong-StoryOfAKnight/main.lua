@@ -125,7 +125,7 @@ function love.keypressed(key)
 
         -- Force monster position
         if key == "x" then
-            monster_Obj:SetSidePosition("down")
+            monster_Obj:SetSidePosition("left")
             monster_Obj.status = "warning"
         end
     end
@@ -134,10 +134,13 @@ end
 --------------------------------------------------------------------------------------------------------
 
 function InitGame()
-    EnterMenu()
-    gameState = "menu"
-
-    --InitMap()
+    -- pass menu screen
+    if DEBUG_PASS_MENU then
+        InitMap()
+    else
+        EnterMenu()
+        gameState = "menu"
+    end
 end
 
 
@@ -146,7 +149,7 @@ function InitMap()
     map_Obj:InitAnimation()
 
     player_Obj = PLAYER.NewPlayer(map_Obj, VILLAGE_LIFE, PLAYER_LIFE)
-    player_Obj:InitPlayer(0, Y_SCREENSIZE/2, "running/knight_hero_side_defend", 4)
+    player_Obj:InitPlayer(0, Y_SCREENSIZE/2)
 
     monster_Obj = MONSTER.NewMonster(1, map_Obj)
     monster_Obj:InitMonster(MONSTER_LIFE, "right", 1, "")

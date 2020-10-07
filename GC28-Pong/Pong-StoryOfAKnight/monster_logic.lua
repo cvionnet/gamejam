@@ -1,6 +1,7 @@
 local MONSTER = {}
 
 local ENEMY = require("enemy_logic")
+
 require("param")
 
 
@@ -119,7 +120,7 @@ function MONSTER.NewMonster(pId, pMapObject)
 --------------------------------------------------------------------------------------------------------
 
     -- Move the monster on the field
-    function myMonster:updateComing(dt, pPlayerObject)
+    function myMonster:updateComing(dt)
         -- Move the monster
         self.x = self.x + self.vx * dt
         self.y = self.y + self.vy * dt
@@ -157,7 +158,6 @@ function MONSTER.NewMonster(pId, pMapObject)
     function myMonster:updateFighting(dt, pPlayerObject)
         -- Enemies update
         for EnemyID = #self.lstEnemies, 1, -1 do
-            local isEnemyToDelete = false
             local enemy = self.lstEnemies[EnemyID]
 
             enemy:update(dt, pPlayerObject)
@@ -174,14 +174,14 @@ function MONSTER.NewMonster(pId, pMapObject)
                         self:HitVillage(pPlayerObject, bullet)
                         table.remove(enemy.lstBullet, bulletID)        -- delete the bullet
                     elseif self:CheckBulletWithEnemyCollision(bullet, enemy) then         -- with an enemy
-                        isEnemyToDelete = self:HitEnemy(enemy)
+                        self:HitEnemy(enemy)
                         table.remove(enemy.lstBullet, bulletID)        -- delete the bullet
                     end
                 end
             end
 
             -- If the enemies is dead, remove all its bullets and remove the enemy
-            if isEnemyToDelete then
+            if enemy.IsToDelete then
                 -- Hit the monster
                 self.life = self.life - 1
 
@@ -194,6 +194,7 @@ function MONSTER.NewMonster(pId, pMapObject)
             end
         end
 
+
         -- Create a new enemy
         if self.createdEnemies < self.maxEnemies  then
             self.timeToNewEnemy = self.timeToNewEnemy - 1 * dt
@@ -202,6 +203,7 @@ function MONSTER.NewMonster(pId, pMapObject)
                 self:CreateEnemy()
             end
         end
+
 
         -- If all enemies have been destroyed, move the monster to another position
         if self.createdEnemies == self.maxEnemies and #self.lstEnemies == 0 then
@@ -219,6 +221,7 @@ function MONSTER.NewMonster(pId, pMapObject)
                 self.status = "leaving"
             end
         end
+
 
         -- Message when the village is hitten
         self:updateMessageHitVillage(dt)
@@ -326,7 +329,7 @@ function MONSTER.NewMonster(pId, pMapObject)
         end
 
         -- Set enemy position
-        myEnemy:InitEnemy(xEnemy, yEnemy, "idle/knight_evil_side_idle", 2, self.mapSidePosition)
+        myEnemy:InitEnemy(xEnemy, yEnemy, self.mapSidePosition)
         table.insert(self.lstEnemies, myEnemy)
 
         self.createdEnemies = self.createdEnemies + 1
@@ -382,13 +385,7 @@ function MONSTER.NewMonster(pId, pMapObject)
     -- If a bullet touch the enemy, reduce its life
     function myMonster:HitEnemy(pEnemyObject)
         pEnemyObject.life = pEnemyObject.life - 1
-
-        -- If the enemy is dead
-        if pEnemyObject.life <= 0 then
-            return true
-        end
-
-        return false
+        pEnemyObject.isHit = true
     end
 
 --------------------------------------------------------------------------------------------------------
@@ -407,7 +404,7 @@ function MONSTER.NewMonster(pId, pMapObject)
             self.x = map_Obj.TILE_WIDTH*2
             self.y = 0
             self.vx = 0
-            self.vy = 150
+            self.vy = MONSTER_WALKING_SPEED
 
             self.sx = -1
             self.sy = 1
@@ -416,7 +413,7 @@ function MONSTER.NewMonster(pId, pMapObject)
             self.x = map_Obj.TILE_WIDTH*2
             self.y = Y_SCREENSIZE
             self.vx = 0
-            self.vy = -150
+            self.vy = -MONSTER_WALKING_SPEED
 
             self.sx = -1
             self.sy = -1
@@ -424,7 +421,7 @@ function MONSTER.NewMonster(pId, pMapObject)
         elseif self.mapSidePosition == "left" then
             self.x = 0
             self.y = map_Obj.TILE_HEIGHT*2
-            self.vx = 150
+            self.vx = MONSTER_WALKING_SPEED
             self.vy = 0
 
             self.sx = 1
@@ -433,7 +430,7 @@ function MONSTER.NewMonster(pId, pMapObject)
         elseif self.mapSidePosition == "right" then
             self.x = X_SCREENSIZE
             self.y = map_Obj.TILE_HEIGHT*2
-            self.vx = -150
+            self.vx = -MONSTER_WALKING_SPEED
             self.vy = 0
 
             self.sx = 1

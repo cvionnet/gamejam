@@ -22,8 +22,10 @@ function PLAYER.NewPlayer(pMapObject, pVillageLife, pPlayerLife)
     myPlayer.movingDirection = ""       -- up, down, left, right
     myPlayer.mapSidePosition = ""       -- up, down, left, right
 
-    myPlayer.images = {}
     myPlayer.frame = 1
+    myPlayer.currentAnimation = ""
+    myPlayer.lstAnimations = {}                         -- stock all images of an animation ("run1", "run2"...), indexed by a name (eg :  lstAnimations["run"])
+    myPlayer.lstAnimationsImages = {}                   -- stock all images (Love2d object) used in all animations, indexed by mage name (eg : "run1", "run2"...)
 
     myPlayer.life = pPlayerLife
     myPlayer.villageLife = pVillageLife
@@ -35,7 +37,7 @@ function PLAYER.NewPlayer(pMapObject, pVillageLife, pPlayerLife)
     -- METHODS
     function myPlayer:draw()
 
-        love.graphics.draw(self.images[math.floor(self.frame)], self.x, self.y, 0, 1 * SPRITE_PLAYER_RATIO, 1 * SPRITE_PLAYER_RATIO)  --, 0, self.flip, 1) --, self.w/2, self.h-6) -- player.h/2)
+        self:drawAnimation()
         love.graphics.print("Villageois : "..tostring(self.villageLife), 10, 30)
 
         -- DEBUG - draw player box
@@ -66,7 +68,8 @@ function PLAYER.NewPlayer(pMapObject, pVillageLife, pPlayerLife)
         self.y = self.y + self.vy
 
         -- Player animation
-        self:PlayAnimation(dt)
+        --self:PlayAnimation(dt)
+        self:updateAnimation(dt)
 
         -- Movements
         self:CheckInputs(dt)
@@ -77,31 +80,69 @@ function PLAYER.NewPlayer(pMapObject, pVillageLife, pPlayerLife)
 
 --------------------------------------------------------------------------------------------------------
 
-    function myPlayer:InitPlayer(pX, pY, pAnimationFile, pAnimationNumberFrames)
+    function myPlayer:InitPlayer(pX, pY)
         self.x = pX
         self.y = pY
         self.mapSidePosition = "left"
 
-        self:LoadAnimation(pAnimationFile, pAnimationNumberFrames)
+        self:AddNewAnimation("idle", "images/player/idle", { "knight_hero_side_idle1", "knight_hero_side_idle2", "knight_hero_side_idle3" })
+        self:AddNewAnimation("run", "images/player/run", { "knight_hero_side_defend1", "knight_hero_side_defend2", "knight_hero_side_defend3", "knight_hero_side_defend4" })
+        self:PlayAnimation("idle")
+    end
+
+--------------------------------------------------------------------------------------------------------
+
+    -- Create a new animation
+    function myPlayer:AddNewAnimation(pName, pFolder, pListImages)
+        self:AddAnimationImages(pFolder, pListImages)
+        self.lstAnimations[pName] = pListImages
     end
 
 
-    function myPlayer:LoadAnimation(pImageName, pImageNumber)
-        for i = 1, pImageNumber do
-            self.images[i] = love.graphics.newImage("images/player/"..pImageName..tostring(i)..".png")
+    -- Load images used for an animation (from a folder)
+    function myPlayer:AddAnimationImages(pFolder, pListImages)
+        for key, image in pairs(pListImages) do
+            local fileName = pFolder.."/"..image..".png"
+            self.lstAnimationsImages[image] = love.graphics.newImage(fileName)
         end
 
-        self.w = self.images[1]:getWidth() * SPRITE_PLAYER_RATIO
-        self.h = self.images[1]:getHeight() * SPRITE_PLAYER_RATIO
+        self.w = self.lstAnimationsImages["knight_hero_side_idle1"]:getWidth() * SPRITE_PLAYER_RATIO
+        self.h = self.lstAnimationsImages["knight_hero_side_idle1"]:getHeight() * SPRITE_PLAYER_RATIO
     end
 
 
-    function myPlayer:PlayAnimation(dt)
-        if math.abs(self.vx) < 1 and math.abs(self.vy) < 1 then
+    -- Prepare the animation before being played
+    function myPlayer:PlayAnimation(pName)
+        if self.currentAnimation ~= pName then
+            self.currentAnimation = pName
             self.frame = 1
-        else
-            self.frame = self.frame + FRAME_PER_SECOND_PLAYER * dt
-            if self.frame > #self.images+1 then
+        end
+    end
+
+
+    function myPlayer:drawAnimation()
+        local imgName = self.lstAnimations[self.currentAnimation][math.floor(self.frame)]    -- get image name for the current animation and the current fame  (eg : for "run" and frame=1, get "run1")
+        local img = self.lstAnimationsImages[imgName]       -- get Love2d image object from the name of the image
+
+        love.graphics.draw(img, self.x, self.y, 0, 1 * SPRITE_PLAYER_RATIO, 1 * SPRITE_PLAYER_RATIO)
+    end
+
+
+    function myPlayer:updateAnimation(dt)
+        if self.currentAnimation ~= "" then
+            if self.currentAnimation == "run" then
+                self.frame = self.frame + FRAME_PER_SECOND_PLAYER_RUN * dt
+
+                -- If the player stop
+                if math.abs(self.vx) < 1 and math.abs(self.vy) < 1 then
+                    self:PlayAnimation("idle")
+                end
+            elseif self.currentAnimation == "idle" then
+                self.frame = self.frame + FRAME_PER_SECOND_PLAYER_IDLE * dt
+            end
+
+            -- Reset timer
+            if self.frame > #self.lstAnimations[self.currentAnimation]+1 then
                 self.frame = 1
             end
         end
@@ -206,12 +247,14 @@ function PLAYER.NewPlayer(pMapObject, pVillageLife, pPlayerLife)
                 if math.abs(self.vy) <= self.vmax then
                     self.vy = self.vy - 1
                     self.movingDirection = "up"
+                    self:PlayAnimation("run")
                 end
             end
             if love.keyboard.isDown("down") then
                 if math.abs(self.vy) <= self.vmax then
                     self.vy = self.vy + 1
                     self.movingDirection = "down"
+                    self:PlayAnimation("run")
                 end
             end
         end
@@ -222,12 +265,14 @@ function PLAYER.NewPlayer(pMapObject, pVillageLife, pPlayerLife)
                 if math.abs(self.vx) <= self.vmax then
                     self.vx = self.vx - 1
                     self.movingDirection = "left"
+                    self:PlayAnimation("run")
                 end
             end
             if love.keyboard.isDown("right") then
                 if math.abs(self.vx) <= self.vmax then
                     self.vx = self.vx + 1
                     self.movingDirection = "right"
+                    self:PlayAnimation("run")
                 end
             end
         end
