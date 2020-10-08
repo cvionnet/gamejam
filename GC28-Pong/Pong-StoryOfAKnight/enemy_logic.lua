@@ -352,11 +352,28 @@ function ENEMY.NewEnemy(pMapObject)
     -- Action to perform when the enemy is dead
     function myEnemy:CheckIfDead()
         if self.life <= 0 then
-            self.explosion.x = self.x
-            self.explosion.y = self.y
-            self.explosion.obj:InitExplosion(self.explosion.x, self.explosion.y, self.explosion.ratio, 0, "explosion", 8)
+            if self.mapSidePosition == "up" then
+                self.explosion.x = self.x - self.w/2
+                self.explosion.y = self.y + self.h/2
+            elseif self.mapSidePosition == "down" then
+                self.explosion.x = self.x - self.w/2
+                self.explosion.y = self.y + self.h/2
+            elseif self.mapSidePosition == "left" then
+                self.explosion.x = self.x + self.w/2
+                self.explosion.y = self.y + self.h/2
+            elseif self.mapSidePosition == "right" then
+                self.explosion.x = self.x - self.w/2
+                self.explosion.y = self.y + self.h/2
+            end
+
+            self.explosion.obj:InitExplosion(self.explosion.x, self.explosion.y, self.explosion.ratio, 0, "explosion", 9)
 
             self.isDead = true
+
+            -- Mark all bullets to be destroyed
+            for i = 1, #self.lstBullet do
+                self.lstBullet[i].isMarkedToDestroy = true
+            end
         end
     end
 

@@ -20,6 +20,7 @@ local lstMonsters = {}
 local bulletTimeMode = false
 local bulletTimer = 0.5
 
+
 --------------------------------------------------------------------------------------------------------
 
 function love.load()
@@ -49,6 +50,11 @@ function love.update(dt)
             CheckforSecondMonster()
         end
 
+        -- Camera shake
+        if camShake.shake then
+            updateCamShake(dt)
+        end
+
         CheckforGameOver()
         CheckforVictory()
     end
@@ -59,6 +65,11 @@ function love.draw()
     if gameState == "menu" then
         drawMenu()
     elseif gameState == "game" then
+        -- Camera shake
+        if camShake.shake then
+            drawCamShake()
+        end
+
         map_Obj:draw()
 
         player_Obj:draw()
@@ -68,19 +79,15 @@ function love.draw()
         end
 
         -- Fog
-        local fg_r, fg_g, fg_b, fg_a = love.graphics.getColor()
-        love.graphics.setColor(fg_r, fg_g, fg_b, 0.3)
-        love.graphics.draw(imgFog, 1 , 1)
-        love.graphics.setColor(fg_r, fg_g, fg_b, fg_a)
-
+        drawFog()
 
         if DEBUG_MODE then
             love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), 10, 10)
         end
     elseif gameState == "gameover" then
-        love.graphics.print("GAME OVER", fontBig, X_SCREENSIZE/2, Y_SCREENSIZE/2)
+        love.graphics.print("GAME OVER", fontWarning, X_SCREENSIZE/2, Y_SCREENSIZE/2)
     elseif gameState == "victory" then
-        love.graphics.print("VICTORY", fontBig, X_SCREENSIZE/2, Y_SCREENSIZE/2)
+        love.graphics.print("VICTORY", fontWarning, X_SCREENSIZE/2, Y_SCREENSIZE/2)
     end
 end
 
@@ -232,5 +239,32 @@ function CheckforVictory()
 
     if monsterDeadNumber == #lstMonsters then
         gameState = "victory"
+    end
+end
+
+--------------------------------------------------------------------------------------------------------
+
+function drawFog()
+    local fg_r, fg_g, fg_b, fg_a = love.graphics.getColor()
+    love.graphics.setColor(fg_r, fg_g, fg_b, 0.3)
+    love.graphics.draw(imgFog, 1 , 1)
+    love.graphics.setColor(fg_r, fg_g, fg_b, fg_a)
+end
+
+
+function drawCamShake(dt)
+    -- Backup graphics parameters
+    --love.graphics.push()
+
+    love.graphics.translate(math.random(-camShake.shakeOffset, camShake.shakeOffset), math.random(-camShake.shakeOffset, camShake.shakeOffset))
+
+    -- Restore graphics parameters
+    --love.graphics.pop()
+end
+
+function updateCamShake(dt)
+    camShake.shakeTimer = camShake.shakeTimer - 1*dt
+    if camShake.shakeTimer <= 0 then
+        camShake.shake = false      -- stop the shake
     end
 end

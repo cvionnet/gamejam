@@ -1,7 +1,6 @@
 local MONSTER = {}
 
 local ENEMY = require("enemy_logic")
-
 require("param")
 
 
@@ -96,13 +95,13 @@ function MONSTER.NewMonster(pId, pMapObject)
     -- Display a warning where the monster will appear
     function myMonster:drawWarning()
         if self.mapSidePosition == "up" then
-            love.graphics.print(math.floor(self.timeWarning), fontBig, X_SCREENSIZE/2 - fontBig:getHeight()/2, self.map_Object.TILE_HEIGHT*2)
+            love.graphics.print(math.floor(self.timeWarning), fontWarning, X_SCREENSIZE/2 - fontWarning:getHeight()/2, self.map_Object.TILE_HEIGHT*2)
         elseif self.mapSidePosition == "down" then
-            love.graphics.print(math.floor(self.timeWarning), fontBig, X_SCREENSIZE/2 - fontBig:getHeight()/2, Y_SCREENSIZE - self.map_Object.TILE_HEIGHT*3)
+            love.graphics.print(math.floor(self.timeWarning), fontWarning, X_SCREENSIZE/2 - fontWarning:getHeight()/2, Y_SCREENSIZE - self.map_Object.TILE_HEIGHT*3)
         elseif self.mapSidePosition == "left" then
-            love.graphics.print(math.floor(self.timeWarning), fontBig, self.map_Object.TILE_WIDTH*2, Y_SCREENSIZE/2 - fontBig:getHeight()/2)
+            love.graphics.print(math.floor(self.timeWarning), fontWarning, self.map_Object.TILE_WIDTH*2, Y_SCREENSIZE/2 - fontWarning:getHeight()/2)
         elseif self.mapSidePosition == "right" then
-            love.graphics.print(math.floor(self.timeWarning), fontBig, X_SCREENSIZE - self.map_Object.TILE_WIDTH*3, Y_SCREENSIZE/2 - fontBig:getHeight()/2)
+            love.graphics.print(math.floor(self.timeWarning), fontWarning, X_SCREENSIZE - self.map_Object.TILE_WIDTH*3, Y_SCREENSIZE/2 - fontWarning:getHeight()/2)
         end
     end
 
@@ -169,14 +168,21 @@ function MONSTER.NewMonster(pId, pMapObject)
                 bullet:update(dt)
 
                 -- Bullet collisions
-                if self:CheckBulletWithPlayerCollision(bullet, pPlayerObject) == false then     -- with the player
-                    if self:CheckBulletWithOutsideCollision(bullet, pPlayerObject) then         -- outside the screen
+                -- With the player
+                if self:CheckBulletWithPlayerCollision(bullet, pPlayerObject) == false then
+                    -- Outside the screen
+                    if self:CheckBulletWithOutsideCollision(bullet, pPlayerObject) then
                         self:HitVillage(pPlayerObject, bullet)
                         table.remove(enemy.lstBullet, bulletID)        -- delete the bullet
-                    elseif self:CheckBulletWithEnemyCollision(bullet, enemy) then         -- with an enemy
+                    -- With an enemy
+                    elseif self:CheckBulletWithEnemyCollision(bullet, enemy) then
                         self:HitEnemy(enemy)
                         table.remove(enemy.lstBullet, bulletID)        -- delete the bullet
                     end
+                -- The bullet hit the player
+                else
+                    camShake.shake = true
+                    camShake.shakeTimer = CAM_SHAKE_TIMING
                 end
             end
 
@@ -268,7 +274,7 @@ function MONSTER.NewMonster(pId, pMapObject)
     -- Display a message where the bullet hit the village
     function myMonster:drawMessageHitVillage()
         for key, message in pairs(self.lstMessageVillageHit) do
-            love.graphics.print(message.message, fontBig, message.x , message.y)
+            love.graphics.print(message.message, fontWarning, message.x , message.y)
         end
     end
 
@@ -365,17 +371,17 @@ function MONSTER.NewMonster(pId, pMapObject)
         myMessage.ttl = TIME_DISPLAY_MESSAGE_VILLAGE
 
         if pBulletObject.mapSidePosition == "up" then
-            myMessage.x = pBulletObject.x - fontBig:getHeight()/2
+            myMessage.x = pBulletObject.x - fontWarning:getHeight()/2
             myMessage.y = pBulletObject.y - math.random(self.map_Object.TILE_WIDTH*2, self.map_Object.TILE_WIDTH*4)
         elseif pBulletObject.mapSidePosition == "down" then
-            myMessage.x = pBulletObject.x - fontBig:getHeight()/2
+            myMessage.x = pBulletObject.x - fontWarning:getHeight()/2
             myMessage.y = pBulletObject.y + math.random(self.map_Object.TILE_WIDTH*2, self.map_Object.TILE_WIDTH*4)
         elseif pBulletObject.mapSidePosition == "left" then
             myMessage.x = pBulletObject.x - math.random(self.map_Object.TILE_WIDTH*2, self.map_Object.TILE_WIDTH*4)
-            myMessage.y = pBulletObject.y - fontBig:getHeight()/2
+            myMessage.y = pBulletObject.y - fontWarning:getHeight()/2
         elseif pBulletObject.mapSidePosition == "right" then
             myMessage.x = pBulletObject.x + math.random(self.map_Object.TILE_WIDTH*2, self.map_Object.TILE_WIDTH*4)
-            myMessage.y = pBulletObject.y - fontBig:getHeight()/2
+            myMessage.y = pBulletObject.y - fontWarning:getHeight()/2
         end
 
         table.insert(self.lstMessageVillageHit, myMessage)

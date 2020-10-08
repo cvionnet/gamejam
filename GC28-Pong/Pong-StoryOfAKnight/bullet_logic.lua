@@ -1,4 +1,6 @@
 local BULLET = {}
+local EXPLOSION = require("explosion_logic")
+local PARTICLES = require("particles_factory")
 
 require("param")
 
@@ -24,16 +26,42 @@ function BULLET.NewBullet(pMapObject)
     myBullet.speed = 0
     myBullet.mapSidePosition = ""       -- up, down, left, right
 
+    myBullet.isMarkedToDestroy = false
+    myBullet.isToDestroy = false
+    myBullet.IsToDelete = false
+
     myBullet.images = {}
     myBullet.frame = 1
 
     myBullet.type = 0
 
+    myBullet.explosion = {}                -- to display an explosion when the enemy die
+    myBullet.explosion.obj = EXPLOSION.NewExplosion()
+    myBullet.explosion.x = 0
+    myBullet.explosion.y = 0
+    myBullet.explosion.ratio = SPRITE_BULLET_RATIO
+
+    myBullet.particles = {}
+    myBullet.particles.obj = PARTICLES.NewParticles()
+    myBullet.particles.x = 0
+    myBullet.particles.y = 0
+    myBullet.particles.ratio = SPRITE_BULLET_RATIO
+
 --------------------------------------------------------------------------------------------------------
     -- METHODS
     function myBullet:draw()
+        if self.isToDestroy then
+            if self.explosion.obj.isFinished == false then
+                self.explosion.obj:draw()
+            end
+        else
+            -- Draw particles (if any particles exists)
+            if #self.particles.obj.lstParticles > 0 then
+                self.particles.obj:draw()
+            end
 
-        love.graphics.draw(self.images[math.floor(self.frame)], self.x, self.y, math.rad(self.rotation), self.sx*SPRITE_BULLET_RATIO, self.sy*SPRITE_BULLET_RATIO, self.ox, self.oy)
+            love.graphics.draw(self.images[math.floor(self.frame)], self.x, self.y, math.rad(self.rotation), self.sx*SPRITE_BULLET_RATIO, self.sy*SPRITE_BULLET_RATIO, self.ox, self.oy)
+        end
 
         -- DEBUG
         if DEBUG_MODE == true then
@@ -51,12 +79,29 @@ function BULLET.NewBullet(pMapObject)
 
 
     function myBullet:update(dt)
-        -- Bullet animation
-        self:PlayAnimation(dt)
+        if self.isToDestroy then
+            self.explosion.obj:update(dt)
 
-        -- Move bullet
-        self.x = self.x + self.vx * dt
-        self.y = self.y + self.vy * dt
+            -- To remove the enemy in the list in "monster_logic" when the animation is finished
+            if self.explosion.obj.isFinished then
+                self.IsToDelete = true
+            end
+        else
+            -- Bullet animation
+            self:PlayAnimation(dt)
+
+            -- Move bullet
+            self.x = self.x + self.vx * dt
+            self.y = self.y + self.vy * dt
+
+            -- Check if the bullet must be destroyed
+            self:CheckIfToDestroy()
+
+            -- Draw particles (if any particles exists)
+            if #self.particles.obj.lstParticles > 0 then
+                self.particles.obj:update(dt)
+            end
+        end
     end
 
 --------------------------------------------------------------------------------------------------------
@@ -101,6 +146,10 @@ function BULLET.NewBullet(pMapObject)
                 self.vy = self.vy * -1
                 self.sy = self.sy * -1      -- invert the bullet image
                 self.y = pPlayerObject.y + 10
+
+                -- Create particles
+                self.particles.obj:InitParticules(self.x, self.y, self.particles.ratio, 20, 1, 4)
+
                 return true
             end
         elseif self.mapSidePosition == "down" then
@@ -109,6 +158,10 @@ function BULLET.NewBullet(pMapObject)
                 self.vy = self.vy * -1
                 self.sy = self.sy * -1      -- invert the bullet image
                 self.y = pPlayerObject.y + pPlayerObject.h
+
+                -- Create particles
+                self.particles.obj:InitParticules(self.x, self.y, self.particles.ratio, 20, 1, 4)
+
                 return true
             end
         elseif self.mapSidePosition == "left" then
@@ -117,6 +170,10 @@ function BULLET.NewBullet(pMapObject)
                 self.vx = self.vx * -1
                 self.sy = self.sy * -1      -- invert the bullet image
                 self.x = pPlayerObject.x -- + pPlayerObject.w/2 - 20
+
+                -- Create particles
+                self.particles.obj:InitParticules(self.x, self.y, self.particles.ratio, 20, 1, 4)
+
                 return true
             end
         elseif self.mapSidePosition == "right" then
@@ -125,6 +182,10 @@ function BULLET.NewBullet(pMapObject)
                 self.vx = self.vx * -1
                 self.sy = self.sy * -1      -- invert the bullet image
                 self.x = pPlayerObject.x + pPlayerObject.w/2 + 20
+
+                -- Create particles
+                self.particles.obj:InitParticules(self.x, self.y, self.particles.ratio, 20, 1, 4)
+
                 return true
             end
         end
@@ -206,6 +267,30 @@ function BULLET.NewBullet(pMapObject)
 
         self.ox = self.w/2
         self.oy = self.h
+    end
+
+
+    -- Action to perform when the bullet must be destroy
+    function myBullet:CheckIfToDestroy()
+        if self.isMarkedToDestroy then
+            if self.vx > 0 then     -- the bullet go from left to right  (can't perform by position, because it could rebound)
+                self.explosion.x = self.x - self.w/2
+                self.explosion.y = self.y + self.h/2
+            elseif self.vx < 0 then
+                self.explosion.x = self.x + self.w/2
+                self.explosion.y = self.y + self.h/2
+            elseif self.vy > 0 then     -- the bullet go from up to bottom
+                self.explosion.x = self.x + self.w/2
+                self.explosion.y = self.y - self.h/2
+            elseif self.vy < 0 then
+                self.explosion.x = self.x + self.w/2
+                self.explosion.y = self.y + self.h/2
+            end
+
+            self.explosion.obj:InitExplosion(self.explosion.x, self.explosion.y, self.explosion.ratio, 0, "explosion", 9)
+
+            self.isToDestroy = true
+        end
     end
 
 --------------------------------------------------------------------------------------------------------

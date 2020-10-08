@@ -33,7 +33,32 @@ fontTitle = love.graphics.newFont("fonts/jabjai_heavy.ttf", 85)
 fontSubTitle = love.graphics.newFont("fonts/jabjai_heavy.ttf", 25)
 fontMenu = love.graphics.newFont("fonts/jabjai_heavy.ttf", 35)
 fontDialog = love.graphics.newFont("fonts/Computerfont.ttf", 30)
-fontBig = love.graphics.newFont("fonts/Computerfont.ttf", 50)
+fontWarning = love.graphics.newFont("fonts/Paintling.ttf", 50)
+
+
+-- EFFECTS
+-- To make the screen shaking
+CAM_SHAKE_TIMING = 0.2
+CAM_SHAKE_OFFSET = 2
+
+camShake = {}
+camShake.shake = false      -- shake active ?
+camShake.shakeTimer = 0     -- how long
+camShake.shakeOffset = CAM_SHAKE_OFFSET    -- how much
+
+
+-- To make a sprite blinking
+shaderBlink = love.graphics.newShader[[
+    extern float WhiteFactor;
+
+    vec4 effect(vec4 vcolor, Image tex, vec2 texcoord, vec2 pixcoord)
+    {
+        vec4 outputcolor = Texel(tex, texcoord) * vcolor;
+        outputcolor.rgb += vec3(WhiteFactor);
+        return outputcolor;
+    }
+]]
+
 
 
 -- PLAYER
@@ -76,16 +101,3 @@ BULLET_MAX_SPEED = 200 --300
 
 -- EXPLOSION
 FRAME_PER_SECOND_EXPLOSION = 8
-
-
--- To make a sprite blinking
-shaderBlink = love.graphics.newShader[[
-    extern float WhiteFactor;
-
-    vec4 effect(vec4 vcolor, Image tex, vec2 texcoord, vec2 pixcoord)
-    {
-        vec4 outputcolor = Texel(tex, texcoord) * vcolor;
-        outputcolor.rgb += vec3(WhiteFactor);
-        return outputcolor;
-    }
-]]
