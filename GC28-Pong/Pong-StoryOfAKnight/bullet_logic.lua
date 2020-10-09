@@ -1,6 +1,6 @@
 local BULLET = {}
 local EXPLOSION = require("explosion_logic")
-local PARTICLES = require("particles_factory")
+local PARTICLES = require("particles_manager")
 
 require("param")
 

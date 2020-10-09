@@ -30,7 +30,7 @@ function PLAYER.NewPlayer(pMapObject, pVillageLife, pPlayerLife)
     myPlayer.life = pPlayerLife
     myPlayer.villageLife = pVillageLife
 
-    myPlayer.bulletTime = 0
+    --myPlayer.bulletTime = 0
     myPlayer.shieldColor = nil
 
 --------------------------------------------------------------------------------------------------------
@@ -241,20 +241,26 @@ function PLAYER.NewPlayer(pMapObject, pVillageLife, pPlayerLife)
 
     -- Check keyboard inputs
     function myPlayer:CheckInputs(dt)
+        local stopWalkSound = true
+
         -- Player can move UP and DOWN where he is on the left and right sides
         if self.mapSidePosition == "left" or self.mapSidePosition == "right" then
             if love.keyboard.isDown("up") then
                 if math.abs(self.vy) <= self.vmax then
                     self.vy = self.vy - 1
                     self.movingDirection = "up"
+
                     self:PlayAnimation("run")
+                    stopWalkSound = false
                 end
             end
             if love.keyboard.isDown("down") then
                 if math.abs(self.vy) <= self.vmax then
                     self.vy = self.vy + 1
                     self.movingDirection = "down"
+
                     self:PlayAnimation("run")
+                    stopWalkSound = false
                 end
             end
         end
@@ -265,15 +271,32 @@ function PLAYER.NewPlayer(pMapObject, pVillageLife, pPlayerLife)
                 if math.abs(self.vx) <= self.vmax then
                     self.vx = self.vx - 1
                     self.movingDirection = "left"
+
                     self:PlayAnimation("run")
+                    stopWalkSound = false
                 end
             end
             if love.keyboard.isDown("right") then
                 if math.abs(self.vx) <= self.vmax then
                     self.vx = self.vx + 1
                     self.movingDirection = "right"
+
                     self:PlayAnimation("run")
+                    stopWalkSound = false
                 end
+            end
+        end
+
+        if stopWalkSound then
+            -- Stop step sounds
+            if sndGamePlayer_Walk:isPlaying() then
+                sndGamePlayer_Walk:stop()
+            end
+        else
+            -- Play step sounds
+            if sndGamePlayer_Walk:isPlaying() == false then
+                sndGamePlayer_Walk:setLooping(true)
+                sndGamePlayer_Walk:play()
             end
         end
     end

@@ -130,9 +130,17 @@ function ENEMY.NewEnemy(pMapObject)
 
     -- Move the monster on the field
     function myEnemy:updateComing(dt)
+        local stopWalkSound = false
+
         -- Move the monster
         self.x = self.x + self.vx * dt
         self.y = self.y + self.vy * dt
+
+        -- Play step sounds
+        if sndGameEnemy_Walk:isPlaying() == false then
+            sndGameEnemy_Walk:setLooping(true)
+            sndGameEnemy_Walk:play()
+        end
 
         -- Make the monster appear from the fog
         if self.alpha < 1 then
@@ -147,25 +155,34 @@ function ENEMY.NewEnemy(pMapObject)
                 self.y = self.finalPositionY
                 self.vy = 0
                 self:PlayAnimation("idle")
+                stopWalkSound = true
             end
         elseif self.mapSidePosition == "down" then
             if self.y <= self.finalPositionY then
                 self.y = self.finalPositionY
                 self.vy = 0
                 self:PlayAnimation("idle")
+                stopWalkSound = true
             end
         elseif self.mapSidePosition == "left" then
             if self.x >= self.finalPositionX then
                 self.x = self.finalPositionX
                 self.vx = 0
                 self:PlayAnimation("idle")
+                stopWalkSound = true
             end
         elseif self.mapSidePosition == "right" then
             if self.x <= self.finalPositionX then
                 self.x = self.finalPositionX
                 self.vx = 0
                 self:PlayAnimation("idle")
+                stopWalkSound = true
             end
+        end
+
+        -- Stop step sounds
+        if stopWalkSound then
+            sndGameEnemy_Walk:stop()
         end
     end
 
@@ -346,6 +363,8 @@ function ENEMY.NewEnemy(pMapObject)
         local myBullet = BULLET.NewBullet(self.map_Object)
         myBullet:InitBullet(xBullet, yBullet, "frame", 11, vxBullet, vyBullet, self.mapSidePosition)
         table.insert(self.lstBullet, myBullet)
+
+        love.audio.play(sndGameEnemy_Bullet)
     end
 
 

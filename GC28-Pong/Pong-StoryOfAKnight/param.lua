@@ -9,7 +9,31 @@ PLAYER_LIFE = 10
 VILLAGE_LIFE = 100
 MONSTER_LIFE = 2 --50
 MONSTER_PERCENT_APPEAR_2ND_MONSTER = 50 --20
+BULLET_TIME_SLOW_FACTOR = 0.5
+BULLET_TIME_LENGTH = 15
+BULLET_TIME_LOSS_SPEED = 3
 BULLET_TIME_SPEED = 15
+
+
+-- SOUNDS - fx
+sndMenuUpDown = love.audio.newSource("sounds/fx/menu_updown.wav", "static")
+sndMenuSelect = love.audio.newSource("sounds/fx/menu_select.wav", "static")
+
+sndGameBullet_EnemyHit = love.audio.newSource("sounds/fx/game_bullet_enemy_hit.wav", "static")
+sndGameBullet_PlayerHit = love.audio.newSource("sounds/fx/game_bullet_player_hit.wav", "static")
+sndGameBullet_VillageHit = love.audio.newSource("sounds/fx/game_bullet_village_hit.wav", "static")
+
+sndGameEnemy_Bullet = love.audio.newSource("sounds/fx/game_enemy_bullet.wav", "static")
+sndGameEnemy_Death = love.audio.newSource("sounds/fx/game_enemy_death.wav", "static")
+sndGameEnemy_Appear = love.audio.newSource("sounds/fx/game_enemy_appear.wav", "static")
+sndGameEnemy_Disappear = love.audio.newSource("sounds/fx/game_enemy_disappear.wav", "static")
+sndGameEnemy_Walk = love.audio.newSource("sounds/fx/game_enemy_footstep_walk.wav", "static")
+
+sndGamePlayer_Walk = love.audio.newSource("sounds/fx/game_player_footstep_run.wav", "static")
+
+
+-- SOUNDS - music
+musicBattle = love.audio.newSource("sounds/music/battle.ogg", "stream")
 
 
 -- MENU

@@ -1,4 +1,6 @@
 
+require("param")
+
 local menuTween = {}
 local menuId = 0
 local menuLoaded = false
@@ -8,6 +10,7 @@ local menuState = ""
 --local imgPlayerHead = love.graphics.newImage("images/player/hero_head.png")
 local imgPlayerHead = {}
 local framePlayerHead = 1
+
 
 --------------------------------------------------------------------------------------------------------
 
@@ -85,18 +88,21 @@ end
 function MenuKeyboardCommands(key)
     if key == "return" then
         if menuState == "menu" and menuLoaded then
+            love.audio.play(sndMenuSelect)
             ExitMenu()
         end
     end
 
     if menuState == "menu" and menuLoaded then
         if key == "down" then
+            love.audio.play(sndMenuUpDown)
             menuId = menuId + 1
             if menuId > #menuTween then
                 menuId = 1
             end
         end
         if key == "up" then
+            love.audio.play(sndMenuUpDown)
             menuId = menuId - 1
             if menuId <= 0 then
                 menuId = #menuTween

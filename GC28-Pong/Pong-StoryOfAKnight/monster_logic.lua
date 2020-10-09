@@ -172,15 +172,19 @@ function MONSTER.NewMonster(pId, pMapObject)
                 if self:CheckBulletWithPlayerCollision(bullet, pPlayerObject) == false then
                     -- Outside the screen
                     if self:CheckBulletWithOutsideCollision(bullet, pPlayerObject) then
+                        love.audio.play(sndGameBullet_VillageHit)
                         self:HitVillage(pPlayerObject, bullet)
                         table.remove(enemy.lstBullet, bulletID)        -- delete the bullet
                     -- With an enemy
                     elseif self:CheckBulletWithEnemyCollision(bullet, enemy) then
+                        love.audio.play(sndGameBullet_EnemyHit)
                         self:HitEnemy(enemy)
                         table.remove(enemy.lstBullet, bulletID)        -- delete the bullet
                     end
                 -- The bullet hit the player
                 else
+                    love.audio.play(sndGameBullet_PlayerHit)
+
                     camShake.shake = true
                     camShake.shakeTimer = CAM_SHAKE_TIMING
                 end
@@ -188,10 +192,12 @@ function MONSTER.NewMonster(pId, pMapObject)
 
             -- If the enemies is dead, remove all its bullets and remove the enemy
             if enemy.IsToDelete then
+                love.audio.play(sndGameEnemy_Death)
+
                 -- Hit the monster
                 self.life = self.life - 1
 
-                -- Delete its own bullets
+                -- Delete bullets on the enemy
                 for i = #enemy.lstBullet, 1, -1 do
                     table.remove(enemy.lstBullet, i)
                 end
@@ -337,6 +343,8 @@ function MONSTER.NewMonster(pId, pMapObject)
         -- Set enemy position
         myEnemy:InitEnemy(xEnemy, yEnemy, self.mapSidePosition)
         table.insert(self.lstEnemies, myEnemy)
+
+        love.audio.play(sndGameEnemy_Appear)
 
         self.createdEnemies = self.createdEnemies + 1
     end
