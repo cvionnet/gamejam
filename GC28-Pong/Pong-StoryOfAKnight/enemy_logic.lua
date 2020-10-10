@@ -2,6 +2,7 @@ local ENEMY = {}
 
 local BULLET = require("bullet_logic")
 local EXPLOSION = require("explosion_logic")
+local GUI = require("ui_manager")
 
 require("param")
 
@@ -48,6 +49,9 @@ function ENEMY.NewEnemy(pMapObject)
     myEnemy.explosion.y = 0
     myEnemy.explosion.ratio = SPRITE_ENEMY_RATIO
 
+    myEnemy.groupUI = nil
+    myEnemy.uiEnemyLife = nil
+
 --------------------------------------------------------------------------------------------------------
     -- METHODS
     function myEnemy:draw()
@@ -57,6 +61,10 @@ function ENEMY.NewEnemy(pMapObject)
             end
         else
             self:drawAnimation()
+
+            if self.currentAnimation ~= "walk" then
+                self.groupUI:draw()
+            end
         end
 
         -- DEBUG
@@ -82,6 +90,8 @@ function ENEMY.NewEnemy(pMapObject)
             -- Monster animation
             if self.currentAnimation == "walk" then
                 self:updateComing(dt)
+            else
+                self:updateUI(dt)
             end
 
             self:updateAnimation(dt)
@@ -124,6 +134,31 @@ function ENEMY.NewEnemy(pMapObject)
         self:PlayAnimation("walk")
 
         self:SetSidePosition()
+    end
+
+
+    -- To display enemy life
+    function myEnemy:InitUI()
+        local xUI, yUI = 0, 0
+
+        if self.mapSidePosition == "up" then
+            xUI = self.x - self.w/2 - 8
+            yUI = self.y - 5 --+ self.h + 5
+        elseif self.mapSidePosition == "down" then
+            xUI = self.x - self.w/2 - 8
+            yUI = self.y - 5 --+ self.h + 5
+        elseif self.mapSidePosition == "left" then
+            xUI = self.x + self.w/2 - 24
+            yUI = self.y - 5 --+ self.h + 5
+        elseif self.mapSidePosition == "right" then
+            xUI = self.x - self.w/2 - 8
+            yUI = self.y - 5 --+ self.h + 5
+        end
+
+        self.groupUI = GUI.NewGroup()
+        self.uiEnemyLife = GUI.NewProgressBar(xUI, yUI, 1, 1, self.life)
+        self.uiEnemyLife:setImages("images/ui/enemy_bar_orange.png", "images/ui/enemy_bar_green.png")
+        self.groupUI:addElement(self.uiEnemyLife)
     end
 
 --------------------------------------------------------------------------------------------------------
@@ -183,7 +218,17 @@ function ENEMY.NewEnemy(pMapObject)
         -- Stop step sounds
         if stopWalkSound then
             sndGameEnemy_Walk:stop()
+
+            -- Display life progressbar
+            self:InitUI()
         end
+    end
+
+
+    -- Update the life progressbar
+    function myEnemy:updateUI(dt)
+        self.uiEnemyLife:setValue(self.life)
+        self.groupUI:update(dt)
     end
 
 --------------------------------------------------------------------------------------------------------
@@ -395,7 +440,6 @@ function ENEMY.NewEnemy(pMapObject)
             end
         end
     end
-
 
 --------------------------------------------------------------------------------------------------------
 

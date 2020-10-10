@@ -31,7 +31,6 @@ local imgPlayerHealth40 = love.graphics.newImage("images/player/health/hero_head
 local imgPlayerHealth20 = love.graphics.newImage("images/player/health/hero_head_health5.png")
 
 
-
 local lstMonsters = {}
 
 local bulletTimeMode = false
@@ -231,7 +230,7 @@ function LoadUI()
     groupUI = GUI.NewGroup()
 
     -- Player bullet time
-    uiPlayerBulletTime = GUI.NewProgressBar(45, 50, 140, 40, BULLET_TIME_LENGTH)
+    uiPlayerBulletTime = GUI.NewProgressBar(45, 50, 1, 1, BULLET_TIME_LENGTH)
     uiPlayerBulletTime:setImages("images/ui/bullettime_bar_orange.png", "images/ui/bullettime_bar_green.png")
 
     groupUI:addElement(uiPlayerBulletTime)

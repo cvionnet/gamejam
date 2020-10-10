@@ -170,6 +170,15 @@ function GUI.NewProgressBar(pX, pY, pW, pH, pMaxValue, pColorOut, pColorIn, pVer
     function myProgressBar:draw()
         if self.visible == false then return end
         self:drawProgressBar()
+
+        -- DEBUG
+        if DEBUG_MODE == true then
+            love.graphics.setColor(1,0,0)
+            love.graphics.circle("fill", self.x, self.y, 5)
+            love.graphics.setColor(1,1,1)
+
+            love.graphics.print("x:"..tostring(math.floor(self.x)).." / y:"..tostring(math.floor(self.y)), self.x, self.y-10)
+        end
     end
 
     function myProgressBar:drawProgressBar()

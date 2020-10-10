@@ -124,6 +124,7 @@ function PLAYER.NewPlayer(pMapObject, pVillageLife, pPlayerLife)
         local imgName = self.lstAnimations[self.currentAnimation][math.floor(self.frame)]    -- get image name for the current animation and the current fame  (eg : for "run" and frame=1, get "run1")
         local img = self.lstAnimationsImages[imgName]       -- get Love2d image object from the name of the image
 
+print(img, self.x, self.y, SPRITE_PLAYER_RATIO)
         love.graphics.draw(img, self.x, self.y, 0, 1 * SPRITE_PLAYER_RATIO, 1 * SPRITE_PLAYER_RATIO)
     end
 
