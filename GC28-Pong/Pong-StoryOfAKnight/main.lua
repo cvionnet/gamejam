@@ -15,21 +15,7 @@ require("param")
 
 local gameState = ""            -- menu / game / gameover / victory
 
-local imgFog = love.graphics.newImage("images/map/fog.png")
-
--- UI
-local imgParchment = love.graphics.newImage("images/ui/parchment.png")
-local imgBulletTime = love.graphics.newImage("images/ui/bullettime.png")
-
-local imgVillageHealth = love.graphics.newImage("images/ui/village.png")
-local imgVillageFire = love.graphics.newImage("images/ui/village_fire.png")
-
-local imgPlayerHealth100 = love.graphics.newImage("images/player/health/hero_head_health1.png")
-local imgPlayerHealth80 = love.graphics.newImage("images/player/health/hero_head_health2.png")
-local imgPlayerHealth60 = love.graphics.newImage("images/player/health/hero_head_health3.png")
-local imgPlayerHealth40 = love.graphics.newImage("images/player/health/hero_head_health4.png")
-local imgPlayerHealth20 = love.graphics.newImage("images/player/health/hero_head_health5.png")
-
+local fogX = 1       -- Horizontal position of the fog (for scrolling)
 
 local lstMonsters = {}
 
@@ -61,6 +47,7 @@ function love.update(dt)
         ActivateBulletTime(dt)
 
         groupUI:update(dt)
+        FogInfiniteScrolling(dt)
 
         -- Create a maximum of 2 monsters
         if #lstMonsters < 2 then
@@ -100,9 +87,9 @@ function love.draw()
             love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), X_SCREENSIZE - 100, 10)
         end
     elseif gameState == "gameover" then
-        love.graphics.print("GAME OVER", fontWarning, X_SCREENSIZE/2, Y_SCREENSIZE/2)
+        drawGameOver()
     elseif gameState == "victory" then
-        love.graphics.print("VICTORY", fontWarning, X_SCREENSIZE/2, Y_SCREENSIZE/2)
+        drawVictory()
     end
 end
 
@@ -120,6 +107,11 @@ function love.keypressed(key)
         if key == "escape" then
             love.event.quit()
         end
+
+        -- Display Victory screen
+        if key == "v" then gameState = "victory" end
+        -- Display Gameover screen
+        if key == "g" then gameState = "gameover" end
 
         -- Create enemies on the 1st monster
         if key == "t" then
@@ -296,12 +288,21 @@ function ActivateBulletTime(dt)
     end
 end
 
+--------------------------------------------------------------------------------------------------------
 
 function CheckforGameOver()
     if player_Obj.life <= 0 or player_Obj.villageLife <= 0 then
         gameState = "gameover"
     end
 end
+
+
+function drawGameOver()
+    love.graphics.print("GAME OVER ...", fontEndgame, 350, 200)
+    love.graphics.draw(imgGameover_Head, 0, 120, 0, 2, 2)
+end
+
+
 
 function CheckforVictory()
     local monsterDeadNumber = 0
@@ -317,13 +318,33 @@ function CheckforVictory()
     end
 end
 
+
+function drawVictory()
+    love.graphics.print("VICTORY !", fontEndgame, 350, 200)
+    love.graphics.draw(imgVictory_Head, 0, 120, 0, 2, 2)
+end
+
 --------------------------------------------------------------------------------------------------------
 
 function drawFog()
     local fg_r, fg_g, fg_b, fg_a = love.graphics.getColor()
     love.graphics.setColor(fg_r, fg_g, fg_b, 0.3)
-    love.graphics.draw(imgFog, 1 , 1)
+    love.graphics.draw(imgFog2, 1, 1)       -- fix fox
+
+    love.graphics.setColor(fg_r, fg_g, fg_b, 0.1)
+    love.graphics.draw(imgFog, fogX, 1)     -- scrolling fog
+    if fogX < 1 then
+        love.graphics.draw(imgFog, fogX + imgFog:getWidth() , 1)
+    end
+
     love.graphics.setColor(fg_r, fg_g, fg_b, fg_a)
+end
+
+function FogInfiniteScrolling(dt)
+    fogX = fogX - FOG_SCROLLINGSPEED * dt
+    if fogX <= (0 - imgFog:getWidth()) then
+        fogX = 1
+    end
 end
 
 

@@ -40,6 +40,7 @@ function ENEMY.NewEnemy(pMapObject)
 
     myEnemy.timeToShoot = 0
     myEnemy.timeHurtPlayer = TIME_HURT_PLAYER
+    myEnemy.isHurtingPlayer = false
 
     myEnemy.lstBullet = {}
 
@@ -51,6 +52,8 @@ function ENEMY.NewEnemy(pMapObject)
 
     myEnemy.groupUI = nil
     myEnemy.uiEnemyLife = nil
+
+    myEnemy.isShooting = false
 
 --------------------------------------------------------------------------------------------------------
     -- METHODS
@@ -266,7 +269,7 @@ function ENEMY.NewEnemy(pMapObject)
         local img = self.lstAnimationsImages[imgName]       -- get Love2d image object from the name of the image
 
 
-        if myEnemy.isHit then
+        if self.isHit then
             love.graphics.setShader(shaderBlink)
             shaderBlink:send("WhiteFactor", 1)
 
@@ -307,24 +310,27 @@ function ENEMY.NewEnemy(pMapObject)
 
     -- Check collision with the player
     function myEnemy:CheckPlayerCollision(dt, pPlayerObject)
-        local isPlayerHurt = false
-
         -- Check if enemy coordinates are the same as the player
         if self.mapSidePosition == "up" then
-            if self.y >= pPlayerObject.y then isPlayerHurt = true end
+            if self.y >= pPlayerObject.y then self.isHurtingPlayer = true end
         elseif self.mapSidePosition == "down" then
-            if self.y <= pPlayerObject.y + pPlayerObject.h then isPlayerHurt = true end
+            if self.y <= pPlayerObject.y + pPlayerObject.h then self.isHurtingPlayer = true end
         elseif self.mapSidePosition == "left" then
-            if self.x >= pPlayerObject.x then isPlayerHurt = true end
-            if (pPlayerObject.x >= self.x and pPlayerObject.x <= self.x + self.w) and (pPlayerObject.y >= self.y and pPlayerObject.y <= self.y + self.h) then isPlayerHurt = true end
+            if self.x >= pPlayerObject.x then self.isHurtingPlayer = true end
+            if (pPlayerObject.x >= self.x and pPlayerObject.x <= self.x + self.w) and (pPlayerObject.y >= self.y and pPlayerObject.y <= self.y + self.h) then self.isHurtingPlayer = true end
         elseif self.mapSidePosition == "right" then
-            if (pPlayerObject.x >= self.x and pPlayerObject.x <= self.x + self.w) and (pPlayerObject.y >= self.y and pPlayerObject.y <= self.y + self.h) then isPlayerHurt = true end
+            if (pPlayerObject.x >= self.x and pPlayerObject.x <= self.x + self.w) and (pPlayerObject.y >= self.y and pPlayerObject.y <= self.y + self.h) then self.isHurtingPlayer = true end
         end
 
-        -- Decrease player's life
-        if isPlayerHurt then
+        -- Decrease player's life, shake screen and draw player in white
+        if self.isHurtingPlayer then
             self.timeHurtPlayer = self.timeHurtPlayer - 1 * dt
             if self.timeHurtPlayer <= 0 then
+                self.isHurtingPlayer = false
+                pPlayerObject.isHit = true
+                camShake.shake = true
+                camShake.shakeTimer = CAM_SHAKE_TIMING
+
                 self.timeHurtPlayer = TIME_HURT_PLAYER
                 pPlayerObject.life = pPlayerObject.life - 1
             end

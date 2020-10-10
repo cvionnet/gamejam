@@ -22,12 +22,17 @@ function PLAYER.NewPlayer(pMapObject, pVillageLife, pPlayerLife)
     myPlayer.movingDirection = ""       -- up, down, left, right
     myPlayer.mapSidePosition = ""       -- up, down, left, right
 
+    myPlayer.previousPosition = {}      -- to save coordinates from previous side positions (1 = left, 2 = up, 3 = right, 4 down)
+    myPlayer.previousPosition.x = 0
+    myPlayer.previousPosition.y = 0
+
     myPlayer.frame = 1
     myPlayer.currentAnimation = ""
     myPlayer.lstAnimations = {}                         -- stock all images of an animation ("run1", "run2"...), indexed by a name (eg :  lstAnimations["run"])
     myPlayer.lstAnimationsImages = {}                   -- stock all images (Love2d object) used in all animations, indexed by mage name (eg : "run1", "run2"...)
 
     myPlayer.life = pPlayerLife
+    myPlayer.isHit = false
     myPlayer.villageLife = pVillageLife
 
     --myPlayer.bulletTime = 0
@@ -87,7 +92,35 @@ function PLAYER.NewPlayer(pMapObject, pVillageLife, pPlayerLife)
 
         self:AddNewAnimation("idle", "images/player/idle", { "knight_hero_side_idle1", "knight_hero_side_idle2", "knight_hero_side_idle3" })
         self:AddNewAnimation("run", "images/player/run", { "knight_hero_side_defend1", "knight_hero_side_defend2", "knight_hero_side_defend3", "knight_hero_side_defend4" })
-        self:PlayAnimation("idle")
+        self:AddNewAnimation("protect", "images/player/protect", { "knight_hero_side_protect1", "knight_hero_side_protect2" })
+        self:PlayAnimation("protect")
+
+        -- Initialize 4 lists (1 = left, 2 = up, 3 = right, 4 down) to store previous positions
+        self.previousPosition[1] = {}
+        self.previousPosition[2] = {}
+        self.previousPosition[3] = {}
+        self.previousPosition[4] = {}
+
+        -- When player change side, save its coordinates. If he moves back, keep the same position
+        self:savePlayerPosition()
+    end
+
+
+    -- When player change side, keep last position. If he moves back, set the same coordinates
+    function myPlayer:savePlayerPosition()
+        if self.mapSidePosition == "up" then
+            self.previousPosition[2].x = self.x
+            self.previousPosition[2].y = self.y
+        elseif self.mapSidePosition == "down" then
+            self.previousPosition[4].x = self.x
+            self.previousPosition[4].y = self.y
+        elseif self.mapSidePosition == "left" then
+            self.previousPosition[1].x = self.x
+            self.previousPosition[1].y = self.y
+        elseif self.mapSidePosition == "right" then
+            self.previousPosition[3].x = self.x
+            self.previousPosition[3].y = self.y
+        end
     end
 
 --------------------------------------------------------------------------------------------------------
@@ -124,8 +157,18 @@ function PLAYER.NewPlayer(pMapObject, pVillageLife, pPlayerLife)
         local imgName = self.lstAnimations[self.currentAnimation][math.floor(self.frame)]    -- get image name for the current animation and the current fame  (eg : for "run" and frame=1, get "run1")
         local img = self.lstAnimationsImages[imgName]       -- get Love2d image object from the name of the image
 
-print(img, self.x, self.y, SPRITE_PLAYER_RATIO)
-        love.graphics.draw(img, self.x, self.y, 0, 1 * SPRITE_PLAYER_RATIO, 1 * SPRITE_PLAYER_RATIO)
+        --print(img, self.x, self.y, SPRITE_PLAYER_RATIO)
+        if self.isHit then
+            love.graphics.setShader(shaderBlink)
+            shaderBlink:send("WhiteFactor", 1)
+
+            love.graphics.draw(img, self.x, self.y, 0, 1 * SPRITE_PLAYER_RATIO, 1 * SPRITE_PLAYER_RATIO)
+
+            love.graphics.setShader()
+            self.isHit = false
+        else
+            love.graphics.draw(img, self.x, self.y, 0, 1 * SPRITE_PLAYER_RATIO, 1 * SPRITE_PLAYER_RATIO)
+        end
     end
 
 
@@ -136,9 +179,9 @@ print(img, self.x, self.y, SPRITE_PLAYER_RATIO)
 
                 -- If the player stop
                 if math.abs(self.vx) < 1 and math.abs(self.vy) < 1 then
-                    self:PlayAnimation("idle")
+                    self:PlayAnimation("protect")
                 end
-            elseif self.currentAnimation == "idle" then
+            elseif self.currentAnimation == "idle" or self.currentAnimation == "protect" then
                 self.frame = self.frame + FRAME_PER_SECOND_PLAYER_IDLE * dt
             end
 
@@ -199,28 +242,34 @@ print(img, self.x, self.y, SPRITE_PLAYER_RATIO)
 
     -- Change player side position
     function myPlayer:SwitchSidePosition(key)
+        -- When player change side, save its coordinates. If he moves back, keep the same position
+        self:savePlayerPosition()
+
         if key == "z" then
-            -- If previous position was down, keep the same x ; else set position at the middle of the screen
-            if self.mapSidePosition == "down" then
-                self:ResetPosition_Velocity(self.x, 0)
+            -- If previous position was saved, set previous coordinates ; else set position at the middle of the screen
+            if self.previousPosition[2].x ~= nil then
+                --self:ResetPosition_Velocity(self.x, 0)
+                self:ResetPosition_Velocity(self.previousPosition[2].x, self.previousPosition[2].y)
             else
                 self:ResetPosition_Velocity(X_SCREENSIZE/2, 0)
             end
             self.mapSidePosition = "up"
         end
         if key == "s" then
-            -- If previous position was up, keep the same x ; else set position at the middle of the screen
-            if self.mapSidePosition == "up" then
-                self:ResetPosition_Velocity(self.x, Y_SCREENSIZE - self.map_Object.TILE_HEIGHT)
+            -- If previous position was saved, set previous coordinates ; else set position at the middle of the screen
+            if self.previousPosition[4].x ~= nil then
+                --self:ResetPosition_Velocity(self.x, Y_SCREENSIZE - self.map_Object.TILE_HEIGHT)
+                self:ResetPosition_Velocity(self.previousPosition[4].x, self.previousPosition[4].y)
             else
                 self:ResetPosition_Velocity(X_SCREENSIZE/2, Y_SCREENSIZE - self.map_Object.TILE_HEIGHT)
             end
             self.mapSidePosition = "down"
         end
         if key == "q" then
-            -- If previous position was right, keep the same y ; else set position at the middle of the screen
-            if self.mapSidePosition == "right" then
-                self:ResetPosition_Velocity(0, self.y)
+            -- If previous position was saved, set previous coordinates ; else set position at the middle of the screen
+            if self.previousPosition[1].x ~= nil then
+                --self:ResetPosition_Velocity(0, self.y)
+                self:ResetPosition_Velocity(self.previousPosition[1].x, self.previousPosition[1].y)
             else
                 self:ResetPosition_Velocity(0, Y_SCREENSIZE/2)
             end
@@ -228,9 +277,10 @@ print(img, self.x, self.y, SPRITE_PLAYER_RATIO)
             self.mapSidePosition = "left"
         end
         if key == "d" then
-            -- If previous position was left, keep the same y ; else set position at the middle of the screen
-            if self.mapSidePosition == "left" then
+            -- If previous position was saved, set previous coordinates ; else set position at the middle of the screen
+            if self.previousPosition[3].x ~= nil then
                 self:ResetPosition_Velocity(X_SCREENSIZE - self.map_Object.TILE_WIDTH, self.y)
+                self:ResetPosition_Velocity(self.previousPosition[3].x, self.previousPosition[3].y)
             else
                 self:ResetPosition_Velocity(X_SCREENSIZE - self.map_Object.TILE_WIDTH, Y_SCREENSIZE/2)
             end
