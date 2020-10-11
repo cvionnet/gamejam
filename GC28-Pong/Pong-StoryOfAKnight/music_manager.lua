@@ -56,6 +56,19 @@ function MUSIC_MANAGER.NewMusic()
         music.source:play()
         myMusic.currentMusic = pNum
     end
+
+    -- Start a music using its ID
+    function myMusic:StopMusic(pNum)
+        local music = myMusic.lstMusics[pNum]
+
+--[[         -- Play music if volume is 0 and is not the actual music playing
+        if music.source:getVolume() == 0 and myMusic.currentMusic ~= pNum then
+            music.source:play()
+        end ]]
+
+        music.source:stop()
+        myMusic.currentMusic = pNum
+    end
 --------------------------------------------------------------------------------------------------------
 
 

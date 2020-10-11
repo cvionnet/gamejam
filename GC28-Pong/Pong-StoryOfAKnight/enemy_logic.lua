@@ -415,7 +415,8 @@ function ENEMY.NewEnemy(pMapObject)
         myBullet:InitBullet(xBullet, yBullet, "frame", 11, vxBullet, vyBullet, self.mapSidePosition)
         table.insert(self.lstBullet, myBullet)
 
-        love.audio.play(sndGameEnemy_Bullet)
+        if sndGameEnemy_Bullet:isPlaying() then sndGameEnemy_Bullet:stop() end
+        sndGameEnemy_Bullet:play()
     end
 
 

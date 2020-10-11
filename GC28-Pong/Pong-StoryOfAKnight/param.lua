@@ -25,15 +25,18 @@ SUB_TITLE = "Story of a fight"
 fontTitle = love.graphics.newFont("fonts/jabjai_heavy.ttf", 85)
 fontSubTitle = love.graphics.newFont("fonts/jabjai_heavy.ttf", 25)
 fontMenu = love.graphics.newFont("fonts/jabjai_heavy.ttf", 35)
-fontEndgame = love.graphics.newFont("fonts/jabjai_heavy.ttf", 60)
+fontEndgame = love.graphics.newFont("fonts/Computerfont.ttf", 60)
 fontDialog = love.graphics.newFont("fonts/Computerfont.ttf", 30)
 fontWarning = love.graphics.newFont("fonts/Paintling.ttf", 50)
 
 --------------------------------------------------------------------------------------------------------
 
 -- UI
+TEXT_SPEED = 0.1
+
 imgParchment = love.graphics.newImage("images/ui/parchment.png")
 imgBulletTime = love.graphics.newImage("images/ui/bullettime.png")
+imgButtonNext = love.graphics.newImage("images/ui/next_button.png")
 
 imgVillageHealth = love.graphics.newImage("images/ui/village.png")
 imgVillageFire = love.graphics.newImage("images/ui/village_fire.png")
@@ -49,6 +52,7 @@ imgPlayerHealth20 = love.graphics.newImage("images/player/health/hero_head_healt
 -- SOUNDS - fx
 sndMenuUpDown = love.audio.newSource("sounds/fx/menu_updown.wav", "static")
 sndMenuSelect = love.audio.newSource("sounds/fx/menu_select.wav", "static")
+sndBraaamInverse = love.audio.newSource("sounds/fx/braaam_inverse.wav", "static")
 
 sndGameBullet_EnemyHit = love.audio.newSource("sounds/fx/game_bullet_enemy_hit.wav", "static")
 sndGameBullet_PlayerHit = love.audio.newSource("sounds/fx/game_bullet_player_hit.wav", "static")
@@ -74,16 +78,35 @@ FRAME_PER_SECOND_HEAD = 4
 --------------------------------------------------------------------------------------------------------
 
 -- VICTORY
-
 imgVictory_Head = love.graphics.newImage("images/player/head/hero_head1.png")
+victoryText_FR = "VICTOIRE !"
+lstVictoryText_FR = {}
+lstVictoryText_FR[1] = "Tu as vaincu tous tes enemis. Grace a tes actions, le village va pouvoir vivre de nouveau en paix."
+lstVictoryText_FR[2] = ". . ."
+lstVictoryText_FR[3] = "A moins que ..."
 
+
+victoryText_EN = "VICTORY !"
+lstVictoryText_EN = {}
+lstVictoryText_EN[1] = "You have defeated all your enemies. Thanks to your actions, the village will be able to live in peace again."
+lstVictoryText_EN[2] = ". . ."
+lstVictoryText_EN[3] = "Unless ..."
 
 --------------------------------------------------------------------------------------------------------
 
 -- GAME OVER
-
 imgGameover_Head = love.graphics.newImage("images/player/head/hero_head_gameover.png")
+gameoverText_FR = "GAME OVER !"
+lstGameoverText_FR = {}
+lstGameoverText_FR[1] = "Tu as ete defait par tes enemis. Le village a ete detruit, les hommes et les femmes tues et les enfants emmenes comme esclave."
+lstGameoverText_FR[2] = ". . ."
+lstGameoverText_FR[3] = "Ta seule chance reste cette pierre de resurrection ..."
 
+gameoverText_EN = "GAME OVER !"
+lstGameoverText_EN = {}
+lstGameoverText_EN[1] = "You have been defeated by your enemies. The village has been destroyed, men and women killed and children taken as slaves."
+lstGameoverText_EN[2] = "..."
+lstGameoverText_EN[3] = "Your only chance is to use this resurrection stone ..."
 
 --------------------------------------------------------------------------------------------------------
 

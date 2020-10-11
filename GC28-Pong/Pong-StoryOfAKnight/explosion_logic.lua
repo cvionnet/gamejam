@@ -57,7 +57,8 @@ function EXPLOSION.NewExplosion()
         self.w = self.images[1]:getWidth() * self.aspectRatio
         self.h = self.images[1]:getHeight() * self.aspectRatio
 
-        love.audio.play(sndGameEnemy_Disappear)
+        if sndGameEnemy_Disappear:isPlaying() then sndGameEnemy_Disappear:stop() end
+        sndGameEnemy_Disappear:play()
     end
 
     return myExplosion

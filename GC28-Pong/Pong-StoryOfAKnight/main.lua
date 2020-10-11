@@ -23,6 +23,12 @@ local bulletTimeMode = false
 local bulletTimer = BULLET_TIME_SLOW_FACTOR
 local bulletTimeLength = 0
 
+local textEffect = {}
+--local initTextFinished = false
+local textAllDisplayed = false
+local textDisplayNext = false
+local indexText = 1
+
 --------------------------------------------------------------------------------------------------------
 
 function love.load()
@@ -61,6 +67,8 @@ function love.update(dt)
 
         CheckforGameOver()
         CheckforVictory()
+    elseif gameState == "victory" or gameState == "gameover" then
+        updateTextEffect(dt)
     end
 end
 
@@ -100,6 +108,19 @@ function love.keypressed(key)
     elseif gameState == "game" then
         -- Check if the player have to change side (left, right, up, down)
         player_Obj:SwitchSidePosition(key)
+    elseif gameState == "victory" or gameState == "gameover" then
+        if key == "space" then
+            -- All the text has been displayed, go to next text
+            if textAllDisplayed then
+                textDisplayNext = true
+            end
+
+            -- Display all the text
+            if textEffect.text ~= nil then
+                textEffect.position = string.len(textEffect.text)
+                textAllDisplayed = true
+            end
+        end
     end
 
 
@@ -109,9 +130,9 @@ function love.keypressed(key)
         end
 
         -- Display Victory screen
-        if key == "v" then gameState = "victory" end
+        if key == "v" then InitVictory() end
         -- Display Gameover screen
-        if key == "g" then gameState = "gameover" end
+        if key == "g" then InitGameOver() end
 
         -- Create enemies on the 1st monster
         if key == "t" then
@@ -292,17 +313,48 @@ end
 
 function CheckforGameOver()
     if player_Obj.life <= 0 or player_Obj.villageLife <= 0 then
-        gameState = "gameover"
+        InitGameOver()
     end
 end
 
 
-function drawGameOver()
-    love.graphics.print("GAME OVER ...", fontEndgame, 350, 200)
-    love.graphics.draw(imgGameover_Head, 0, 120, 0, 2, 2)
+function InitGameOver()
+    music_Obj:StopMusic(1)
+
+    gameState = "gameover"
+
+    indexText = 1
+    InitTextEffect(lstGameoverText_FR[indexText])
 end
 
 
+function drawGameOver()
+    love.graphics.print(gameoverText_FR, fontEndgame, 350, 200)
+    love.graphics.draw(imgGameover_Head, 0, 120, 0, 2, 2)
+
+    drawTextEffect()
+end
+
+
+-- Display next text or reset game
+function ActionGameOver()
+    -- Load next text
+    if textAllDisplayed and textDisplayNext and indexText <= #lstGameoverText_FR then
+        indexText = indexText + 1
+        InitTextEffect(lstGameoverText_FR[indexText])
+    -- All texts have been displayed
+    elseif indexText > #lstGameoverText_FR then
+        sndGameEnemy_Appear:play()
+        -- Wait the sound finished
+        while sndGameEnemy_Appear:isPlaying() do
+        end
+
+        -- Reload the game
+        InitGame()
+    end
+end
+
+--------------------------------------------------------------------------------------------------------
 
 function CheckforVictory()
     local monsterDeadNumber = 0
@@ -314,14 +366,96 @@ function CheckforVictory()
     end
 
     if monsterDeadNumber == #lstMonsters then
-        gameState = "victory"
+        InitVictory()
     end
 end
 
 
+function InitVictory()
+    music_Obj:StopMusic(1)
+
+    gameState = "victory"
+
+    indexText = 1
+    InitTextEffect(lstVictoryText_FR[indexText])
+end
+
+
 function drawVictory()
-    love.graphics.print("VICTORY !", fontEndgame, 350, 200)
+    love.graphics.print(victoryText_FR, fontEndgame, 350, 200)
     love.graphics.draw(imgVictory_Head, 0, 120, 0, 2, 2)
+
+    drawTextEffect()
+end
+
+
+-- Display next text or reset game
+function ActionVictory()
+    -- Load next text
+    if textAllDisplayed and textDisplayNext and indexText <= #lstVictoryText_FR then
+        indexText = indexText + 1
+        InitTextEffect(lstVictoryText_FR[indexText])
+    -- All texts have been displayed
+    elseif indexText > #lstVictoryText_FR then
+--[[         sndGameEnemy_Appear:play()
+        -- Wait the sound finished
+        while sndGameEnemy_Appear:isPlaying() do
+        end
+ ]]
+        sndBraaamInverse:play()
+        -- Wait the sound finished
+        while sndBraaamInverse:isPlaying() do
+        end
+
+        -- Reload the game
+        InitGame()
+    end
+end
+
+--------------------------------------------------------------------------------------------------------
+
+function InitTextEffect(pText)
+    textEffect = {}
+    textEffect.text = pText
+    textEffect.position = 1
+    textEffect.timer = 0
+    textEffect.speed = TEXT_SPEED
+
+    textAllDisplayed = false
+    textDisplayNext = false
+end
+
+
+function drawTextEffect()
+    if textEffect.text ~= nil then
+        local partText = string.sub(textEffect.text, 1, textEffect.position)
+        love.graphics.printf(partText, fontDialog, 50, 500, X_SCREENSIZE - 50) --, "center")
+    end
+
+    -- Display the "next" button
+    if textAllDisplayed then
+        love.graphics.draw(imgButtonNext, X_SCREENSIZE-100, Y_SCREENSIZE-150, 0, 4, 4)
+    end
+end
+
+
+function updateTextEffect(dt)
+    if textEffect.text ~= nil then
+        if textEffect.position < string.len(textEffect.text) then   -- stop the increment of position if all the text is displayed
+            textEffect.timer = textEffect.timer + dt
+            if textEffect.timer >= textEffect.speed then
+                textEffect.position = textEffect.position + 1
+                textEffect.timer = 0
+            end
+        else
+            -- the current text is all displayed
+            textAllDisplayed = true
+        end
+    end
+
+    -- Display next text or reset game
+    if gameState == "victory" then ActionVictory() end
+    if gameState == "gameover" then ActionGameOver() end
 end
 
 --------------------------------------------------------------------------------------------------------
@@ -340,6 +474,7 @@ function drawFog()
     love.graphics.setColor(fg_r, fg_g, fg_b, fg_a)
 end
 
+
 function FogInfiniteScrolling(dt)
     fogX = fogX - FOG_SCROLLINGSPEED * dt
     if fogX <= (0 - imgFog:getWidth()) then
@@ -347,6 +482,7 @@ function FogInfiniteScrolling(dt)
     end
 end
 
+--------------------------------------------------------------------------------------------------------
 
 function drawCamShake(dt)
     -- Backup graphics parameters

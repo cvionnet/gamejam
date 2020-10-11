@@ -172,18 +172,23 @@ function MONSTER.NewMonster(pId, pMapObject)
                 if self:CheckBulletWithPlayerCollision(bullet, pPlayerObject) == false then
                     -- Outside the screen
                     if self:CheckBulletWithOutsideCollision(bullet, pPlayerObject) then
-                        love.audio.play(sndGameBullet_VillageHit)
+                        if sndGameBullet_VillageHit:isPlaying() then sndGameBullet_VillageHit:stop() end
+                        sndGameBullet_VillageHit:play()
+
                         self:HitVillage(pPlayerObject, bullet)
                         table.remove(enemy.lstBullet, bulletID)        -- delete the bullet
                     -- With an enemy
                     elseif self:CheckBulletWithEnemyCollision(bullet, enemy) then
-                        love.audio.play(sndGameBullet_EnemyHit)
+                        if sndGameBullet_EnemyHit:isPlaying() then sndGameBullet_EnemyHit:stop() end
+                        sndGameBullet_EnemyHit:play()
+
                         self:HitEnemy(enemy)
                         table.remove(enemy.lstBullet, bulletID)        -- delete the bullet
                     end
                 -- The bullet hit the player
                 else
-                    love.audio.play(sndGameBullet_PlayerHit)
+                    if sndGameBullet_PlayerHit:isPlaying() then sndGameBullet_PlayerHit:stop() end
+                    sndGameBullet_PlayerHit:play()
 
                     camShake.shake = true
                     camShake.shakeTimer = CAM_SHAKE_TIMING
@@ -192,7 +197,8 @@ function MONSTER.NewMonster(pId, pMapObject)
 
             -- If the enemies is dead, remove all its bullets and remove the enemy
             if enemy.IsToDelete then
-                love.audio.play(sndGameEnemy_Death)
+                if sndGameEnemy_Death:isPlaying() then sndGameEnemy_Death:stop() end
+                sndGameEnemy_Death:play()
 
                 -- Hit the monster
                 self.life = self.life - 1
@@ -344,7 +350,8 @@ function MONSTER.NewMonster(pId, pMapObject)
         myEnemy:InitEnemy(xEnemy, yEnemy, self.mapSidePosition)
         table.insert(self.lstEnemies, myEnemy)
 
-        love.audio.play(sndGameEnemy_Appear)
+        if sndGameEnemy_Appear:isPlaying() then sndGameEnemy_Appear:stop() end
+        sndGameEnemy_Appear:play()
 
         self.createdEnemies = self.createdEnemies + 1
     end
