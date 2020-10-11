@@ -1,7 +1,7 @@
 
 -- MAIN
 DEBUG_MODE = true
-DEBUG_PASS_MENU = true
+DEBUG_PASS_MENU = false
 
 PLAYER_LIFE = 10
 VILLAGE_LIFE = 100
@@ -74,6 +74,38 @@ musicBattle = love.audio.newSource("sounds/music/battle.ogg", "stream")
 
 -- MENU
 FRAME_PER_SECOND_HEAD = 4
+
+--------------------------------------------------------------------------------------------------------
+
+-- INTRODUCTION
+imgPlayer = love.graphics.newImage("images/ui/question_mark.png")
+imgQuestionMark = love.graphics.newImage("images/ui/question_mark.png")
+
+lstIntroductionText_FR = {}
+lstIntroductionText_FR[1] = "Ca y est ! Le village est en place tout autour de ce carrefour"
+lstIntroductionText_FR[2] = "Je vais enfin pouvoir me reposer !"
+lstIntroductionText_FR[3] = "Chevalier Pong ?"      -- enemy
+lstIntroductionText_FR[4] = ". . ."
+lstIntroductionText_FR[5] = ". . ."
+lstIntroductionText_FR[6] = "( ca sent l'embrouille )"
+lstIntroductionText_FR[7] = ". . ."
+lstIntroductionText_FR[8] = "mmmm, vouuuui ?"
+lstIntroductionText_FR[9] = "Nous sommes l'Ordre du Ping"   -- enemy
+lstIntroductionText_FR[10] = "( l'ordre du Ping ... sérieusement ?!? )"
+lstIntroductionText_FR[11] = "et nous venons detruire ce village !!!"     -- enemy
+
+lstIntroductionText_EN = {}
+lstIntroductionText_EN[1] = "That's it! The village is in place all around this crossroads"
+lstIntroductionText_EN[2] = "I will finally be able to rest!"
+lstIntroductionText_EN[3] = "Are you Pong, the Knight ?"      -- enemy
+lstIntroductionText_EN[4] = ". . ."
+lstIntroductionText_EN[5] = ". . ."
+lstIntroductionText_EN[6] = "( smells like trouble )"
+lstIntroductionText_EN[7] = ". . ."
+lstIntroductionText_EN[8] = "mmmm, mayyyybeee ?"
+lstIntroductionText_EN[9] = "We are the Order of the Ping"   -- enemy
+lstIntroductionText_EN[10] = "( the order of the Ping ... seriously ?!? )"
+lstIntroductionText_EN[11] = "and we come to destroy this village !!!"     -- enemy
 
 --------------------------------------------------------------------------------------------------------
 

@@ -36,10 +36,6 @@ function drawMenu()
     -- Title
     love.graphics.print(TITLE, fontTitle, 20, 120, math.rad(-5))
     love.graphics.print(SUB_TITLE, fontSubTitle, 450, 190)
-
-
-    if menuState == "newgame" then InitMap() end
-    if menuState == "howto" then love.graphics.print("How to play ... press ENTER", 30, 30) end
 end
 
 
@@ -62,9 +58,8 @@ function updateMenu(dt)
     -- Player head animation
     PlayHeadAnimation(dt)
 
-    if menuState == "quit" then
-        love.event.quit()
-    end
+    -- Actions to do from the menu
+    ActionMenu()
 end
 
 --------------------------------------------------------------------------------------------------------
@@ -111,6 +106,14 @@ function MenuKeyboardCommands(key)
     end
 end
 
+
+function ActionMenu()
+    if menuState == "newgame" then InitIntroduction() end
+    if menuState == "howto" then love.graphics.print("How to play ... press ENTER", 30, 30) end
+    if menuState == "quit" then
+        love.event.quit()
+    end
+end
 --------------------------------------------------------------------------------------------------------
 
 function EnterMenu()

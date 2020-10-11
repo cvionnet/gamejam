@@ -13,7 +13,7 @@ require("menu_logic")
 require("param")
 
 
-local gameState = ""            -- menu / game / gameover / victory
+local gameState = ""            -- menu / intro / game / gameover / victory
 
 local fogX = 1       -- Horizontal position of the fog (for scrolling)
 
@@ -46,6 +46,9 @@ end
 function love.update(dt)
     if gameState == "menu" then
         updateMenu(dt)
+    elseif gameState == "intro" then
+        updateIntroduction(dt)
+        updateTextEffect(dt)
     elseif gameState == "game" then
         map_Obj:update(dt)
         player_Obj:update(dt)
@@ -76,6 +79,8 @@ end
 function love.draw()
     if gameState == "menu" then
         drawMenu()
+    elseif gameState == "intro" then
+        drawIntroduction()
     elseif gameState == "game" then
         -- Camera shake
         if camShake.shake then drawCamShake() end
@@ -108,7 +113,7 @@ function love.keypressed(key)
     elseif gameState == "game" then
         -- Check if the player have to change side (left, right, up, down)
         player_Obj:SwitchSidePosition(key)
-    elseif gameState == "victory" or gameState == "gameover" then
+    elseif gameState == "intro" or gameState == "victory" or gameState == "gameover" then
         if key == "space" then
             -- All the text has been displayed, go to next text
             if textAllDisplayed then
@@ -311,6 +316,49 @@ end
 
 --------------------------------------------------------------------------------------------------------
 
+function InitIntroduction()
+    player_Obj:InitPlayer(0, Y_SCREENSIZE/2)
+    player_Obj:PlayAnimation("idle")
+
+    gameState = "intro"
+
+    indexText = 1
+    InitTextEffect(lstIntroductionText_FR[indexText])
+end
+
+
+function drawIntroduction()
+    -- Draw the player or enemy picture, depending of sentences
+    if indexText == 3 or indexText == 9 or indexText == 11 then
+        love.graphics.draw(imgQuestionMark, X_SCREENSIZE - 150, Y_SCREENSIZE/2, 0, 4, 4)
+    else
+        player_Obj:draw()
+    end
+
+    drawTextEffect()
+end
+
+
+function updateIntroduction(dt)
+    player_Obj:updateAnimation(dt)
+end
+
+
+-- Display next text or reset game
+function ActionIntroduction()
+    -- Load next text
+    if textAllDisplayed and textDisplayNext and indexText <= #lstIntroductionText_FR then
+        indexText = indexText + 1
+        InitTextEffect(lstIntroductionText_FR[indexText])
+    -- All texts have been displayed
+    elseif indexText > #lstIntroductionText_FR then
+        -- Start the game
+        InitMap()
+    end
+end
+
+--------------------------------------------------------------------------------------------------------
+
 function CheckforGameOver()
     if player_Obj.life <= 0 or player_Obj.villageLife <= 0 then
         InitGameOver()
@@ -384,6 +432,7 @@ end
 function drawVictory()
     love.graphics.print(victoryText_FR, fontEndgame, 350, 200)
     love.graphics.draw(imgVictory_Head, 0, 120, 0, 2, 2)
+    love.graphics.draw(imgParchment, 340, 190, 0, 40, 6)
 
     drawTextEffect()
 end
@@ -454,6 +503,7 @@ function updateTextEffect(dt)
     end
 
     -- Display next text or reset game
+    if gameState == "intro" then ActionIntroduction() end
     if gameState == "victory" then ActionVictory() end
     if gameState == "gameover" then ActionGameOver() end
 end

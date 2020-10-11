@@ -43,7 +43,7 @@ function PLAYER.NewPlayer(pMapObject, pVillageLife, pPlayerLife)
     function myPlayer:draw()
 
         self:drawAnimation()
-        love.graphics.print("Villageois : "..tostring(self.villageLife), 10, 30)
+        --love.graphics.print("Villageois : "..tostring(self.villageLife), 10, 30)
 
         -- DEBUG - draw player box
         if DEBUG_MODE == true then
