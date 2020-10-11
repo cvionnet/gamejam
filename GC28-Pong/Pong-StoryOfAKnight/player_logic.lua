@@ -158,16 +158,18 @@ function PLAYER.NewPlayer(pMapObject, pVillageLife, pPlayerLife)
         local img = self.lstAnimationsImages[imgName]       -- get Love2d image object from the name of the image
 
         --print(img, self.x, self.y, SPRITE_PLAYER_RATIO)
-        if self.isHit then
-            love.graphics.setShader(shaderBlink)
-            shaderBlink:send("WhiteFactor", 1)
+        if img ~= nil then
+            if self.isHit then
+                love.graphics.setShader(shaderBlink)
+                shaderBlink:send("WhiteFactor", 1)
 
-            love.graphics.draw(img, self.x, self.y, 0, 1 * SPRITE_PLAYER_RATIO, 1 * SPRITE_PLAYER_RATIO)
+                love.graphics.draw(img, self.x, self.y, 0, 1 * SPRITE_PLAYER_RATIO, 1 * SPRITE_PLAYER_RATIO)
 
-            love.graphics.setShader()
-            self.isHit = false
-        else
-            love.graphics.draw(img, self.x, self.y, 0, 1 * SPRITE_PLAYER_RATIO, 1 * SPRITE_PLAYER_RATIO)
+                love.graphics.setShader()
+                self.isHit = false
+            else
+                love.graphics.draw(img, self.x, self.y, 0, 1 * SPRITE_PLAYER_RATIO, 1 * SPRITE_PLAYER_RATIO)
+            end
         end
     end
 

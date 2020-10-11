@@ -53,6 +53,7 @@ function love.update(dt)
         map_Obj:update(dt)
         player_Obj:update(dt)
 
+        -- Bullet time + monster update
         ActivateBulletTime(dt)
 
         groupUI:update(dt)
@@ -183,7 +184,10 @@ function InitGame()
 
     -- Pre-load musics
     music_Obj:AddMusic(musicBattle)
-    --music_Obj:AddMusic(musicTechno)
+    music_Obj:AddMusic(musicIntro)
+    music_Obj:AddMusic(musicMenu)
+    music_Obj:AddMusic(musicVictory)
+    music_Obj:AddMusic(musicGameover)
 
     -- pass menu screen
     if DEBUG_PASS_MENU then
@@ -198,7 +202,8 @@ end
 function InitMap()
     bulletTimeLength = BULLET_TIME_LENGTH
 
-    music_Obj:PlayMusic(1)
+    music_Obj:StopMusic(2)  -- intro
+    music_Obj:PlayMusic(1)  -- game
 
     -- Load the UI
     LoadUI()
@@ -207,7 +212,7 @@ function InitMap()
 
     player_Obj:InitPlayer(0, Y_SCREENSIZE/2)
 
-    monster_Obj:InitMonster(MONSTER_LIFE, "right", 1, "")
+    monster_Obj:InitMonster(MONSTER_LIFE, "right", 1, "")       -- 3rd parameter : how many times the monster will appear
     table.insert(lstMonsters, monster_Obj)
 
     gameState = "game"
@@ -281,24 +286,21 @@ function ActivateBulletTime(dt)
             bulletTimeLength = bulletTimeLength - BULLET_TIME_LOSS_SPEED * dt
             uiPlayerBulletTime:setValue(bulletTimeLength)   --uiPlayerBulletTime.value - 1)
 
-            for i = 1, #lstMonsters do
-                -- If there is 2 monster, need to send the position of the other monster
-                -- 2 monsters, send position of 2nd monster
-                if #lstMonsters > 1 and i == 1 then
-                    lstMonsters[i]:update(dt, player_Obj, #lstMonsters, lstMonsters[i+1].mapSidePosition)
-                -- 2 monsters, send position of 1st monster
-                elseif #lstMonsters > 1 and i == 2 then
-                    lstMonsters[i]:update(dt, player_Obj, #lstMonsters, lstMonsters[i-1].mapSidePosition)
-                -- Only one monster
-                else
-                    lstMonsters[i]:update(dt, player_Obj, 1, "")
-                end
-            end
+            updateMonster(dt)
         end
 
     -- Mode bullet time OFF
     else
-        for i = 1, #lstMonsters do
+        updateMonster(dt)
+    end
+end
+
+
+function updateMonster(dt)
+    for i = 1, #lstMonsters do
+        --print("Monster"..tostring(i).." life : "..tostring(lstMonsters[i].life))
+        -- If the moster is not dead
+        if lstMonsters[i].life > 0 then
             -- If there is 2 monster, need to send the position of the other monster
             -- 2 monsters, send position of 2nd monster
             if #lstMonsters > 1 and i == 1 then
@@ -317,6 +319,9 @@ end
 --------------------------------------------------------------------------------------------------------
 
 function InitIntroduction()
+    music_Obj:StopMusic(3)  -- menu
+    music_Obj:PlayMusic(2)  -- intro
+
     player_Obj:InitPlayer(0, Y_SCREENSIZE/2)
     player_Obj:PlayAnimation("idle")
 
@@ -367,7 +372,8 @@ end
 
 
 function InitGameOver()
-    music_Obj:StopMusic(1)
+    music_Obj:StopMusic(1)  -- game
+    music_Obj:PlayMusic(5)  -- gameover
 
     gameState = "gameover"
 
@@ -392,6 +398,8 @@ function ActionGameOver()
         InitTextEffect(lstGameoverText_FR[indexText])
     -- All texts have been displayed
     elseif indexText > #lstGameoverText_FR then
+        music_Obj:StopMusic(5)  -- gameover
+
         sndGameEnemy_Appear:play()
         -- Wait the sound finished
         while sndGameEnemy_Appear:isPlaying() do
@@ -420,7 +428,8 @@ end
 
 
 function InitVictory()
-    music_Obj:StopMusic(1)
+    music_Obj:StopMusic(1)  -- game
+    music_Obj:PlayMusic(4)  -- victory
 
     gameState = "victory"
 
@@ -432,7 +441,6 @@ end
 function drawVictory()
     love.graphics.print(victoryText_FR, fontEndgame, 350, 200)
     love.graphics.draw(imgVictory_Head, 0, 120, 0, 2, 2)
-    love.graphics.draw(imgParchment, 340, 190, 0, 40, 6)
 
     drawTextEffect()
 end
@@ -446,11 +454,8 @@ function ActionVictory()
         InitTextEffect(lstVictoryText_FR[indexText])
     -- All texts have been displayed
     elseif indexText > #lstVictoryText_FR then
---[[         sndGameEnemy_Appear:play()
-        -- Wait the sound finished
-        while sndGameEnemy_Appear:isPlaying() do
-        end
- ]]
+        music_Obj:StopMusic(4)  -- victory
+
         sndBraaamInverse:play()
         -- Wait the sound finished
         while sndBraaamInverse:isPlaying() do

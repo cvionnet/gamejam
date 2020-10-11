@@ -80,7 +80,7 @@ function MONSTER.NewMonster(pId, pMapObject)
             self:updateWarning(dt)
         -- Move the monster on the field
         elseif self.status == "coming" then
-            self:updateComing(dt, pPlayerObject)
+            self:updateComing(dt)
         -- All actions when the monster fight
         elseif self.status == "fighting" then
             self:updateFighting(dt, pPlayerObject)
@@ -95,13 +95,13 @@ function MONSTER.NewMonster(pId, pMapObject)
     -- Display a warning where the monster will appear
     function myMonster:drawWarning()
         if self.mapSidePosition == "up" then
-            love.graphics.print(math.floor(self.timeWarning), fontWarning, X_SCREENSIZE/2 - fontWarning:getHeight()/2, self.map_Object.TILE_HEIGHT*2)
+            love.graphics.print(math.floor(self.timeWarning)+1, fontWarning, X_SCREENSIZE/2 - fontWarning:getHeight()/2, self.map_Object.TILE_HEIGHT*2)
         elseif self.mapSidePosition == "down" then
-            love.graphics.print(math.floor(self.timeWarning), fontWarning, X_SCREENSIZE/2 - fontWarning:getHeight()/2, Y_SCREENSIZE - self.map_Object.TILE_HEIGHT*3)
+            love.graphics.print(math.floor(self.timeWarning)+1, fontWarning, X_SCREENSIZE/2 - fontWarning:getHeight()/2, Y_SCREENSIZE - self.map_Object.TILE_HEIGHT*3)
         elseif self.mapSidePosition == "left" then
-            love.graphics.print(math.floor(self.timeWarning), fontWarning, self.map_Object.TILE_WIDTH*2, Y_SCREENSIZE/2 - fontWarning:getHeight()/2)
+            love.graphics.print(math.floor(self.timeWarning)+1, fontWarning, self.map_Object.TILE_WIDTH*2, Y_SCREENSIZE/2 - fontWarning:getHeight()/2)
         elseif self.mapSidePosition == "right" then
-            love.graphics.print(math.floor(self.timeWarning), fontWarning, X_SCREENSIZE - self.map_Object.TILE_WIDTH*3, Y_SCREENSIZE/2 - fontWarning:getHeight()/2)
+            love.graphics.print(math.floor(self.timeWarning)+1, fontWarning, X_SCREENSIZE - self.map_Object.TILE_WIDTH*3, Y_SCREENSIZE/2 - fontWarning:getHeight()/2)
         end
     end
 
@@ -200,9 +200,6 @@ function MONSTER.NewMonster(pId, pMapObject)
                 if sndGameEnemy_Death:isPlaying() then sndGameEnemy_Death:stop() end
                 sndGameEnemy_Death:play()
 
-                -- Hit the monster
-                self.life = self.life - 1
-
                 -- Delete bullets on the enemy
                 for i = #enemy.lstBullet, 1, -1 do
                     table.remove(enemy.lstBullet, i)
@@ -238,6 +235,9 @@ function MONSTER.NewMonster(pId, pMapObject)
                 self.vx = 150
                 self.status = "leaving"
             end
+
+            -- Hit the monster  (how many times he will come back)
+            self.life = self.life - 1
         end
 
 

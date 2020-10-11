@@ -108,15 +108,26 @@ end
 
 
 function ActionMenu()
-    if menuState == "newgame" then InitIntroduction() end
-    if menuState == "howto" then love.graphics.print("How to play ... press ENTER", 30, 30) end
+    if menuState == "newgame" then
+        music_Obj:StopMusic(3)  -- menu
+        InitIntroduction()
+    end
+    if menuState == "howto" then
+        music_Obj:StopMusic(3)  -- menu
+        love.graphics.print("How to play ... press ENTER", 30, 30)
+    end
     if menuState == "quit" then
+        music_Obj:StopMusic(3)  -- menu
         love.event.quit()
     end
 end
 --------------------------------------------------------------------------------------------------------
 
 function EnterMenu()
+    music_Obj:StopMusic(4)  -- victory
+    music_Obj:StopMusic(5)  -- gameover
+    music_Obj:PlayMusic(3)  -- menu
+
     LoadHeadAnimation("hero_head", 6)
 
     menuState = "menu"

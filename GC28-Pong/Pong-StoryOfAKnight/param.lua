@@ -69,6 +69,10 @@ sndGamePlayer_Walk = love.audio.newSource("sounds/fx/game_player_footstep_run.wa
 
 -- SOUNDS - music
 musicBattle = love.audio.newSource("sounds/music/battle.ogg", "stream")
+musicIntro = love.audio.newSource("sounds/music/intro.ogg", "stream")
+musicMenu = love.audio.newSource("sounds/music/menu.ogg", "stream")
+musicVictory = love.audio.newSource("sounds/music/victory.ogg", "stream")
+musicGameover = love.audio.newSource("sounds/music/gameover.ogg", "stream")
 
 --------------------------------------------------------------------------------------------------------
 
@@ -83,11 +87,11 @@ imgQuestionMark = love.graphics.newImage("images/ui/question_mark.png")
 
 lstIntroductionText_FR = {}
 lstIntroductionText_FR[1] = "Ca y est ! Le village est en place tout autour de ce carrefour"
-lstIntroductionText_FR[2] = "Je vais enfin pouvoir me reposer !"
+lstIntroductionText_FR[2] = "Tout ce travail n'etait pas inutile, je vais enfin pouvoir me reposer un peu"
 lstIntroductionText_FR[3] = "Chevalier Pong ?"      -- enemy
 lstIntroductionText_FR[4] = ". . ."
 lstIntroductionText_FR[5] = ". . ."
-lstIntroductionText_FR[6] = "( ca sent l'embrouille )"
+lstIntroductionText_FR[6] = "( ca sent l'embrouille ... )"
 lstIntroductionText_FR[7] = ". . ."
 lstIntroductionText_FR[8] = "mmmm, vouuuui ?"
 lstIntroductionText_FR[9] = "Nous sommes l'Ordre du Ping"   -- enemy
@@ -96,11 +100,11 @@ lstIntroductionText_FR[11] = "et nous venons detruire ce village !!!"     -- ene
 
 lstIntroductionText_EN = {}
 lstIntroductionText_EN[1] = "That's it! The village is in place all around this crossroads"
-lstIntroductionText_EN[2] = "I will finally be able to rest!"
+lstIntroductionText_EN[2] = "All this work was not useless, I will finally be able to rest for a while"
 lstIntroductionText_EN[3] = "Are you Pong, the Knight ?"      -- enemy
 lstIntroductionText_EN[4] = ". . ."
 lstIntroductionText_EN[5] = ". . ."
-lstIntroductionText_EN[6] = "( smells like trouble )"
+lstIntroductionText_EN[6] = "( smells like trouble ... )"
 lstIntroductionText_EN[7] = ". . ."
 lstIntroductionText_EN[8] = "mmmm, mayyyybeee ?"
 lstIntroductionText_EN[9] = "We are the Order of the Ping"   -- enemy
@@ -190,11 +194,11 @@ PLAYER_FEET_HEIGHT = 6
 -- MONSTER
 MONSTER_WALKING_SPEED = 250
 SPRITE_MONSTER_RATIO = 1
-TIME_WARNING = 1  --4
+TIME_WARNING = 4  -- 1
 TIME_HURT_PLAYER = 0.3
-TIME_MIN_CREATE_ENEMY = 0.1 --10
-TIME_MAX_CREATE_ENEMY = 0.1 --20
-MAX_ENEMY = 1 -- 10
+TIME_MIN_CREATE_ENEMY = 2 --0.1
+TIME_MAX_CREATE_ENEMY = 10 --0.1
+MAX_ENEMY = 10 --1
 TIME_DISPLAY_MESSAGE_VILLAGE = 2
 SIDE_POSITIONS = {"up", "right", "down", "left"}     -- the 4 positions on the screen
 
@@ -205,8 +209,8 @@ SPRITE_ENEMY_RATIO = 4
 FRAME_PER_SECOND_ENEMY = 2
 FRAME_PER_SECOND_ENEMY_ATTACK = 20
 ENEMY_WALKING_SPEED = 50
-TIME_MIN_SHOOT_BULLET = 0.5 -- 1
-TIME_MAX_SHOOT_BULLET = 1   -- 3
+TIME_MIN_SHOOT_BULLET = 1 --0.5 -- 1
+TIME_MAX_SHOOT_BULLET = 3 --1   -- 3
 ENEMY_MIN_LIFE = 2
 ENEMY_MAX_LIFE = 5
 

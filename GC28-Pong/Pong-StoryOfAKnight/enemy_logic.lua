@@ -268,19 +268,21 @@ function ENEMY.NewEnemy(pMapObject)
         local imgName = self.lstAnimations[self.currentAnimation][math.floor(self.frame)]    -- get image name for the current animation and the current fame  (eg : for "run" and frame=1, get "run1")
         local img = self.lstAnimationsImages[imgName]       -- get Love2d image object from the name of the image
 
+        --print(img, self.x, self.y, SPRITE_PLAYER_RATIO)
+        if img ~= nil then
+            if self.isHit then
+                love.graphics.setShader(shaderBlink)
+                shaderBlink:send("WhiteFactor", 1)
 
-        if self.isHit then
-            love.graphics.setShader(shaderBlink)
-            shaderBlink:send("WhiteFactor", 1)
+                love.graphics.draw(img, self.x, self.y, math.rad(self.rotation), self.sx*SPRITE_ENEMY_RATIO, self.sy*SPRITE_ENEMY_RATIO)
 
-            love.graphics.draw(img, self.x, self.y, math.rad(self.rotation), self.sx*SPRITE_ENEMY_RATIO, self.sy*SPRITE_ENEMY_RATIO)
-
-            love.graphics.setShader()
-            self.isHit = false
-        else
-            love.graphics.setColor(1,1,1,self.alpha)
-            love.graphics.draw(img, self.x, self.y, math.rad(self.rotation), self.sx*SPRITE_ENEMY_RATIO, self.sy*SPRITE_ENEMY_RATIO)
-            love.graphics.setColor(1,1,1,1)
+                love.graphics.setShader()
+                self.isHit = false
+            else
+                love.graphics.setColor(1,1,1,self.alpha)
+                love.graphics.draw(img, self.x, self.y, math.rad(self.rotation), self.sx*SPRITE_ENEMY_RATIO, self.sy*SPRITE_ENEMY_RATIO)
+                love.graphics.setColor(1,1,1,1)
+            end
         end
     end
 
