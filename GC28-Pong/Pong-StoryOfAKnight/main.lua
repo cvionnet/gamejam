@@ -32,6 +32,7 @@ local indexText = 1
 --------------------------------------------------------------------------------------------------------
 
 function love.load()
+    love.window.setTitle(TITLE.." - "..SUB_TITLE)
     love.window.setMode(768, 768) --, {fullscreen=false, vsync=true})
     --love.keyboard.setKeyRepeat(true)
 
@@ -176,7 +177,7 @@ function love.keypressed(key)
 
         -- Force monster position
         if key == "x" then
-            monster_Obj:SetSidePosition("left")
+            monster_Obj:SetSidePosition("down")
             monster_Obj.status = "warning"
         end
     end

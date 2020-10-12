@@ -312,16 +312,19 @@ function ENEMY.NewEnemy(pMapObject)
 
     -- Check collision with the player
     function myEnemy:CheckPlayerCollision(dt, pPlayerObject)
-        -- Check if enemy coordinates are the same as the player
+        -- Check if enemy coordinates are the same as the player  (if the player is behind the enemy, it will also hurt him)
         if self.mapSidePosition == "up" then
-            if self.y >= pPlayerObject.y then self.isHurtingPlayer = true end
+            --if self.y >= pPlayerObject.y then self.isHurtingPlayer = true end
+            if pPlayerObject.mapSidePosition == "up" and (pPlayerObject.x >= self.x and pPlayerObject.x <= self.x + self.w) then self.isHurtingPlayer = true end
         elseif self.mapSidePosition == "down" then
-            if self.y <= pPlayerObject.y + pPlayerObject.h then self.isHurtingPlayer = true end
+            --if self.y <= pPlayerObject.y + pPlayerObject.h then self.isHurtingPlayer = true end
+            if pPlayerObject.mapSidePosition == "down" and (pPlayerObject.x >= self.x and pPlayerObject.x <= self.x + self.w) then self.isHurtingPlayer = true end
         elseif self.mapSidePosition == "left" then
-            if self.x >= pPlayerObject.x then self.isHurtingPlayer = true end
-            if (pPlayerObject.x >= self.x and pPlayerObject.x <= self.x + self.w) and (pPlayerObject.y >= self.y and pPlayerObject.y <= self.y + self.h) then self.isHurtingPlayer = true end
+            --if (pPlayerObject.x >= self.x and pPlayerObject.x <= self.x + self.w) and (pPlayerObject.y >= self.y and pPlayerObject.y <= self.y + self.h) then self.isHurtingPlayer = true end
+            if pPlayerObject.mapSidePosition == "left" and (pPlayerObject.y >= self.y and pPlayerObject.y <= self.y + self.h) then self.isHurtingPlayer = true end
         elseif self.mapSidePosition == "right" then
-            if (pPlayerObject.x >= self.x and pPlayerObject.x <= self.x + self.w) and (pPlayerObject.y >= self.y and pPlayerObject.y <= self.y + self.h) then self.isHurtingPlayer = true end
+            --if (pPlayerObject.x >= self.x and pPlayerObject.x <= self.x + self.w) and (pPlayerObject.y >= self.y and pPlayerObject.y <= self.y + self.h) then self.isHurtingPlayer = true end
+            if pPlayerObject.mapSidePosition == "right" and (pPlayerObject.y >= self.y and pPlayerObject.y <= self.y + self.h) then self.isHurtingPlayer = true end
         end
 
         -- Decrease player's life, shake screen and draw player in white

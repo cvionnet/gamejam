@@ -69,8 +69,8 @@ function PLAYER.NewPlayer(pMapObject, pVillageLife, pPlayerLife)
         self:PlayerFriction()
 
         -- Move the sprite and apply velocity
-        self.x = self.x + self.vx
-        self.y = self.y + self.vy
+        self.x = self.x + self.vx * PLAYER_SPEED * dt
+        self.y = self.y + self.vy * PLAYER_SPEED * dt
 
         -- Player animation
         --self:PlayAnimation(dt)
@@ -235,8 +235,8 @@ function PLAYER.NewPlayer(pMapObject, pVillageLife, pPlayerLife)
 
     function myPlayer:PlayerFriction()
         -- Reduce velocity (=friction)  - 10% each time
-        self.vx = self.vx * GRAVITY
-        self.vy = self.vy * GRAVITY
+        self.vx = self.vx * PARTICLE_GRAVITY
+        self.vy = self.vy * PARTICLE_GRAVITY
         if math.abs(self.vx) < STOP_PLAYER then self.vx = 0 end
         if math.abs(self.vy) < STOP_PLAYER then self.vy = 0 end
     end
