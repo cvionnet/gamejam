@@ -28,6 +28,26 @@ function drawMenu()
         if menuLoaded then
             love.graphics.print(">", fontMenu, menuTween[menuId].x - 25, menuTween[menuId].y)
         end
+
+        -- Draw the flags
+        local flagPositionX = menuTween[1].x + 210
+        if LANGUAGE == "FR" then
+            love.graphics.draw(imgFlagFR, flagPositionX, menuTween[1].y)
+            --love.graphics.setColor(0.7,0.7,0.7,0.7)
+            --love.graphics.rectangle("line", flagPositionX - 2, menuTween[1].y - 2, imgFlagFR:getWidth() + 4, imgFlagFR:getHeight() + 4)
+
+            love.graphics.setColor(1,1,1,0.25)
+            love.graphics.draw(imgFlagEN, flagPositionX + imgFlagFR:getWidth() + 10, menuTween[1].y)
+            love.graphics.setColor(1,1,1,1)
+        elseif LANGUAGE == "EN" then
+            love.graphics.setColor(1,1,1,0.25)
+            love.graphics.draw(imgFlagFR, flagPositionX, menuTween[1].y)
+            love.graphics.setColor(1,1,1,1)
+            --love.graphics.setColor(0.7,0.7,0.7,0.7)
+            --love.graphics.rectangle("line", flagPositionX - 2, menuTween[1].y - 2, imgFlagFR:getWidth() + 4, imgFlagFR:getHeight() + 4)
+
+            love.graphics.draw(imgFlagEN, flagPositionX + imgFlagFR:getWidth() + 10, menuTween[1].y)
+        end
     end
 
     -- Hero head
@@ -103,6 +123,13 @@ function MenuKeyboardCommands(key)
                 menuId = #menuTween
             end
         end
+        if key == "right" and LANGUAGE == "FR" then
+            LANGUAGE = "EN"
+            EnterMenu()
+        elseif key == "left" and LANGUAGE == "EN" then
+            LANGUAGE = "FR"
+            EnterMenu()
+        end
     end
 end
 
@@ -113,8 +140,8 @@ function ActionMenu()
         InitIntroduction()
     end
     if menuState == "howto" then
-        music_Obj:StopMusic(3)  -- menu
-        love.graphics.print("How to play ... press ENTER", 30, 30)
+        --music_Obj:StopMusic(3)  -- menu
+        InitHowTo()
     end
     if menuState == "quit" then
         music_Obj:StopMusic(3)  -- menu
@@ -139,19 +166,22 @@ function EnterMenu()
     menuTween[1] = {}
     menuTween[1].startPosition = -100
     menuTween[1].distance = 500
-    menuTween[1].text = "New game"
+    if LANGUAGE == "FR" then menuTween[1].text = menu1_FR
+    elseif LANGUAGE == "EN" then menuTween[1].text = menu1_EN end
     menuTween[1].menuState = "newgame"
 
     menuTween[2] = {}
     menuTween[2].startPosition = -200
     menuTween[2].distance = 600
-    menuTween[2].text = "How to play"
+    if LANGUAGE == "FR" then menuTween[2].text = menu2_FR
+    elseif LANGUAGE == "EN" then menuTween[2].text = menu2_EN end
     menuTween[2].menuState = "howto"
 
     menuTween[3] = {}
     menuTween[3].startPosition = -300
     menuTween[3].distance = 700
-    menuTween[3].text = "Quit game"
+    if LANGUAGE == "FR" then menuTween[3].text = menu3_FR
+    elseif LANGUAGE == "EN" then menuTween[3].text = menu3_EN end
     menuTween[3].menuState = "quit"
 
     for i = 1, #menuTween do

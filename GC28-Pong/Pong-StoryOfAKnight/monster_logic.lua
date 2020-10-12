@@ -212,6 +212,12 @@ function MONSTER.NewMonster(pId, pMapObject)
 
         -- Create a new enemy
         if self.createdEnemies < self.maxEnemies  then
+            -- Don't wait before creating a first enemy
+            if self.createdEnemies == 0 then
+                -- Create a first enemy
+                self:CreateEnemy()
+            end
+
             self.timeToNewEnemy = self.timeToNewEnemy - 1 * dt
             if self.timeToNewEnemy < 0 then
                 self.timeToNewEnemy = math.random(TIME_MIN_CREATE_ENEMY, TIME_MAX_CREATE_ENEMY)
@@ -340,10 +346,10 @@ function MONSTER.NewMonster(pId, pMapObject)
             yEnemy = Y_SCREENSIZE - imageEnemyH - math.random(10, imageEnemyH)
         elseif self.mapSidePosition == "left" then
             xEnemy = math.random(10, imageEnemyW)
-            yEnemy = math.random(self.y - (imageEnemyH)/2 + 10, self.y + self.h - (imageEnemyH)/2 - 10)     -- (imageH*SPRITE_ENEMY_RATIO)/2 : shoots are send from the center of the enemy
+            yEnemy = math.random(self.y - (imageEnemyH)/2 + 10, self.y + self.h - (imageEnemyH)/2 - 30)     -- (imageH*SPRITE_ENEMY_RATIO)/2 : shoots are send from the center of the enemy
         elseif self.mapSidePosition == "right" then
             xEnemy = self.x + math.random(0, imageEnemyW)
-            yEnemy = math.random(self.y - (imageEnemyH)/2 + 10, self.y + self.h - (imageEnemyH)/2 - 10)     -- (imageH*SPRITE_ENEMY_RATIO)/2 : shoots are send from the center of the enemy
+            yEnemy = math.random(self.y - (imageEnemyH)/2 + 10, self.y + self.h - (imageEnemyH)/2 - 30)     -- (imageH*SPRITE_ENEMY_RATIO)/2 : shoots are send from the center of the enemy
         end
 
         -- Set enemy position

@@ -1,6 +1,6 @@
 
 -- MAIN
-DEBUG_MODE = true
+DEBUG_MODE = false
 DEBUG_PASS_MENU = false
 
 PLAYER_LIFE = 10
@@ -15,6 +15,7 @@ BULLET_TIME_SPEED = 15
 --------------------------------------------------------------------------------------------------------
 
 -- COMMON
+LANGUAGE = "FR"     -- FR / EN
 FRAME_PER_SECOND = 24
 X_SCREENSIZE = 0
 Y_SCREENSIZE = 0
@@ -37,6 +38,10 @@ TEXT_SPEED = 0.1
 imgParchment = love.graphics.newImage("images/ui/parchment.png")
 imgBulletTime = love.graphics.newImage("images/ui/bullettime.png")
 imgButtonNext = love.graphics.newImage("images/ui/next_button.png")
+imgHowToPlay = love.graphics.newImage("images/ui/howtoplay.png")
+
+imgFlagFR = love.graphics.newImage("images/ui/flagFR.png")
+imgFlagEN = love.graphics.newImage("images/ui/flagEN.png")
 
 imgVillageHealth = love.graphics.newImage("images/ui/village.png")
 imgVillageFire = love.graphics.newImage("images/ui/village_fire.png")
@@ -53,6 +58,7 @@ imgPlayerHealth20 = love.graphics.newImage("images/player/health/hero_head_healt
 sndMenuUpDown = love.audio.newSource("sounds/fx/menu_updown.wav", "static")
 sndMenuSelect = love.audio.newSource("sounds/fx/menu_select.wav", "static")
 sndBraaamInverse = love.audio.newSource("sounds/fx/braaam_inverse.wav", "static")
+sndBulletTime = love.audio.newSource("sounds/fx/bullettime.wav", "static")
 
 sndGameBullet_EnemyHit = love.audio.newSource("sounds/fx/game_bullet_enemy_hit.wav", "static")
 sndGameBullet_PlayerHit = love.audio.newSource("sounds/fx/game_bullet_player_hit.wav", "static")
@@ -79,6 +85,14 @@ musicGameover = love.audio.newSource("sounds/music/gameover.ogg", "stream")
 -- MENU
 FRAME_PER_SECOND_HEAD = 4
 
+menu1_FR = "Demarrer"
+menu2_FR = "Comment jouer"
+menu3_FR = "Quitter"
+
+menu1_EN = "New game"
+menu2_EN = "How to play"
+menu3_EN = "Quit game"
+
 --------------------------------------------------------------------------------------------------------
 
 -- INTRODUCTION
@@ -93,10 +107,11 @@ lstIntroductionText_FR[4] = ". . ."
 lstIntroductionText_FR[5] = ". . ."
 lstIntroductionText_FR[6] = "( ca sent l'embrouille ... )"
 lstIntroductionText_FR[7] = ". . ."
-lstIntroductionText_FR[8] = "mmmm, vouuuui ?"
+lstIntroductionText_FR[8] = "mmmm, c'est pour quoi ?"
 lstIntroductionText_FR[9] = "Nous sommes l'Ordre du Ping"   -- enemy
-lstIntroductionText_FR[10] = "( l'ordre du Ping ... sérieusement ?!? )"
-lstIntroductionText_FR[11] = "et nous venons detruire ce village !!!"     -- enemy
+lstIntroductionText_FR[10] = "( l'ordre du Ping ... serieusement ?!? )"
+lstIntroductionText_FR[11] = "et nous devons detruire ce village !"     -- enemy
+lstIntroductionText_FR[12] = "En garde !"     -- enemy
 
 lstIntroductionText_EN = {}
 lstIntroductionText_EN[1] = "That's it! The village is in place all around this crossroads"
@@ -104,12 +119,13 @@ lstIntroductionText_EN[2] = "All this work was not useless, I will finally be ab
 lstIntroductionText_EN[3] = "Are you Pong, the Knight ?"      -- enemy
 lstIntroductionText_EN[4] = ". . ."
 lstIntroductionText_EN[5] = ". . ."
-lstIntroductionText_EN[6] = "( smells like trouble ... )"
+lstIntroductionText_EN[6] = "( smells like we're in trouble ... )"
 lstIntroductionText_EN[7] = ". . ."
-lstIntroductionText_EN[8] = "mmmm, mayyyybeee ?"
+lstIntroductionText_EN[8] = "mmmm, what do you want ?"
 lstIntroductionText_EN[9] = "We are the Order of the Ping"   -- enemy
 lstIntroductionText_EN[10] = "( the order of the Ping ... seriously ?!? )"
-lstIntroductionText_EN[11] = "and we come to destroy this village !!!"     -- enemy
+lstIntroductionText_EN[11] = "and we come to destroy this village !"     -- enemy
+lstIntroductionText_EN[12] = "Prepare to fight !"     -- enemy
 
 --------------------------------------------------------------------------------------------------------
 
@@ -134,13 +150,13 @@ lstVictoryText_EN[3] = "Unless ..."
 imgGameover_Head = love.graphics.newImage("images/player/head/hero_head_gameover.png")
 gameoverText_FR = "GAME OVER !"
 lstGameoverText_FR = {}
-lstGameoverText_FR[1] = "Tu as ete defait par tes enemis. Le village a ete detruit, les hommes et les femmes tues et les enfants emmenes comme esclave."
+lstGameoverText_FR[1] = "Tu as ete defait par tes enemis. Le village a ete detruit et tous les villageois emmenes comme esclaves."
 lstGameoverText_FR[2] = ". . ."
-lstGameoverText_FR[3] = "Ta seule chance reste cette pierre de resurrection ..."
+lstGameoverText_FR[3] = "Ta seule chance reste d'utiliser cette pierre de resurrection ..."
 
 gameoverText_EN = "GAME OVER !"
 lstGameoverText_EN = {}
-lstGameoverText_EN[1] = "You have been defeated by your enemies. The village has been destroyed, men and women killed and children taken as slaves."
+lstGameoverText_EN[1] = "You have been defeated by your enemies. The village has been destroyed, and villagers taken as slaves."
 lstGameoverText_EN[2] = "..."
 lstGameoverText_EN[3] = "Your only chance is to use this resurrection stone ..."
 

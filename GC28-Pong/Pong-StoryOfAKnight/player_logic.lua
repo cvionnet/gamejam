@@ -247,7 +247,7 @@ function PLAYER.NewPlayer(pMapObject, pVillageLife, pPlayerLife)
         -- When player change side, save its coordinates. If he moves back, keep the same position
         self:savePlayerPosition()
 
-        if key == "z" then
+        if key == "z" or key == "w" then
             -- If previous position was saved, set previous coordinates ; else set position at the middle of the screen
             if self.previousPosition[2].x ~= nil then
                 --self:ResetPosition_Velocity(self.x, 0)
@@ -267,7 +267,7 @@ function PLAYER.NewPlayer(pMapObject, pVillageLife, pPlayerLife)
             end
             self.mapSidePosition = "down"
         end
-        if key == "q" then
+        if key == "q" or key == "a" then
             -- If previous position was saved, set previous coordinates ; else set position at the middle of the screen
             if self.previousPosition[1].x ~= nil then
                 --self:ResetPosition_Velocity(0, self.y)

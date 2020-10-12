@@ -13,7 +13,7 @@ require("menu_logic")
 require("param")
 
 
-local gameState = ""            -- menu / intro / game / gameover / victory
+local gameState = ""            -- menu / howto / intro / game / gameover / victory
 
 local fogX = 1       -- Horizontal position of the fog (for scrolling)
 
@@ -32,7 +32,6 @@ local indexText = 1
 --------------------------------------------------------------------------------------------------------
 
 function love.load()
-    math.randomseed(love.timer.getTime())
     love.window.setMode(768, 768) --, {fullscreen=false, vsync=true})
     --love.keyboard.setKeyRepeat(true)
 
@@ -80,6 +79,8 @@ end
 function love.draw()
     if gameState == "menu" then
         drawMenu()
+    elseif gameState == "howto" then
+        love.graphics.draw(imgHowToPlay, 100, 100)
     elseif gameState == "intro" then
         drawIntroduction()
     elseif gameState == "game" then
@@ -111,7 +112,25 @@ end
 function love.keypressed(key)
     if gameState == "menu" then
         MenuKeyboardCommands(key)
+    elseif gameState == "howto" then
+        if key == "escape" then
+            InitGame()
+        end
     elseif gameState == "game" then
+        -- Activate / desactivate bullet time mode
+        if key == "space" then
+            if bulletTimeMode then
+                bulletTimeMode = false
+            else
+                bulletTimeMode = true
+
+                if sndBulletTime:isPlaying() then
+                    sndBulletTime:stop()
+                end
+                sndBulletTime:play()
+            end
+        end
+
         -- Check if the player have to change side (left, right, up, down)
         player_Obj:SwitchSidePosition(key)
     elseif gameState == "intro" or gameState == "victory" or gameState == "gameover" then
@@ -147,15 +166,6 @@ function love.keypressed(key)
             end
         end
 
-        -- Activate / desactivate bullet time mode
-        if key == "b" then
-            if bulletTimeMode then
-                bulletTimeMode = false
-            else
-                bulletTimeMode = true
-            end
-        end
-
         -- force 2nd monster to appear
         if key == "m" then
             --local newPosition = monster_Obj:GetNextSidePosition_MultipleMonsters()
@@ -175,11 +185,19 @@ end
 --------------------------------------------------------------------------------------------------------
 
 function InitGame()
-    -- Pre-create all objects
+    math.randomseed(love.timer.getTime())
+    
+    -- Reset objects and pre-create all objects
+    lstMonsters = {}
+    map_Obj = nil
     map_Obj = MAP.NewMap()
+    player_Obj = nil
     player_Obj = PLAYER.NewPlayer(map_Obj, VILLAGE_LIFE, PLAYER_LIFE)
+    monster_Obj = nil
     monster_Obj = MONSTER.NewMonster(1, map_Obj)
+    monster_Obj2 = nil
     monster_Obj2 = MONSTER.NewMonster(2, map_Obj)
+    music_Obj = nil
     music_Obj = MUSIC.NewMusic()
 
     -- Pre-load musics
@@ -200,6 +218,7 @@ end
 
 
 function InitMap()
+    bulletTimeMode = false
     bulletTimeLength = BULLET_TIME_LENGTH
 
     music_Obj:StopMusic(2)  -- intro
@@ -216,6 +235,11 @@ function InitMap()
     table.insert(lstMonsters, monster_Obj)
 
     gameState = "game"
+end
+
+
+function InitHowTo()
+    gameState = "howto"
 end
 
 --------------------------------------------------------------------------------------------------------
@@ -328,13 +352,14 @@ function InitIntroduction()
     gameState = "intro"
 
     indexText = 1
-    InitTextEffect(lstIntroductionText_FR[indexText])
+    if LANGUAGE == "FR" then InitTextEffect(lstIntroductionText_FR[indexText])
+    elseif LANGUAGE == "EN" then InitTextEffect(lstIntroductionText_EN[indexText]) end
 end
 
 
 function drawIntroduction()
     -- Draw the player or enemy picture, depending of sentences
-    if indexText == 3 or indexText == 9 or indexText == 11 then
+    if indexText == 3 or indexText == 9 or indexText == 11 or indexText == 12 then
         love.graphics.draw(imgQuestionMark, X_SCREENSIZE - 150, Y_SCREENSIZE/2, 0, 4, 4)
     else
         player_Obj:draw()
@@ -354,7 +379,8 @@ function ActionIntroduction()
     -- Load next text
     if textAllDisplayed and textDisplayNext and indexText <= #lstIntroductionText_FR then
         indexText = indexText + 1
-        InitTextEffect(lstIntroductionText_FR[indexText])
+        if LANGUAGE == "FR" then InitTextEffect(lstIntroductionText_FR[indexText])
+        elseif LANGUAGE == "EN" then InitTextEffect(lstIntroductionText_EN[indexText]) end
     -- All texts have been displayed
     elseif indexText > #lstIntroductionText_FR then
         -- Start the game
@@ -372,18 +398,23 @@ end
 
 
 function InitGameOver()
+    sndGamePlayer_Walk:stop()
+    sndGameEnemy_Walk:stop()
     music_Obj:StopMusic(1)  -- game
     music_Obj:PlayMusic(5)  -- gameover
 
     gameState = "gameover"
 
     indexText = 1
-    InitTextEffect(lstGameoverText_FR[indexText])
+    if LANGUAGE == "FR" then InitTextEffect(lstGameoverText_FR[indexText])
+    elseif LANGUAGE == "EN" then InitTextEffect(lstGameoverText_EN[indexText]) end
 end
 
 
 function drawGameOver()
-    love.graphics.print(gameoverText_FR, fontEndgame, 350, 200)
+    if LANGUAGE == "FR" then love.graphics.print(gameoverText_FR, fontEndgame, 350, 200)
+    elseif LANGUAGE == "EN" then love.graphics.print(gameoverText_EN, fontEndgame, 350, 200) end
+
     love.graphics.draw(imgGameover_Head, 0, 120, 0, 2, 2)
 
     drawTextEffect()
@@ -395,7 +426,10 @@ function ActionGameOver()
     -- Load next text
     if textAllDisplayed and textDisplayNext and indexText <= #lstGameoverText_FR then
         indexText = indexText + 1
-        InitTextEffect(lstGameoverText_FR[indexText])
+
+        if LANGUAGE == "FR" then InitTextEffect(lstGameoverText_FR[indexText])
+        elseif LANGUAGE == "EN" then InitTextEffect(lstGameoverText_EN[indexText]) end
+
     -- All texts have been displayed
     elseif indexText > #lstGameoverText_FR then
         music_Obj:StopMusic(5)  -- gameover
@@ -428,18 +462,23 @@ end
 
 
 function InitVictory()
+    sndGamePlayer_Walk:stop()
+    sndGameEnemy_Walk:stop()
     music_Obj:StopMusic(1)  -- game
     music_Obj:PlayMusic(4)  -- victory
 
     gameState = "victory"
 
     indexText = 1
-    InitTextEffect(lstVictoryText_FR[indexText])
+    if LANGUAGE == "FR" then InitTextEffect(lstVictoryText_FR[indexText])
+    elseif LANGUAGE == "EN" then InitTextEffect(lstVictoryText_EN[indexText]) end
 end
 
 
 function drawVictory()
-    love.graphics.print(victoryText_FR, fontEndgame, 350, 200)
+    if LANGUAGE == "FR" then love.graphics.print(victoryText_FR, fontEndgame, 350, 200)
+    elseif LANGUAGE == "EN" then love.graphics.print(victoryText_EN, fontEndgame, 350, 200) end
+
     love.graphics.draw(imgVictory_Head, 0, 120, 0, 2, 2)
 
     drawTextEffect()
@@ -451,7 +490,10 @@ function ActionVictory()
     -- Load next text
     if textAllDisplayed and textDisplayNext and indexText <= #lstVictoryText_FR then
         indexText = indexText + 1
-        InitTextEffect(lstVictoryText_FR[indexText])
+
+        if LANGUAGE == "FR" then InitTextEffect(lstVictoryText_FR[indexText])
+        elseif LANGUAGE == "EN" then InitTextEffect(lstVictoryText_EN[indexText]) end
+
     -- All texts have been displayed
     elseif indexText > #lstVictoryText_FR then
         music_Obj:StopMusic(4)  -- victory
