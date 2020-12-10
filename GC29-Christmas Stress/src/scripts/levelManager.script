@@ -1,0 +1,30 @@
+local GAMESTATE = require("src.scripts.gamestate")
+
+local TILE_WIDTH = 32
+local TILE_HEIGHT = 32
+
+local topOffset = gameHeight - TILE_HEIGHT
+
+local MAP_WIDTH = 16
+
+-------------------------------------------------------------------------------------------------------------
+
+function init(self)
+	-- Set zoom factor depending of device
+	if sys.get_sys_info().system_name == "Android" or sys.get_sys_info().system_name == "iPhone OS" then
+		msg.post("/camera#script", "zoom_to", { zoom = 10 } )
+	else
+		msg.post("/camera#script", "zoom_to", { zoom = 6 } )
+	end
+end
+
+function on_message(self, message_id, message, sender)
+end
+
+
+function update(self, dt) end
+function final(self) end
+function on_input(self, action_id, action) end
+function on_reload(self) end
+
+-------------------------------------------------------------------------------------------------------------
