@@ -16,6 +16,7 @@ function final(self) end
 function on_reload(self) end
 
 ]]
+-------------------------------------------------------------------------------------------------------------
 
 
 -- GAME SPECIFIC ------------------------------------------------------------------------------------------------------
@@ -23,6 +24,8 @@ function on_reload(self) end
 --* HOW TO USE : to get access to the functions, add:      require "my_directory.utils"
 
 local DEBUG_MODE = true
+
+ZOOM_LEVEL = 1
 
 --* HOW TO USE : add hashes of keys defined in file "game.input_binding"
 INPUT = {

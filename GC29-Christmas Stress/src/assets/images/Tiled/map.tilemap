@@ -1,7 +1,7 @@
 tile_set: "/src/assets/images/Tiled/map.tilesource"
 layers {
   id: "background"
-  z: 0.0
+  z: -0.1
   is_visible: 1
   cell {
     x: 0

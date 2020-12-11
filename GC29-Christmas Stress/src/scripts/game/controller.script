@@ -1,0 +1,75 @@
+--local defmath = require("defmath.defmath")	-- to use https://github.com/subsoap/defmath
+require("src.scripts.utils.utils")
+
+
+function init(self)
+    msg.post(".", "acquire_input_focus")
+
+    self.pressed = false
+	self.collision_id = nil		-- GO's id which the cursor collided with
+	self.dragged_id = nil		-- GO's id currently dragged
+    self.cursor_position = vmath.vector3(0,0,0)
+
+    Debug_Tools(self, "COLLISION")
+end
+
+
+function on_input(self, action_id, action)
+    if not action_id or action_id == INPUT.TOUCH then
+		-- Set the GO position to be the same as the "real" cursor
+--        local action_position = vmath.vector3(action.x / ZOOM_LEVEL, action.y / ZOOM_LEVEL, 0)	-- get real cursor position
+        self.cursor_position.x = action.x / ZOOM_LEVEL
+        self.cursor_position.y = action.y / ZOOM_LEVEL
+        go.set_position(self.cursor_position)
+
+        -- Detect if a press or release occurs
+        if action.pressed and self.pressed == false then
+            self.pressed = true
+        elseif action.released and self.pressed then
+            self.pressed = false
+        end
+
+        if self.pressed and self.collision_id then
+            print(self.collision_id, self.cursor_position)
+            go.set_position(self.cursor_position, self.collision_id)
+        end
+
+
+        -- Get x y coordinates divide by zoom level set in the Level Manager
+        --msg.post("/levelManager#levelManager", "check_for_gift", { action = action })
+
+        -- message au level manager
+            -- est-ce qu'il contient un gift correspond à ces coordonnées ?
+            -- si oui
+                -- save du current objet (pour ne pas scanner à chaque fois)
+                -- go.animate (current objet, x, y)
+
+                -- si action.released, message pour arreter de déplacer l'objet
+
+        -- Supprimer les Group / Mask
+        -- supprimer la blibliothèque
+
+    end
+
+
+end
+
+
+function on_message(self, message_id, message, sender)
+    if message_id == MESSAGE.COLLISION and self.pressed then
+		-- Set collision_id to the id of the top-most GO which is pointed to the cursor
+--		if not self.collision_id or ( go.get_position(self.collision_id).z < message.other_position.z ) then
+        if self.collision_id ~= message.other_id then
+                self.collision_id = message.other_id
+            --print(message.other_id, self.collision_id)
+		end
+    end
+end
+
+
+function update(self, dt) 
+    self.collision_id = nil
+end
+
+function final(self) end
+function on_reload(self) end
