@@ -30,10 +30,16 @@ end
 function on_message(self, message_id, message, sender)
 	-- If collide with a border
 	if message_id == MESSAGE.COLLISION and message.other_group == hash("border") then
-		-- If collide with the border the gift must stop on
+		-- If collide with a down border, the gift stop on it
 		if message.other_id == hash("/borderdownZ"..self.borderdownID) then
 			self.isGravityActive= false
 		end
+
+--		-- If collide with a side border, the gift must stop
+--		if message.other_id == hash("/borderleft") then
+--			self.position.x = 10
+--		end
+
 	end
 
 	-- Activate the gravity
