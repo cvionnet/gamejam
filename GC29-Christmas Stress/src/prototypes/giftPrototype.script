@@ -3,7 +3,8 @@ require("src.scripts.utils.utils")
 
 local COLOR = { "gift_blue", "gift_green", "gift_red" }
 
-go.property("position", vmath.vector3(0))
+go.property("position", vmath.vector3())
+go.property("borderdownID", 0)		-- to know with which borderbown the gift will collide (borderdownZ1, borderdownZ2 or borderdownZ3)
 
 -------------------------------------------------------------------------------------------------------------
 
@@ -11,24 +12,34 @@ function init(self)
 	--self.position = vmath.vector3(0)
 	self.color = ""
 	self.type = 0
+
 	self.velocity = vmath.vector3(0,-10,0)
 	self.speed = 5
-	self.isGravityON = true
+	self.isGravityActive = true
 
 	InitializeGift(self)
-	print(self.position)
 end
 
 function update(self, dt)
-	if self.isGravityON then
+	if self.isGravityActive then
 		self.position.y = self.position.y + self.velocity.y * self.speed * dt
 		go.set_position(self.position)
 	end
 end
 
 function on_message(self, message_id, message, sender)
+	-- If collide with a border
 	if message_id == MESSAGE.COLLISION and message.other_group == hash("border") then
-		self.isGravityON= false
+		-- If collide with the border the gift must stop on
+		if message.other_id == hash("/borderdownZ"..self.borderdownID) then
+			self.isGravityActive= false
+		end
+	end
+
+	-- Activate the gravity
+	if message_id == hash("activate_gravity") then
+		self.position = message.position
+		self.isGravityActive = true
 	end
 end
 

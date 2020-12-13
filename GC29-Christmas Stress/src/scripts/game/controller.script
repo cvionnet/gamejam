@@ -8,62 +8,7 @@ function init(self)
     self.pressed = false
 	self.collision_id = nil		-- GO's id which the cursor collided with
 	self.dragged_id = nil		-- GO's id currently dragged
-    self.cursor_position = vmath.vector3(0,0,0)
-
-    Debug_Tools(self, "COLLISION")
-end
-
-
-function on_input(self, action_id, action)
-    if not action_id or action_id == INPUT.TOUCH then
-		-- Set the GO position to be the same as the "real" cursor
---        local action_position = vmath.vector3(action.x / ZOOM_LEVEL, action.y / ZOOM_LEVEL, 0)	-- get real cursor position
-        self.cursor_position.x = action.x / ZOOM_LEVEL
-        self.cursor_position.y = action.y / ZOOM_LEVEL
-        go.set_position(self.cursor_position)
-
-        -- Detect if a press or release occurs
-        if action.pressed and self.pressed == false then
-            self.pressed = true
-        elseif action.released and self.pressed then
-            self.pressed = false
-        end
-
-        if self.pressed and self.collision_id then
-            print(self.collision_id, self.cursor_position)
-            go.set_position(self.cursor_position, self.collision_id)
-        end
-
-
-        -- Get x y coordinates divide by zoom level set in the Level Manager
-        --msg.post("/levelManager#levelManager", "check_for_gift", { action = action })
-
-        -- message au level manager
-            -- est-ce qu'il contient un gift correspond à ces coordonnées ?
-            -- si oui
-                -- save du current objet (pour ne pas scanner à chaque fois)
-                -- go.animate (current objet, x, y)
-
-                -- si action.released, message pour arreter de déplacer l'objet
-
-        -- Supprimer les Group / Mask
-        -- supprimer la blibliothèque
-
-    end
-
-
-end
-
-
-function on_message(self, message_id, message, sender)
-    if message_id == MESSAGE.COLLISION and self.pressed then
-		-- Set collision_id to the id of the top-most GO which is pointed to the cursor
---		if not self.collision_id or ( go.get_position(self.collision_id).z < message.other_position.z ) then
-        if self.collision_id ~= message.other_id then
-                self.collision_id = message.other_id
-            --print(message.other_id, self.collision_id)
-		end
-    end
+    self.cursor_position = vmath.vector3()
 end
 
 
@@ -71,5 +16,65 @@ function update(self, dt)
     self.collision_id = nil
 end
 
+
+function on_input(self, action_id, action)
+    -- Display debug collision boxes
+    if action_id == hash("debug_collision") and DEBUG_MODE then
+        Debug_Tools(self, "COLLISION")
+    end
+
+    -- Move the object
+    if not action_id or action_id == INPUT.TOUCH then
+		-- Set the GO cursor position to be the same as the "real" cursor
+        self.cursor_position.x = action.x / ZOOM_LEVEL
+        self.cursor_position.y = action.y / ZOOM_LEVEL
+        go.set_position(self.cursor_position)
+
+        -- Move the object following the cursor
+        Moving_Object(self, action)
+    end
+end
+
+
+function on_message(self, message_id, message, sender)
+    if message_id == MESSAGE.COLLISION then
+        -- Check if we are not already dragging an object
+        if self.dragged_id == nil then
+            -- Check if we are not already colliding with an object
+            --      and select the object with the higher Z value
+            if self.collision_id == nil or go.get_position(self.collision_id).z > message.other_position.z then
+                self.collision_id = message.other_id
+            end
+        end
+    end
+end
+
+
 function final(self) end
 function on_reload(self) end
+
+-------------------------------------------------------------------------------------------------------------
+
+-- Move the object following the cursor
+function Moving_Object(self, action)
+    -- Detect if a press or release occurs
+    if action.pressed and self.pressed == false then
+        self.pressed = true
+    end
+    if action.released and self.dragged_id ~= nil and self.pressed == true then
+        self.pressed = false
+        -- The gift fall
+        msg.post(self.dragged_id, "activate_gravity", { position = go.get_position() })
+        self.dragged_id = nil
+    end
+
+    -- If we are clicking and the GO collide with another GO
+    if self.pressed and self.collision_id ~= nil then
+        self.dragged_id = self.collision_id
+    end
+
+    if self.dragged_id then --and self.dragging then
+        go.set_position(self.cursor_position, self.dragged_id)
+    end
+end
+

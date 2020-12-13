@@ -23,7 +23,7 @@ function on_reload(self) end
 
 --* HOW TO USE : to get access to the functions, add:      require "my_directory.utils"
 
-local DEBUG_MODE = true
+DEBUG_MODE = true
 
 ZOOM_LEVEL = 1
 
@@ -97,6 +97,25 @@ function Debug_Tools(self, pCommand, pStatus)
 		end
 	end
 end
+
+
+-- Set the zoom level
+-- Use with Orthographic plugin (https://github.com/britzl/defold-orthographic)
+function Camera_Set_Zoom_Level()
+	-- Set zoom factor depending of device
+	-- TODO : GO Zoom property  :  FIXED_ZOOM
+	--[[
+	if sys.get_sys_info().system_name == "Android" or sys.get_sys_info().system_name == "iPhone OS" then
+		ZOOM_LEVEL = 10
+	else
+		ZOOM_LEVEL = 6
+	end
+	msg.post("/camera#script", "zoom_to", { zoom = ZOOM_LEVEL } )
+	]]
+
+	ZOOM_LEVEL = go.get("/camera#script", "zoom")
+end
+
 
 
 -- ******************************************************************************************************* --

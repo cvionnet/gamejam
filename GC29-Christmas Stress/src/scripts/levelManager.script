@@ -7,18 +7,15 @@ local GAMESTATE = require("src.scripts.gamestate")
 --local topOffset = gameHeight - TILE_HEIGHT
 --local MAP_WIDTH = 16
 
+local GIFT_Z_ORDER = { 0.1, 0.2, 0.3 }
+
 go.property("gift_to_create", 10)
 
 -------------------------------------------------------------------------------------------------------------
 
 function init(self)
 	-- Set zoom factor depending of device
-	if sys.get_sys_info().system_name == "Android" or sys.get_sys_info().system_name == "iPhone OS" then
-		ZOOM_LEVEL = 10
-	else
-		ZOOM_LEVEL = 6
-	end
-	msg.post("/camera#script", "zoom_to", { zoom = ZOOM_LEVEL } )
+	Camera_Set_Zoom_Level()
 
 	self.gifts = 0
 	CreateGifts(self, self.gift_to_create)
@@ -35,8 +32,12 @@ function on_reload(self) end
 -- Create new gifts using the gift prototype
 function CreateGifts(self, pCount)
 	for i=1, pCount do
-		local pos = vmath.vector3(math.random(50, 150), math.random(30, 50), 0 )
-		factory.create("/giftFactory#factory", pos, nil, { position = pos }, 1.0)
+		-- Z axis on 3 values : 0.1, 0.2 or 0.3   (3 borders hight and )
+		local index = math.random(1,3)
+		local z = GIFT_Z_ORDER[index]
+		local pos = vmath.vector3(math.random(50, 150), math.random(50, 70), z)
+
+		factory.create("/giftFactory#factory", pos, nil, { position = pos, borderdownID = index }, 1.0 + z)
 		self.gifts = self.gifts + 1
 	end
 end
