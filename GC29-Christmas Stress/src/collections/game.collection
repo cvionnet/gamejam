@@ -82,6 +82,26 @@ instances {
     z: 1.0
   }
 }
+instances {
+  id: "bagRed"
+  prototype: "/src/gameObjects/bag.go"
+  position {
+    x: 40.0
+    y: 91.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
 scale_along_z: 0
 embedded_instances {
   id: "levelManager"
@@ -101,7 +121,7 @@ embedded_instances {
   "  }\n"
   "  properties {\n"
   "    id: \"gift_to_create\"\n"
-  "    value: \"5.0\"\n"
+  "    value: \"10.0\"\n"
   "    type: PROPERTY_TYPE_NUMBER\n"
   "  }\n"
   "}\n"

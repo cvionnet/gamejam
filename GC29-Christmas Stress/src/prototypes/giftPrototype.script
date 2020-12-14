@@ -4,9 +4,13 @@ require("src.scripts.utils.utils")
 local COLOR = { "gift_blue", "gift_green", "gift_red" }
 
 go.property("position", vmath.vector3())
-go.property("borderdownID", 0)		-- to know with which borderground the gift will collide (bordergroundZ*)
-go.property("swipe_from", vmath.vector3())
+go.property("z_index", 0)		-- 1 = in back  2 = middle   3 = in front
+
 go.property("swipe_to", vmath.vector3())
+go.property("swipe_force", 10)
+
+go.property("isOnGround", true)
+go.property("isGravityActive", true)
 
 -------------------------------------------------------------------------------------------------------------
 
@@ -17,8 +21,10 @@ function init(self)
 
 	self.velocity = vmath.vector3(0,-10,0)
 	self.speed = 5
-	self.isGravityActive = true
-	self.isOnGround = true
+--	self.isGravityActive = true
+--	self.isOnGround = true
+
+	self.collisionResolving = vmath.vector3()
 
 	CreateRandomGift(self)
 end
@@ -30,13 +36,39 @@ function update(self, dt)
 
 		go.set_position(self.position)
 	end
+
+	self.collisionResolving = vmath.vector3()
 end
 
 function on_message(self, message_id, message, sender)
+	---------------------------------------------------------------
+	-- if collide with another gift
+	if message_id == MESSAGE.CONTACT and message.other_group == hash("gift") then --and (self.isOnGround or self.isGravityActive==false) then
+		-- Build the other object URL from his ID
+		local obj_url = msg.url(nil, message.other_id, "giftPrototype")
+
+		-- Stop a gift to fall if :
+		-- 	- the gift is still falling
+		--	- the object it collides have the same Z axis
+		--	- the object it collides is on the ground or is not falling (to stack the gift)
+		if self.isGravityActive and go.get(obj_url, "z_index") == self.z_index
+		and (go.get(obj_url, "isOnGround") or go.get(obj_url, "isGravityActive") == false) then
+			self.isGravityActive = false
+		end
+
+		-- Apply compensation
+		if go.get(obj_url, "z_index") == self.z_index then
+			local comp = ResolveKinematicCollisions(self, message)
+			go.set_position(go.get_position() + comp)
+			self.collisionResolving = self.collisionResolving + comp
+		end
+	end
+
+	---------------------------------------------------------------
 	-- If collide with the ground
 	if message_id == MESSAGE.COLLISION and message.other_group == hash("border") then
-		-- If collide with a down border, the gift stop on it
-		if message.other_id == hash("/bordergroundZ"..self.borderdownID) then
+		-- If collide with a ground border, the gift stop on it
+		if message.other_id == hash("/bordergroundZ"..self.z_index) then
 			self.isGravityActive= false
 			self.isOnGround = true
 		end
@@ -51,6 +83,7 @@ function on_message(self, message_id, message, sender)
 		end
 	end
 
+	---------------------------------------------------------------
 	-- Activate the gravity
 	if message_id == hash("activate_gravity") then
 		self.position = message.position
@@ -59,7 +92,9 @@ function on_message(self, message_id, message, sender)
 
 		-- Add a X movement when the user swipe the gift
 		if self.swipe_from ~= nil and self.swipe_to ~= nil then
-			self.velocity.x = (self.swipe_to.x - self.swipe_from.x)/5
+			self.velocity.x = (self.swipe_to.x - self.swipe_from.x) / self.swipe_force
+		else
+			self.velocity.x = 0
 		end
 
 		self.isGravityActive = true

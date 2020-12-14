@@ -18,7 +18,17 @@ function init(self)
 	Camera_Set_Zoom_Level()
 
 	self.gifts = 0
-	CreateGifts(self, self.gift_to_create)
+--	local timer_handle = timer.delay(0.5, true, Create)
+
+	timer.delay(0.1, true, function (self,pbar_timer,_)
+		CreateGifts(self, 1)
+
+		if self.gifts >= self.gift_to_create then
+			timer.cancel(pbar_timer)
+		end
+	end)
+
+	--CreateGifts(self, self.gift_to_create)
 end
 
 function on_message(self, message_id, message, sender) end
@@ -29,15 +39,19 @@ function on_reload(self) end
 
 -------------------------------------------------------------------------------------------------------------
 
+function Create(self)
+	CreateGifts(self, 1)
+end
+
 -- Create new gifts using the gift prototype
 function CreateGifts(self, pCount)
 	for i=1, pCount do
-		-- Z axis on 3 values : 0.1, 0.2 or 0.3   (3 borders hight and )
+		-- Z axis on 3 values : 0.1, 0.2 or 0.3   (1 = in back  2 = middle   3 = in front)
 		local index = math.random(1,3)
 		local z = GIFT_Z_ORDER[index]
-		local pos = vmath.vector3(math.random(50, 150), math.random(50, 70), z)
+		local pos = vmath.vector3(math.random(50, (gameWidth-50)/ZOOM_LEVEL), math.random(gameHeight-250, gameHeight-200)/ZOOM_LEVEL, z)
 
-		factory.create("/giftFactory#factory", pos, nil, { position = pos, borderdownID = index }, 1.0 + z)
+		factory.create("/giftFactory#factory", pos, nil, { position = pos, z_index = index }, 0.6 + z)
 		self.gifts = self.gifts + 1
 	end
 end
