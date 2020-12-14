@@ -4,6 +4,8 @@ require("src.scripts.utils.utils")
 local TIMER_KEYBOARD = 0.2  -- delay between the player can stroke a key
 local isTimerKeyboard = false
 
+-------------------------------------------------------------------------------------------------------------
+
 function init(self)
     msg.post(".", "acquire_input_focus")
 
@@ -14,6 +16,10 @@ function init(self)
 
     self.stopDragging = false   -- to prevent the gift to be moved outside the screen
     self.forcedPosition = vmath.vector3()    -- to store the last position before the cursor go out the screen
+
+    self.swipe_state = {}
+
+    Swipe_Init(self)
 end
 
 
@@ -39,6 +45,9 @@ function on_input(self, action_id, action)
         self.cursor_position.x = action.x / ZOOM_LEVEL
         self.cursor_position.y = action.y / ZOOM_LEVEL
         go.set_position(self.cursor_position)
+
+        -- Detect a swipe
+        Swipe(self, action)
 
         -- Move the object following the cursor
         Moving_Object(self, action)
@@ -73,11 +82,21 @@ function Moving_Object(self, action)
     end
     if action.released and self.dragged_id ~= nil and self.pressed == true then
         self.pressed = false
+
         -- The gift fall
         if self.stopDragging == false then
-            msg.post(self.dragged_id, "activate_gravity", { position = go.get_position() })
+            if self.swipe_state.is_swipe then
+                msg.post(self.dragged_id, "activate_gravity", { position = go.get_position(), swipe_from = self.swipe_state.swipe.from, swipe_to = self.swipe_state.swipe.to })
+            else
+                msg.post(self.dragged_id, "activate_gravity", { position = go.get_position() })
+            end
         else
-            msg.post(self.dragged_id, "activate_gravity", { position = self.forcedPosition })
+            -- If the cursor is outside the screen, send the forced position against the border
+            if self.swipe_state.is_swipe then
+                msg.post(self.dragged_id, "activate_gravity", { position = self.forcedPosition, swipe_from = self.swipe_state.swipe.from, swipe_to = self.swipe_state.swipe.to })
+            else
+                msg.post(self.dragged_id, "activate_gravity", { position = self.forcedPosition })
+            end
         end
 
         self.stopDragging = false
@@ -128,3 +147,63 @@ end
 function Reset_TimerKeyboard()
     isTimerKeyboard = false
 end
+
+
+function Swipe_Init(self)
+    self.swipe_state.swipe_threshold = 50    -- minimum distance between a pressed and release action to consider it a swipe
+	self.swipe_state.swipe_time = 0.5        -- maximum time between a pressed and release action to consider it a swipe
+
+    self.swipe_state.swipe = {
+		from = vmath.vector3(),
+		to = vmath.vector3(),
+	}
+    self.swipe_state.swipe_left = false
+    self.swipe_state.swipe_right = false
+
+    self.swipe_state.pressed = false
+	self.swipe_state.pressed_position = nil
+	self.swipe_state.pressed_time = nil
+    self.swipe_state.is_swipe = false
+end
+
+
+function Swipe(self, action)
+    self.swipe_state.swipe_left = false
+    self.swipe_state.swipe_right = false
+    self.swipe_state.is_swipe = false
+
+    if action.pressed then
+        -- Save cursor position and time
+        self.swipe_state.pressed = true
+        self.swipe_state.pressed_position = vmath.vector3(action.x, action.y, 0)
+        self.swipe_state.pressed_time = socket.gettime()
+    elseif action.released then
+        -- Get cursor new position and time
+        local dx = self.swipe_state.pressed_position and (self.swipe_state.pressed_position.x - action.x) or 0
+        local dy = self.swipe_state.pressed_position and (self.swipe_state.pressed_position.y - action.y) or 0
+        local ax = math.abs(dx)
+        local ay = math.abs(dy)
+        local distance = math.max(ax, ay)
+        local time = socket.gettime() - (self.swipe_state.pressed_time or 0)
+
+        -- Swipe if distance and time are higher to settings values
+        local is_swipe = distance >= self.swipe_state.swipe_threshold and time <= self.swipe_state.swipe_time
+
+        if is_swipe then
+            self.swipe_state.is_swipe = true
+
+            -- Set direction
+            if dx < 0 then  self.swipe_state.swipe_right = true
+            else            self.swipe_state.swipe_left = true end
+
+            self.swipe_state.swipe.from.x = self.swipe_state.pressed_position.x
+            self.swipe_state.swipe.from.y = self.swipe_state.pressed_position.y
+            self.swipe_state.swipe.to.x = action.x
+            self.swipe_state.swipe.to.y = action.y
+            self.swipe_state.swipe.time = time
+        end
+
+        self.swipe_state.pressed = false
+    end
+end
+

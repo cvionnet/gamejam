@@ -101,7 +101,7 @@ embedded_instances {
   "  }\n"
   "  properties {\n"
   "    id: \"gift_to_create\"\n"
-  "    value: \"10.0\"\n"
+  "    value: \"5.0\"\n"
   "    type: PROPERTY_TYPE_NUMBER\n"
   "  }\n"
   "}\n"
@@ -197,7 +197,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "borderdownZ3"
+  id: "bordergroundZ3"
   data: "embedded_components {\n"
   "  id: \"collisionobject\"\n"
   "  type: \"collisionobject\"\n"
@@ -273,8 +273,8 @@ embedded_instances {
   "mass: 0.0\\n"
   "friction: 0.1\\n"
   "restitution: 0.5\\n"
-  "group: \\\"default\\\"\\n"
-  "mask: \\\"default\\\"\\n"
+  "group: \\\"border\\\"\\n"
+  "mask: \\\"gift\\\"\\n"
   "embedded_collision_shape {\\n"
   "  shapes {\\n"
   "    shape_type: TYPE_BOX\\n"
@@ -340,8 +340,8 @@ embedded_instances {
   "mass: 0.0\\n"
   "friction: 0.1\\n"
   "restitution: 0.5\\n"
-  "group: \\\"default\\\"\\n"
-  "mask: \\\"default\\\"\\n"
+  "group: \\\"border\\\"\\n"
+  "mask: \\\"gift\\\"\\n"
   "embedded_collision_shape {\\n"
   "  shapes {\\n"
   "    shape_type: TYPE_BOX\\n"
@@ -478,7 +478,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "borderdownZ2"
+  id: "bordergroundZ2"
   data: "embedded_components {\n"
   "  id: \"collisionobject\"\n"
   "  type: \"collisionobject\"\n"
@@ -545,7 +545,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "borderdownZ1"
+  id: "bordergroundZ1"
   data: "embedded_components {\n"
   "  id: \"collisionobject\"\n"
   "  type: \"collisionobject\"\n"
