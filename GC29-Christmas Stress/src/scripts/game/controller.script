@@ -56,7 +56,9 @@ end
 
 
 function on_message(self, message_id, message, sender)
-    if message_id == MESSAGE.COLLISION then
+	---------------------------------------------------------------
+	-- If collide with a gift
+    if message_id == MESSAGE.COLLISION and message.other_group == hash("gift") then
         -- Check if we are not already dragging an object
         if self.dragged_id == nil then
             -- Check if we are not already colliding with an object
@@ -65,6 +67,27 @@ function on_message(self, message_id, message, sender)
                 self.collision_id = message.other_id
             end
         end
+    end
+
+	---------------------------------------------------------------
+	-- If collide with a bag and we drag a gift
+    if message_id == MESSAGE.COLLISION and message.other_group == hash("bag") and self.dragged_id ~= nil then
+        -- Get the gift color
+		local obj_url = msg.url(nil, self.dragged_id, "giftPrototype")
+        local gift_color = go.get(obj_url, "colorID")
+
+        -- Get the bag color
+        -- Build the other object URL from his ID
+		obj_url = msg.url(nil, message.other_id, "bag")
+        local bag_color = go.get(obj_url, "color")
+
+        -- Send informations to the Level Manager
+        msg.post("/levelManager#levelManager", "gift_in_bag", { gift_color = gift_color, bag_color = bag_color, giftID = self.dragged_id })
+
+        -- Reset values as the gift will be deleted
+        self.pressed = false
+        self.stopDragging = false
+        self.dragged_id = nil
     end
 end
 

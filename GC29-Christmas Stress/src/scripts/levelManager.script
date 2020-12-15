@@ -9,7 +9,7 @@ local GAMESTATE = require("src.scripts.gamestate")
 
 local GIFT_Z_ORDER = { 0.1, 0.2, 0.3 }
 
-go.property("gift_to_create", 10)
+go.property("gift_to_create", 0)
 
 -------------------------------------------------------------------------------------------------------------
 
@@ -18,8 +18,14 @@ function init(self)
 	Camera_Set_Zoom_Level()
 
 	self.gifts = 0
---	local timer_handle = timer.delay(0.5, true, Create)
 
+	-- Create bags
+	CreateBag(1,1)
+	CreateBag(2,2)
+	CreateBag(3,3)
+
+	-- Create gifts
+	--CreateGifts(self, self.gift_to_create)
 	timer.delay(0.1, true, function (self,pbar_timer,_)
 		CreateGifts(self, 1)
 
@@ -27,21 +33,51 @@ function init(self)
 			timer.cancel(pbar_timer)
 		end
 	end)
-
-	--CreateGifts(self, self.gift_to_create)
 end
 
-function on_message(self, message_id, message, sender) end
+function on_message(self, message_id, message, sender)
+	---------------------------------------------------------------
+	-- If the user put a gift into the bag
+	if message_id == hash("gift_in_bag") then
+		local gift_color = message.gift_color
+		local bag_color = message.bag_color
+		local giftID = message.giftID
+
+		if gift_color == bag_color then
+			GAMESTATE.score = GAMESTATE.score + 1
+			sound.play("/sounds#gift_correct")
+		else
+			if GAMESTATE.score > 0 then
+				GAMESTATE.score = GAMESTATE.score - 1
+				sound.play("/sounds#gift_incorrect")
+			end
+		end
+
+		-- Update the score
+		msg.post("/GUI#game", "update_score")
+
+		-- Delete the gift
+		go.delete(giftID)
+		self.gifts = self.gifts - 1
+
+		if self.gifts <= 0 then
+			print("TODO: WIN")
+		end
+	end
+
+	---------------------------------------------------------------
+	-- Time is out
+	if message_id == hash("timeout") then
+		print("TODO: TIMEOUT")
+	end
+end
+
 function update(self, dt) end
 function final(self) end
 function on_input(self, action_id, action) end
 function on_reload(self) end
 
 -------------------------------------------------------------------------------------------------------------
-
-function Create(self)
-	CreateGifts(self, 1)
-end
 
 -- Create new gifts using the gift prototype
 function CreateGifts(self, pCount)
@@ -54,4 +90,20 @@ function CreateGifts(self, pCount)
 		factory.create("/giftFactory#factory", pos, nil, { position = pos, z_index = index }, 0.6 + z)
 		self.gifts = self.gifts + 1
 	end
+end
+
+-- Create bags using the bag prototype
+-- pColor : BLUE = 1, GREEN = 2, RED = 3
+-- pPosition : LEFT = 1, CENTER = 2, RIGHT = 3
+function CreateBag(pColor, pPosition)
+	local pos = vmath.vector3()
+	if pPosition == 1 then
+		pos = vmath.vector3(37,90,0)
+	elseif pPosition == 2 then
+		pos = vmath.vector3(96,90,0)
+	elseif pPosition == 3 then
+		pos = vmath.vector3(150,90,0)
+	end
+
+	factory.create("/bagFactory#factory", pos, nil, { color = pColor }, 1.0)
 end

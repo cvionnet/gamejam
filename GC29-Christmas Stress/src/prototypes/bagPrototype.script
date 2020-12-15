@@ -1,0 +1,19 @@
+--local defmath = require("defmath.defmath")	-- to use https://github.com/subsoap/defmath
+--require("src.scripts.utils.utils")
+
+go.property("color", 0)		-- BLUE = 1, GREEN = 2, RED = 3
+
+local COLOR = { "bag_blue", "bag_green", "bag_red" }
+
+-------------------------------------------------------------------------------------------------------------
+
+function init(self)
+	-- Set the new animation name (= texture)
+	msg.post("#sprite", "play_animation", { id = hash(COLOR[self.color]) })
+end
+
+function on_message(self, message_id, message, sender) end
+function update(self, dt) end
+function on_input(self, action_id, action) end
+function final(self) end
+function on_reload(self) end
