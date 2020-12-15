@@ -8,6 +8,7 @@ local GAMESTATE = require("src.scripts.gamestate")
 --local MAP_WIDTH = 16
 
 local GIFT_Z_ORDER = { 0.1, 0.2, 0.3 }
+local SANTA_TIMING = 3.0
 
 go.property("gift_to_create", 0)
 
@@ -24,15 +25,11 @@ function init(self)
 	CreateBag(2,2)
 	CreateBag(3,3)
 
-	-- Create gifts
-	--CreateGifts(self, self.gift_to_create)
-	timer.delay(0.1, true, function (self,pbar_timer,_)
-		CreateGifts(self, 1)
-
-		if self.gifts >= self.gift_to_create then
-			timer.cancel(pbar_timer)
-		end
-	end)
+	-- Display Santa and create gifts
+	InitializeGifts(self, 0)
+	--timer.delay(SANTA_TIMING + 1, false, function ()
+	--	InitializeGifts(self, 1)
+	--end)
 end
 
 function on_message(self, message_id, message, sender)
@@ -79,13 +76,44 @@ function on_reload(self) end
 
 -------------------------------------------------------------------------------------------------------------
 
+-- Display Santa and create gifts
+-- pDirection : 0 = left to right    1 = right to left
+function InitializeGifts(self, pDirection)
+	-- Animate Santa in the sky
+	sound.play("/sounds#santa_ohoh")
+	sprite.play_flipbook("/santa_sleigh#sprite", "run")
+	if pDirection == 1 then
+		sprite.set_hflip("/santa_sleigh#sprite", true)
+		go.set_position(vmath.vector3((gameWidth+1000)/ZOOM_LEVEL, (gameHeight-80)/ZOOM_LEVEL, 1), "/santa_sleigh")
+		go.animate("/santa_sleigh", "position.x", go.PLAYBACK_ONCE_FORWARD, -100, go.EASING_LINEAR, SANTA_TIMING)
+	else
+		go.set_position(vmath.vector3(-100, (gameHeight-80)/ZOOM_LEVEL, 1), "/santa_sleigh")
+		go.animate("/santa_sleigh", "position.x", go.PLAYBACK_ONCE_FORWARD, (gameWidth+1000)/ZOOM_LEVEL, go.EASING_LINEAR, SANTA_TIMING)
+	end
+
+	-- Wait 1 second, then create gifts
+	timer.delay(1.0, false, function ()
+		-- Create gifts
+		--CreateGifts(self, self.gift_to_create)
+		timer.delay(SANTA_TIMING/self.gift_to_create, true, function (self,pbar_timer,_)
+			CreateGifts(self, 1)
+
+			if self.gifts >= self.gift_to_create then
+				timer.cancel(pbar_timer)
+			end
+		end)
+
+	end)
+end
+
+
 -- Create new gifts using the gift prototype
 function CreateGifts(self, pCount)
 	for i=1, pCount do
 		-- Z axis on 3 values : 0.1, 0.2 or 0.3   (1 = in back  2 = middle   3 = in front)
 		local index = math.random(1,3)
 		local z = GIFT_Z_ORDER[index]
-		local pos = vmath.vector3(math.random(50, (gameWidth-50)/ZOOM_LEVEL), math.random(gameHeight-250, gameHeight-200)/ZOOM_LEVEL, z)
+		local pos = vmath.vector3(math.random(40, (gameWidth-50)/ZOOM_LEVEL), math.random(gameHeight-250, gameHeight-200)/ZOOM_LEVEL, z)
 
 		factory.create("/giftFactory#factory", pos, nil, { position = pos, z_index = index }, 0.6 + z)
 		self.gifts = self.gifts + 1

@@ -21,9 +21,12 @@ function init(self)
 		self.time = self.time - 1
 		gui.set_text(gui.get_node("time"), self.time)
 
+		if self.time <= 5 then
+			sound.play("/sounds#timer_end")
+		end
+
 		if self.time <= 0 then
 			timer.cancel(pbar_timer)
-
 			msg.post("/levelManager#levelManager", "timeout")
 		end
 	end)
