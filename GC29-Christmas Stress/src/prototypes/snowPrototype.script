@@ -47,7 +47,6 @@ function Done_Snow(self, url, property)
 	-- Increase or decrease snowflake size during its lifetime
 	if self.scale <= 1 and self.increase_size then
 		self.scale = self.scale + 0.3
-		print(self.speed)
 		if self.speed > 1 then self.speed = self.speed - 0.5 end
 	else
 		self.scale = self.scale - 0.3

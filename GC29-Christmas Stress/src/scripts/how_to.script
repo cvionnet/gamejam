@@ -1,0 +1,27 @@
+--local defmath = require("defmath.defmath")	-- to use https://github.com/subsoap/defmath
+require("src.scripts.utils.utils")
+
+local transitionscreen_timer = true		-- add a small timer before the player can click
+
+function init(self)
+	msg.post(".", "acquire_input_focus")
+
+	timer.delay(1.0, false, function()
+		transitionscreen_timer = false
+	end)
+	
+	timer.delay(4.0, false, function()
+		msg.post("main:/loader#main", "change_scene", { scene = "sceneGame" })
+	end)
+end
+
+function on_input(self, action_id, action)
+	if action_id == INPUT.TOUCH and transitionscreen_timer == false then
+		msg.post("main:/loader#main", "change_scene", { scene = "sceneGame" })
+	end
+end
+
+function update(self, dt) end
+function on_message(self, message_id, message, sender) end
+function final(self) end
+function on_reload(self) end

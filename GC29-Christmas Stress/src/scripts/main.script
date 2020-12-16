@@ -4,7 +4,7 @@ function init(self)
 	msg.post(".", "acquire_input_focus")
 
 	self.currentScene = nil
-	LoadScene(self, "sceneGame")
+	LoadScene(self, "sceneMenu")	--sceneGame
 end
 
 function on_message(self, message_id, message, sender)

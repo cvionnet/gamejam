@@ -1,0 +1,39 @@
+--local defmath = require("defmath.defmath")	-- to use https://github.com/subsoap/defmath
+require("src.scripts.utils.utils")
+
+local transitionscreen_timer = true		-- add a small timer before the player can click
+
+function init(self)
+	msg.post(".", "acquire_input_focus")
+
+	timer.delay(2.0, false, function()
+		transitionscreen_timer = false
+	end)
+	
+	msg.post("/hand_click#sprite", "disable")
+	go.set_position(vmath.vector3(-100, (gameHeight-650)/ZOOM_LEVEL, 1), "/title1")
+	go.set_position(vmath.vector3((gameWidth-1000)/ZOOM_LEVEL, (gameHeight-640)/ZOOM_LEVEL, 1), "/title2")
+	go.set("/background#sprite", "tint.w", 0.0) -- "tint" is a vector4 with x, y, z, w fields
+
+	-- Animate title 1 (left to right)
+	go.animate("/title1", "position.x", go.PLAYBACK_ONCE_FORWARD, 110, go.EASING_OUTBOUNCE, 1.5, 0, function ()
+		-- Then animate title 2 (right to left)
+		go.animate("/title2", "position.x", go.PLAYBACK_ONCE_FORWARD, 70, go.EASING_OUTBOUNCE, 1.0, 0, function ()
+			-- Then fadein of the background
+			go.animate("/background#sprite", "tint.w", go.PLAYBACK_ONCE_FORWARD, 1.0, go.EASING_LINEAR, 2.0, 0, function ()
+				msg.post("/hand_click#sprite", "enable")
+			end)
+		end)
+	end)
+end
+
+function on_input(self, action_id, action)
+	if action_id == INPUT.TOUCH and transitionscreen_timer == false then
+		msg.post("main:/loader#main", "change_scene", { scene = "sceneHowto" })
+	end
+end
+
+function update(self, dt) end
+function on_message(self, message_id, message, sender) end
+function final(self) end
+function on_reload(self) end

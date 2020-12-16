@@ -17,7 +17,7 @@ embedded_components {
   id: "sprite"
   type: "sprite"
   data: "tile_set: \"/src/atlas/snow.atlas\"\n"
-  "default_animation: \"snow1\"\n"
+  "default_animation: \"snowball\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"
   ""
