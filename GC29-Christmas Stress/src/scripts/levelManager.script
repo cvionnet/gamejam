@@ -7,6 +7,10 @@ local GAMESTATE = require("src.scripts.gamestate")
 --local topOffset = gameHeight - TILE_HEIGHT
 --local MAP_WIDTH = 16
 
+-- GAMEPLAY
+local SNOW_TO_CREATE = 40
+local SNOW_APPEARANCE = 10		-- Add a snow effect every X gifts the player add in the correct bag
+
 local GIFT_Z_ORDER = { 0.1, 0.2, 0.3 }
 local SANTA_TIMING = 3.0
 
@@ -18,12 +22,15 @@ function init(self)
 	-- Set zoom factor depending of device
 	Camera_Set_Zoom_Level()
 
-	self.gifts = 0
+	self.totalGifts = 0
+	self.correctGifts = 0
+	GAMESTATE.state = "START"
 
 	-- Create bags
 	CreateBag(1,1)
 	CreateBag(2,2)
 	CreateBag(3,3)
+
 
 	-- Display Santa and create gifts
 	InitializeGifts(self, 0)
@@ -33,39 +40,48 @@ function init(self)
 end
 
 function on_message(self, message_id, message, sender)
-	---------------------------------------------------------------
-	-- If the user put a gift into the bag
-	if message_id == hash("gift_in_bag") then
-		local gift_color = message.gift_color
-		local bag_color = message.bag_color
-		local giftID = message.giftID
+	if GAMESTATE.state == "GAME" then
+		---------------------------------------------------------------
+		-- If the user put a gift into the bag
+		if message_id == hash("gift_in_bag") then
+			local gift_color = message.gift_color
+			local bag_color = message.bag_color
+			local giftID = message.giftID
 
-		if gift_color == bag_color then
-			GAMESTATE.score = GAMESTATE.score + 1
-			sound.play("/sounds#gift_correct")
-		else
-			if GAMESTATE.score > 0 then
-				GAMESTATE.score = GAMESTATE.score - 1
-				sound.play("/sounds#gift_incorrect")
+			if gift_color == bag_color then
+				GAMESTATE.score = GAMESTATE.score + 1
+				self.correctGifts = self.correctGifts + 1
+				sound.play("/sounds#gift_correct")
+
+				-- GAMEPLAY - Add snow effect
+				if (self.correctGifts % SNOW_APPEARANCE) == 0 then
+					print("Add snow effect")
+					CreateSnowEffect(SNOW_TO_CREATE)
+				end
+			else
+				if GAMESTATE.score > 0 then
+					GAMESTATE.score = GAMESTATE.score - 1
+					sound.play("/sounds#gift_incorrect")
+				end
+			end
+
+			-- Update the score
+			msg.post("/GUI#game", "update_score")
+
+			-- Delete the gift
+			go.delete(giftID)
+			self.totalGifts = self.totalGifts - 1
+
+			if self.totalGifts <= 0 then
+				print("TODO: WIN")
 			end
 		end
 
-		-- Update the score
-		msg.post("/GUI#game", "update_score")
-
-		-- Delete the gift
-		go.delete(giftID)
-		self.gifts = self.gifts - 1
-
-		if self.gifts <= 0 then
-			print("TODO: WIN")
+		---------------------------------------------------------------
+		-- Time is out
+		if message_id == hash("timeout") then
+			print("TODO: TIMEOUT")
 		end
-	end
-
-	---------------------------------------------------------------
-	-- Time is out
-	if message_id == hash("timeout") then
-		print("TODO: TIMEOUT")
 	end
 end
 
@@ -81,6 +97,7 @@ function on_reload(self) end
 function InitializeGifts(self, pDirection)
 	-- Animate Santa in the sky
 	sound.play("/sounds#santa_ohoh")
+
 	sprite.play_flipbook("/santa_sleigh#sprite", "run")
 	if pDirection == 1 then
 		sprite.set_hflip("/santa_sleigh#sprite", true)
@@ -96,9 +113,14 @@ function InitializeGifts(self, pDirection)
 		-- Create gifts
 		--CreateGifts(self, self.gift_to_create)
 		timer.delay(SANTA_TIMING/self.gift_to_create, true, function (self,pbar_timer,_)
+
 			CreateGifts(self, 1)
 
-			if self.gifts >= self.gift_to_create then
+			if self.totalGifts >= self.gift_to_create then
+				-- Start the game and the timer
+				GAMESTATE.state = "GAME"
+				msg.post("/GUI#game", "start_timer")
+
 				timer.cancel(pbar_timer)
 			end
 		end)
@@ -115,8 +137,8 @@ function CreateGifts(self, pCount)
 		local z = GIFT_Z_ORDER[index]
 		local pos = vmath.vector3(math.random(40, (gameWidth-50)/ZOOM_LEVEL), math.random(gameHeight-250, gameHeight-200)/ZOOM_LEVEL, z)
 
-		factory.create("/giftFactory#factory", pos, nil, { position = pos, z_index = index }, 0.6 + z)
-		self.gifts = self.gifts + 1
+		factory.create("/factoryGift#factory", pos, nil, { position = pos, z_index = index }, 0.6 + z)
+		self.totalGifts = self.totalGifts + 1
 	end
 end
 
@@ -133,5 +155,18 @@ function CreateBag(pColor, pPosition)
 		pos = vmath.vector3(150,90,0)
 	end
 
-	factory.create("/bagFactory#factory", pos, nil, { color = pColor }, 1.0)
+	factory.create("/factoryBag#factory", pos, nil, { color = pColor }, 1.0)
+end
+
+-- Create the snow effect using the snow prototype
+function CreateSnowEffect(pCount)
+	local count = 0
+	timer.delay(0.5, true, function (_,pbar_timer,_)
+		factory.create("/factorySnow#factory", vmath.vector3(0,0,0))
+		count = count + 1
+
+		if count >= pCount then
+			timer.cancel(pbar_timer)
+		end
+	end)
 end

@@ -16,20 +16,6 @@ function init(self)
 	gui.set_text(gui.get_node("time"), self.time)
 	gui.set_scale(gui.get_node("time"), vmath.vector3(ZOOM_LEVEL,ZOOM_LEVEL,1))
 	gui.set_position(gui.get_node("time"), vmath.vector3(96 * ZOOM_LEVEL, 110 * ZOOM_LEVEL,1))
-
-	timer.delay(1, true, function (self,pbar_timer,_)
-		self.time = self.time - 1
-		gui.set_text(gui.get_node("time"), self.time)
-
-		if self.time <= 5 then
-			sound.play("/sounds#timer_end")
-		end
-
-		if self.time <= 0 then
-			timer.cancel(pbar_timer)
-			msg.post("/levelManager#levelManager", "timeout")
-		end
-	end)
 end
 
 
@@ -37,6 +23,23 @@ function on_message(self, message_id, message, sender)
 	-- Update the score
 	if message_id == hash("update_score") then
 		gui.set_text(gui.get_node("score"), GAMESTATE.score)
+	end
+
+	-- Start the timer
+	if message_id == hash("start_timer") then
+		timer.delay(1, true, function (self,pbar_timer,_)
+			self.time = self.time - 1
+			gui.set_text(gui.get_node("time"), self.time)
+
+			if self.time <= 5 then
+				sound.play("/sounds#timer_end")
+			end
+
+			if self.time <= 0 then
+				timer.cancel(pbar_timer)
+				msg.post("/levelManager#levelManager", "timeout")
+			end
+		end)
 	end
 end
 
