@@ -11,7 +11,7 @@ function init(self)
 	end)
 
 	msg.post("/hand_click#sprite", "disable")
-	go.set_position(vmath.vector3(-100, (gameHeight-650)/ZOOM_LEVEL, 1), "/title1")
+	go.set_position(vmath.vector3(-100, (gameHeight-645)/ZOOM_LEVEL, 1), "/title1")
 	go.set_position(vmath.vector3((gameWidth-1000)/ZOOM_LEVEL, (gameHeight-640)/ZOOM_LEVEL, 1), "/title2")
 	go.set("/background#sprite", "tint.w", 0.0) -- "tint" is a vector4 with x, y, z, w fields
 

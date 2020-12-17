@@ -9,10 +9,13 @@ local GAMESTATE = require("src.scripts.gamestate")
 
 -- GAMEPLAY
 local SNOW_TO_CREATE = 40
+
 local SNOW_APPEARANCE = 10		-- Add a snow effect every X gifts the player add in the correct bag
+local SANTA_APPEARANCE = 7 --20		-- Santa adds gifts every X gifts the player add in a bag
+local ADD_TIME = 5 		-- Add time every X gifts the player add in a bag
 
 local GIFT_Z_ORDER = { 0.1, 0.2, 0.3 }
-local SANTA_TIMING = 3.0
+local SANTA_TIMING = 3.0		-- How much time Santa need to cross the screen
 
 go.property("gift_to_create", 0)
 
@@ -24,6 +27,7 @@ function init(self)
 
 	self.totalGifts = 0
 	self.correctGifts = 0
+	self.santa_direction = 0	-- 0 = left to right    1 = right to left
 	GAMESTATE.state = "START"
 
 	-- Create bags
@@ -32,7 +36,7 @@ function init(self)
 	CreateBag(3,3)
 
 	-- Display Santa and create gifts
-	InitializeGifts(self, 0)
+	InitializeGifts(self, 0, true)
 	--timer.delay(SANTA_TIMING + 1, false, function ()
 	--	InitializeGifts(self, 1)
 	--end)
@@ -59,13 +63,17 @@ function on_message(self, message_id, message, sender)
 				self.correctGifts = self.correctGifts + 1
 				point_earn = 1
 
-				-- Adda particle effect above the bag
+				-- Add a particle effect above the bag
 				CreateStarEffect(10, bag_x, bag_y)
 
 				-- GAMEPLAY - Add snow effect each XX correct gift put in a bag
 				if (self.correctGifts % SNOW_APPEARANCE) == 0 then
-					print("Add snow effect")
 					CreateSnowEffect(SNOW_TO_CREATE)
+				end
+
+				-- GAMEPLAY - Add time
+				if (self.correctGifts % ADD_TIME) == 0 then
+					msg.post("/GUI#game", "add_time", { time = 10 })
 				end
 			else
 				sound.play("/sounds#gift_incorrect")
@@ -88,6 +96,12 @@ function on_message(self, message_id, message, sender)
 				print("TODO: WIN")
 				msg.post("main:/loader#main", "change_scene", { scene = "sceneGameover" })
 			end
+
+			-- GAMEPLAY - Add new gifts
+			if (self.correctGifts % SANTA_APPEARANCE) == 0 then
+				print("Add gifts")
+				InitializeGifts(self, math.random(5,10), false)
+			end
 		end
 
 		---------------------------------------------------------------
@@ -107,39 +121,54 @@ function on_reload(self) end
 -------------------------------------------------------------------------------------------------------------
 
 -- Display Santa and create gifts
--- pDirection : 0 = left to right    1 = right to left
-function InitializeGifts(self, pDirection)
-	-- Animate Santa in the sky
-	sound.play("/sounds#santa_ohoh")
+-- pGifttoCreate : 0 = use default value    XX = force a value
+function InitializeGifts(self, pGifttoCreate, pStartTimer)
+	local gifttocreate = 0
 
-	sprite.play_flipbook("/santa_sleigh#sprite", "run")
-	if pDirection == 1 then
-		sprite.set_hflip("/santa_sleigh#sprite", true)
-		go.set_position(vmath.vector3((gameWidth+1000)/ZOOM_LEVEL, (gameHeight-80)/ZOOM_LEVEL, 1), "/santa_sleigh")
-		go.animate("/santa_sleigh", "position.x", go.PLAYBACK_ONCE_FORWARD, -100, go.EASING_LINEAR, SANTA_TIMING)
-	else
-		go.set_position(vmath.vector3(-100, (gameHeight-80)/ZOOM_LEVEL, 1), "/santa_sleigh")
-		go.animate("/santa_sleigh", "position.x", go.PLAYBACK_ONCE_FORWARD, (gameWidth+1000)/ZOOM_LEVEL, go.EASING_LINEAR, SANTA_TIMING)
-	end
+	if pGifttoCreate then gifttocreate = self.gift_to_create
+	else gifttocreate = pGifttoCreate end
+
+	-- Animate Santa in the sky
+	Animate_Santa(self)
 
 	-- Wait 1 second, then create gifts
 	timer.delay(1.0, false, function ()
 		-- Create gifts
 		--CreateGifts(self, self.gift_to_create)
-		timer.delay(SANTA_TIMING/self.gift_to_create, true, function (self,pbar_timer,_)
+		timer.delay(SANTA_TIMING/gifttocreate, true, function (self,pbar_timer,_)
 
 			CreateGifts(self, 1)
+			gifttocreate = gifttocreate - 1
 
-			if self.totalGifts >= self.gift_to_create then
-				-- Start the game and the timer
-				GAMESTATE.state = "GAME"
-				msg.post("/GUI#game", "start_timer")
-
+			-- Check if all gifts have been created
+			if gifttocreate <= 0 then 		--self.totalGifts >= gifttocreate then
 				timer.cancel(pbar_timer)
+
+				-- Start the game and the timer
+				if pStartTimer then
+					GAMESTATE.state = "GAME"
+					msg.post("/GUI#game", "start_timer")
+				end
 			end
 		end)
-
 	end)
+end
+
+
+function Animate_Santa(self)
+	sound.play("/sounds#santa_ohoh")
+
+	sprite.play_flipbook("/santa_sleigh#sprite", "run")
+	if self.santa_direction == 1 then
+		self.santa_direction = 0
+		sprite.set_hflip("/santa_sleigh#sprite", true)
+		go.set_position(vmath.vector3((gameWidth+1000)/ZOOM_LEVEL, (gameHeight-80)/ZOOM_LEVEL, 1), "/santa_sleigh")
+		go.animate("/santa_sleigh", "position.x", go.PLAYBACK_ONCE_FORWARD, -100, go.EASING_LINEAR, SANTA_TIMING)
+	else
+		self.santa_direction = 1
+		go.set_position(vmath.vector3(-100, (gameHeight-80)/ZOOM_LEVEL, 1), "/santa_sleigh")
+		go.animate("/santa_sleigh", "position.x", go.PLAYBACK_ONCE_FORWARD, (gameWidth+1000)/ZOOM_LEVEL, go.EASING_LINEAR, SANTA_TIMING)
+	end
 end
 
 

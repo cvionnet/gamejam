@@ -24,6 +24,7 @@ end
 
 
 function on_message(self, message_id, message, sender)
+	---------------------------------------------------------------
 	-- Update the score
 	if message_id == hash("update_score") then
 		gui.set_text(gui.get_node("score"), GAMESTATE.score)
@@ -41,6 +42,13 @@ function on_message(self, message_id, message, sender)
 		end)
 	end
 
+	---------------------------------------------------------------
+	-- Add more time
+	if message_id == hash("add_time") then
+		self.time = self.time + message.time
+	end
+
+	---------------------------------------------------------------
 	-- Start the timer
 	if message_id == hash("start_timer") then
 		timer.delay(1, true, function (self,pbar_timer,_)
@@ -52,6 +60,7 @@ function on_message(self, message_id, message, sender)
 			end
 
 			if self.time <= 0 then
+print("time = "..self.time)
 				timer.cancel(pbar_timer)
 				msg.post("/levelManager#levelManager", "timeout")
 			end
