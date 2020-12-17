@@ -16,6 +16,10 @@ function init(self)
 	gui.set_text(gui.get_node("time"), self.time)
 	gui.set_scale(gui.get_node("time"), vmath.vector3(ZOOM_LEVEL,ZOOM_LEVEL,1))
 	gui.set_position(gui.get_node("time"), vmath.vector3(96 * ZOOM_LEVEL, 110 * ZOOM_LEVEL,1))
+
+	-- Hide points (only display when the user put a gift in the bag)
+	gui.set_enabled(gui.get_node("points"), false)
+	gui.set_scale(gui.get_node("points"), vmath.vector3(ZOOM_LEVEL,ZOOM_LEVEL,1))
 end
 
 
@@ -23,6 +27,18 @@ function on_message(self, message_id, message, sender)
 	-- Update the score
 	if message_id == hash("update_score") then
 		gui.set_text(gui.get_node("score"), GAMESTATE.score)
+
+		-- Display point above the bag, animate and hide it
+		local points = ""
+		if message.points > 0 then points = "+"..message.points
+		elseif message.points < 0 then points = message.points end
+		gui.set_text(gui.get_node("points"), points)
+
+		gui.set_position(gui.get_node("points"), message.bag_position)
+		gui.set_enabled(gui.get_node("points"), true)
+		gui.animate(gui.get_node("points"), "position.y", message.bag_position.y+20, gui.EASING_LINEAR, 1.0, 0, function ()
+			gui.set_enabled(gui.get_node("points"), false)
+		end)
 	end
 
 	-- Start the timer

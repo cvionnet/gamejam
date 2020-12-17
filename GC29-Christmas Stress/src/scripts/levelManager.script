@@ -42,35 +42,43 @@ function on_message(self, message_id, message, sender)
 	if GAMESTATE.state == "GAME" then
 		---------------------------------------------------------------
 		-- If the user put a gift into the bag
-		if message_id == hash("gift_in_bag") then
+		if message_id == GAME.GIFT_IN_BAG then
 			local gift_color = message.gift_color
 			local bag_color = message.bag_color
 			local giftID = message.giftID
 			local bagID = message.bagID
+			local point_earn = 0
+
+			-- Get the position of the bag
+			local bag_x = go.get_position(bagID).x
+			local bag_y = go.get_position(bagID).y
 
 			if gift_color == bag_color then
-				CreateStarEffect(10, bagID)
-
-				GAMESTATE.score = GAMESTATE.score + 1
-				self.correctGifts = self.correctGifts + 1
 				sound.play("/sounds#gift_correct")
 
-				-- GAMEPLAY - Add snow effect
+				self.correctGifts = self.correctGifts + 1
+				point_earn = 1
+
+				-- Adda particle effect above the bag
+				CreateStarEffect(10, bag_x, bag_y)
+
+				-- GAMEPLAY - Add snow effect each XX correct gift put in a bag
 				if (self.correctGifts % SNOW_APPEARANCE) == 0 then
 					print("Add snow effect")
 					CreateSnowEffect(SNOW_TO_CREATE)
 				end
 			else
+				sound.play("/sounds#gift_incorrect")
 				msg.post("camera", "shake", { intensity = 0.002, duration = 0.5, direction = "both" })
 
 				if GAMESTATE.score > 0 then
-					GAMESTATE.score = GAMESTATE.score - 1
-					sound.play("/sounds#gift_incorrect")
+					point_earn = -1
 				end
 			end
 
 			-- Update the score
-			msg.post("/GUI#game", "update_score")
+			GAMESTATE.score = GAMESTATE.score + point_earn
+			msg.post("/GUI#game", "update_score", { points = point_earn, bag_position = vmath.vector3((bag_x + 2) * ZOOM_LEVEL,bag_y * ZOOM_LEVEL,0) })
 
 			-- Delete the gift
 			go.delete(giftID)
@@ -178,15 +186,11 @@ function CreateSnowEffect(pCount)
 end
 
 -- Create the star effect when the player put gift in the correct bag using the star prototype
-function CreateStarEffect(pCount, pBagID)
+function CreateStarEffect(pCount, pBagX, pBagY)
 	local count = 0
 
-	-- Get the position of the bag
-	local pos_x = go.get_position(pBagID).x
-	local pos_y = go.get_position(pBagID).y
-
 	timer.delay(0.02, true, function (_,pbar_timer,_)
-		factory.create("/factoryStar#factory", vmath.vector3(pos_x,pos_y,0))
+		factory.create("/factoryStar#factory", vmath.vector3(pBagX,pBagY,0))
 		count = count + 1
 
 		if count >= pCount then

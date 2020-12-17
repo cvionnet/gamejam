@@ -35,7 +35,13 @@ INPUT = {
 
 --* HOW TO USE : add hashes of most called hash in the the game  (update score ...)
 GAME = {
-	-- PLAYER
+	BAG = hash("bag"),
+	GIFT = hash("gift"),
+	GIFT_IN_BAG = hash("gift_in_bag"),
+
+	BORDER = hash("border"),
+	BORDER_LEFT = hash("/borderleft"),
+	BORDER_RIGHT = hash("/borderright")
 }
 
 

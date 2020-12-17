@@ -44,7 +44,7 @@ end
 function on_message(self, message_id, message, sender)
 	---------------------------------------------------------------
 	-- if collide with another gift
-	if message_id == MESSAGE.CONTACT and message.other_group == hash("gift") then --and (self.isOnGround or self.isGravityActive==false) then
+	if message_id == MESSAGE.CONTACT and message.other_group == GAME.GIFT then --and (self.isOnGround or self.isGravityActive==false) then
 		-- Build the other object URL from his ID
 		local obj_url = msg.url(nil, message.other_id, "giftPrototype")
 
@@ -67,7 +67,7 @@ function on_message(self, message_id, message, sender)
 
 	---------------------------------------------------------------
 	-- If collide with the ground
-	if message_id == MESSAGE.COLLISION and message.other_group == hash("border") then
+	if message_id == MESSAGE.COLLISION and message.other_group == GAME.BORDER then
 		-- If collide with a ground border, the gift stop on it
 		if message.other_id == hash("/bordergroundZ"..self.z_index) then
 			self.isGravityActive= false
@@ -75,10 +75,10 @@ function on_message(self, message_id, message, sender)
 		end
 
 		-- If collide with a side border, stop the x movement
-		if message.other_id == hash("/borderleft") then
+		if message.other_id == GAME.BORDER_LEFT then
 			self.velocity.x = 0
 			self.position.x = 30
-		elseif message.other_id == hash("/borderright") then
+		elseif message.other_id == GAME.BORDER_RIGHT then
 			self.velocity.x = 0
 			self.position.x = gameWidth/ZOOM_LEVEL - 30
 		end
