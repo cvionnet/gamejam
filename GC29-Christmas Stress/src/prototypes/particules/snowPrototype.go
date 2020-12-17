@@ -1,6 +1,6 @@
 components {
   id: "snowPrototype"
-  component: "/src/prototypes/snowPrototype.script"
+  component: "/src/prototypes/particules/snowPrototype.script"
   position {
     x: 0.0
     y: 0.0

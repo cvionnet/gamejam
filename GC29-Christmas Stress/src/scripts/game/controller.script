@@ -88,7 +88,7 @@ function on_message(self, message_id, message, sender)
             local bag_color = go.get(obj_url, "color")
 
             -- Send informations to the Level Manager
-            msg.post("/levelManager#levelManager", "gift_in_bag", { gift_color = gift_color, bag_color = bag_color, giftID = self.dragged_id })
+            msg.post("/levelManager#levelManager", "gift_in_bag", { gift_color = gift_color, bag_color = bag_color, giftID = self.dragged_id, bagID = message.other_id })
 
             -- Reset values as the gift will be deleted
             self.pressed = false

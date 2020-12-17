@@ -9,16 +9,19 @@ function init(self)
 	timer.delay(2.0, false, function()
 		transitionscreen_timer = false
 	end)
-	
+
 	msg.post("/hand_click#sprite", "disable")
 	go.set_position(vmath.vector3(-100, (gameHeight-650)/ZOOM_LEVEL, 1), "/title1")
 	go.set_position(vmath.vector3((gameWidth-1000)/ZOOM_LEVEL, (gameHeight-640)/ZOOM_LEVEL, 1), "/title2")
 	go.set("/background#sprite", "tint.w", 0.0) -- "tint" is a vector4 with x, y, z, w fields
 
 	-- Animate title 1 (left to right)
-	go.animate("/title1", "position.x", go.PLAYBACK_ONCE_FORWARD, 110, go.EASING_OUTBOUNCE, 1.5, 0, function ()
+	sound.play("/sounds#title_impact", { delay = 0.25 })
+	go.animate("/title1", "position.x", go.PLAYBACK_ONCE_FORWARD, 110, go.EASING_OUTBOUNCE, 1.0, 0, function ()
+		sound.play("/sounds#title_impact", { delay = 0.25 })
 		-- Then animate title 2 (right to left)
 		go.animate("/title2", "position.x", go.PLAYBACK_ONCE_FORWARD, 70, go.EASING_OUTBOUNCE, 1.0, 0, function ()
+			sound.play("/sounds#reveal", { delay = 0.25 })
 			-- Then fadein of the background
 			go.animate("/background#sprite", "tint.w", go.PLAYBACK_ONCE_FORWARD, 1.0, go.EASING_LINEAR, 2.0, 0, function ()
 				msg.post("/hand_click#sprite", "enable")
@@ -29,7 +32,9 @@ end
 
 function on_input(self, action_id, action)
 	if action_id == INPUT.TOUCH and transitionscreen_timer == false then
-		msg.post("main:/loader#main", "change_scene", { scene = "sceneHowto" })
+		sound.play("/sounds#touch", nil, function ()
+			msg.post("main:/loader#main", "change_scene", { scene = "sceneHowto" })
+		end)
 	end
 end
 

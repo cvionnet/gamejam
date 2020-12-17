@@ -31,7 +31,6 @@ function init(self)
 	CreateBag(2,2)
 	CreateBag(3,3)
 
-
 	-- Display Santa and create gifts
 	InitializeGifts(self, 0)
 	--timer.delay(SANTA_TIMING + 1, false, function ()
@@ -47,8 +46,11 @@ function on_message(self, message_id, message, sender)
 			local gift_color = message.gift_color
 			local bag_color = message.bag_color
 			local giftID = message.giftID
+			local bagID = message.bagID
 
 			if gift_color == bag_color then
+				CreateStarEffect(10, bagID)
+
 				GAMESTATE.score = GAMESTATE.score + 1
 				self.correctGifts = self.correctGifts + 1
 				sound.play("/sounds#gift_correct")
@@ -59,6 +61,8 @@ function on_message(self, message_id, message, sender)
 					CreateSnowEffect(SNOW_TO_CREATE)
 				end
 			else
+				msg.post("camera", "shake", { intensity = 0.002, duration = 0.5, direction = "both" })
+
 				if GAMESTATE.score > 0 then
 					GAMESTATE.score = GAMESTATE.score - 1
 					sound.play("/sounds#gift_incorrect")
@@ -74,6 +78,7 @@ function on_message(self, message_id, message, sender)
 
 			if self.totalGifts <= 0 then
 				print("TODO: WIN")
+				msg.post("main:/loader#main", "change_scene", { scene = "sceneGameover" })
 			end
 		end
 
@@ -81,6 +86,7 @@ function on_message(self, message_id, message, sender)
 		-- Time is out
 		if message_id == hash("timeout") then
 			print("TODO: TIMEOUT")
+			msg.post("main:/loader#main", "change_scene", { scene = "sceneGameover" })
 		end
 	end
 end
@@ -163,6 +169,24 @@ function CreateSnowEffect(pCount)
 	local count = 0
 	timer.delay(0.5, true, function (_,pbar_timer,_)
 		factory.create("/factorySnow#factory", vmath.vector3(0,0,0))
+		count = count + 1
+
+		if count >= pCount then
+			timer.cancel(pbar_timer)
+		end
+	end)
+end
+
+-- Create the star effect when the player put gift in the correct bag using the star prototype
+function CreateStarEffect(pCount, pBagID)
+	local count = 0
+
+	-- Get the position of the bag
+	local pos_x = go.get_position(pBagID).x
+	local pos_y = go.get_position(pBagID).y
+
+	timer.delay(0.02, true, function (_,pbar_timer,_)
+		factory.create("/factoryStar#factory", vmath.vector3(pos_x,pos_y,0))
 		count = count + 1
 
 		if count >= pCount then

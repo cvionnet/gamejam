@@ -1,47 +1,4 @@
-name: "menu"
-instances {
-  id: "camera"
-  prototype: "/orthographic/camera.go"
-  position {
-    x: 104.0
-    y: 56.0
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  component_properties {
-    id: "script"
-    properties {
-      id: "zoom"
-      value: "6.0"
-      type: PROPERTY_TYPE_NUMBER
-    }
-    properties {
-      id: "projection"
-      value: "FIXED_AUTO"
-      type: PROPERTY_TYPE_HASH
-    }
-    properties {
-      id: "follow_horizontal"
-      value: "false"
-      type: PROPERTY_TYPE_BOOLEAN
-    }
-    properties {
-      id: "follow_vertical"
-      value: "false"
-      type: PROPERTY_TYPE_BOOLEAN
-    }
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-  }
-}
+name: "gameover"
 scale_along_z: 0
 embedded_instances {
   id: "cursor"
@@ -127,53 +84,9 @@ embedded_instances {
 embedded_instances {
   id: "sounds"
   data: "embedded_components {\n"
-  "  id: \"title_impact\"\n"
-  "  type: \"sound\"\n"
-  "  data: \"sound: \\\"/src/assets/sounds/UI_title.wav\\\"\\n"
-  "looping: 0\\n"
-  "group: \\\"master\\\"\\n"
-  "gain: 1.0\\n"
-  "pan: 0.0\\n"
-  "speed: 1.0\\n"
-  "\"\n"
-  "  position {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "  }\n"
-  "  rotation {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "    w: 1.0\n"
-  "  }\n"
-  "}\n"
-  "embedded_components {\n"
   "  id: \"touch\"\n"
   "  type: \"sound\"\n"
   "  data: \"sound: \\\"/src/assets/sounds/UI_valid.wav\\\"\\n"
-  "looping: 0\\n"
-  "group: \\\"master\\\"\\n"
-  "gain: 1.0\\n"
-  "pan: 0.0\\n"
-  "speed: 1.0\\n"
-  "\"\n"
-  "  position {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "  }\n"
-  "  rotation {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "    w: 1.0\n"
-  "  }\n"
-  "}\n"
-  "embedded_components {\n"
-  "  id: \"reveal\"\n"
-  "  type: \"sound\"\n"
-  "  data: \"sound: \\\"/src/assets/sounds/UI_reveal.wav\\\"\\n"
   "looping: 0\\n"
   "group: \\\"master\\\"\\n"
   "gain: 1.0\\n"
@@ -211,90 +124,10 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "title1"
-  data: "embedded_components {\n"
-  "  id: \"sprite\"\n"
-  "  type: \"sprite\"\n"
-  "  data: \"tile_set: \\\"/src/atlas/gifts.atlas\\\"\\n"
-  "default_animation: \\\"title1\\\"\\n"
-  "material: \\\"/builtins/materials/sprite.material\\\"\\n"
-  "blend_mode: BLEND_MODE_ALPHA\\n"
-  "\"\n"
-  "  position {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "  }\n"
-  "  rotation {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "    w: 1.0\n"
-  "  }\n"
-  "}\n"
-  ""
-  position {
-    x: 96.0
-    y: 92.0
-    z: 1.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 2.0
-    y: 2.0
-    z: 1.0
-  }
-}
-embedded_instances {
-  id: "title2"
-  data: "embedded_components {\n"
-  "  id: \"sprite\"\n"
-  "  type: \"sprite\"\n"
-  "  data: \"tile_set: \\\"/src/atlas/gifts.atlas\\\"\\n"
-  "default_animation: \\\"title2\\\"\\n"
-  "material: \\\"/builtins/materials/sprite.material\\\"\\n"
-  "blend_mode: BLEND_MODE_ALPHA\\n"
-  "\"\n"
-  "  position {\n"
-  "    x: 34.0\n"
-  "    y: -19.333\n"
-  "    z: 0.0\n"
-  "  }\n"
-  "  rotation {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "    w: 1.0\n"
-  "  }\n"
-  "}\n"
-  ""
-  position {
-    x: 93.0
-    y: 93.0
-    z: 1.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 1.5
-    y: 1.5
-    z: 1.0
-  }
-}
-embedded_instances {
   id: "menuManager"
   data: "components {\n"
-  "  id: \"menu\"\n"
-  "  component: \"/src/scripts/menu.script\"\n"
+  "  id: \"gameover\"\n"
+  "  component: \"/src/scripts/gameover.script\"\n"
   "  position {\n"
   "    x: 0.0\n"
   "    y: 0.0\n"
@@ -366,15 +199,10 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "hand_click"
-  data: "embedded_components {\n"
-  "  id: \"sprite\"\n"
-  "  type: \"sprite\"\n"
-  "  data: \"tile_set: \\\"/src/atlas/background.atlas\\\"\\n"
-  "default_animation: \\\"hand_click\\\"\\n"
-  "material: \\\"/builtins/materials/sprite.material\\\"\\n"
-  "blend_mode: BLEND_MODE_ALPHA\\n"
-  "\"\n"
+  id: "GUI"
+  data: "components {\n"
+  "  id: \"gameover\"\n"
+  "  component: \"/src/GUI/gameover.gui\"\n"
   "  position {\n"
   "    x: 0.0\n"
   "    y: 0.0\n"
@@ -389,9 +217,9 @@ embedded_instances {
   "}\n"
   ""
   position {
-    x: 105.0
-    y: 26.0
-    z: 1.0
+    x: 0.0
+    y: 0.0
+    z: 0.0
   }
   rotation {
     x: 0.0
@@ -400,8 +228,8 @@ embedded_instances {
     w: 1.0
   }
   scale3 {
-    x: 1.5
-    y: 1.5
+    x: 1.0
+    y: 1.0
     z: 1.0
   }
 }
