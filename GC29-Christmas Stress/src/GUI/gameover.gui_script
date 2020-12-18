@@ -4,10 +4,15 @@ local GAMESTATE = require("src.scripts.gamestate")
 -------------------------------------------------------------------------------------------------------------
 
 function init(self)
+	-- Message
+	gui.set_text(gui.get_node("message"), GAMESTATE.score_message)
+	gui.set_scale(gui.get_node("message"), vmath.vector3(ZOOM_LEVEL,ZOOM_LEVEL,1))
+	gui.set_position(gui.get_node("message"), vmath.vector3(66 * ZOOM_LEVEL, 70 * ZOOM_LEVEL,1))
+
 	-- Score
-	gui.set_text(gui.get_node("score"), GAMESTATE.score)
+	gui.set_text(gui.get_node("score"), "Score : "..GAMESTATE.score)
 	gui.set_scale(gui.get_node("score"), vmath.vector3(ZOOM_LEVEL,ZOOM_LEVEL,1))
-	gui.set_position(gui.get_node("score"), vmath.vector3(96 * ZOOM_LEVEL, 60 * ZOOM_LEVEL,1))
+	gui.set_position(gui.get_node("score"), vmath.vector3(116 * ZOOM_LEVEL, 50 * ZOOM_LEVEL,1))
 end
 
 function on_message(self, message_id, message, sender) end

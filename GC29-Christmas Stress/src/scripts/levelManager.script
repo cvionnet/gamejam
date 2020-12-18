@@ -11,13 +11,13 @@ local GAMESTATE = require("src.scripts.gamestate")
 local SNOW_TO_CREATE = 40
 
 local SNOW_APPEARANCE = 10		-- Add a snow effect every X gifts the player add in the correct bag
-local SANTA_APPEARANCE = 7 --20		-- Santa adds gifts every X gifts the player add in a bag
+local SANTA_APPEARANCE = 7 		-- Santa adds gifts every X gifts the player add in a bag
 local ADD_TIME = 5 		-- Add time every X gifts the player add in a bag
 
 local MAXIMUM_GIFTS = 25 	-- Gameover if gifts on the screen exceed this value
 
 local GIFT_Z_ORDER = { 0.1, 0.2, 0.3 }
-local SANTA_TIMING = 3.0		-- How much time Santa need to cross the screen
+local SANTA_TIMING = 2.0		-- How much time Santa need to cross the screen
 
 go.property("gift_to_create", 0)
 
@@ -117,15 +117,17 @@ function on_message(self, message_id, message, sender)
 			go.delete(giftID)
 			self.totalGifts = self.totalGifts - 1
 
+			-- WIN - no more gifts on screen
 			if self.totalGifts <= 0 then
-				print("TODO: WIN")
+				GAMESTATE.score_message = "Congratulations !"
+				GAMESTATE.score = GAMESTATE.score + 100
 				msg.post("main:/loader#main", "change_scene", { scene = "sceneGameover" })
 			end
 
 			-- GAMEPLAY - Add new gifts
 			if (self.correctGifts % SANTA_APPEARANCE) == 0 then
-				-- Check that Santa do not appears less 5 seconds before
-				if self.santa_lastAppareance == nil or os.difftime(os.time(), self.santa_lastAppareance) > 5 then
+				-- Check that Santa do not appears less 10 seconds before
+				if self.santa_lastAppareance == nil or os.difftime(os.time(), self.santa_lastAppareance) > 10 then
 					self.santa_lastAppareance = os.time()
 					InitializeGifts(self, math.random(3,5), false)
 				end
@@ -140,17 +142,17 @@ function on_message(self, message_id, message, sender)
 			-- Update Santa face
 			msg.post("/santa_face#santa_face", "change_santa_face", { giftsonscreen = self.totalGifts })
 
-			-- GAMEPLAY - Gameover if gifts on screen exceed max value
+			-- GAMEOVER - Gifts on screen exceed max value
 			if self.totalGifts >= MAXIMUM_GIFTS then
-				print("TODO: LOOSE - MAX GIFT")
+				GAMESTATE.score_message = "Too much gifts !"
 				msg.post("main:/loader#main", "change_scene", { scene = "sceneGameover" })
 			end
 		end
 
 		---------------------------------------------------------------
-		-- GAMEPLAY - Time is out
+		-- GAMEOVER - Time is out
 		if message_id == hash("timeout") then
-			print("TODO: LOOSE - TIMEOUT")
+			GAMESTATE.score_message = "Time out !"
 			msg.post("main:/loader#main", "change_scene", { scene = "sceneGameover" })
 		end
 	end
