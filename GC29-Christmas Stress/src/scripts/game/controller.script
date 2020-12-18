@@ -114,6 +114,9 @@ function Moving_Object(self, action)
     if action.released and self.dragged_id ~= nil and self.pressed == true then
         self.pressed = false
 
+        -- Desactivate the gravity if enabled (when the the player click on a gift when it is falling -> it will follow the cursor)
+        msg.post(self.dragged_id, "desactivate_gravity")
+
         -- The gift fall
         if self.stopDragging == false then
             if self.swipe_state.is_swipe then

@@ -102,6 +102,12 @@ function on_message(self, message_id, message, sender)
 		self.isGravityActive = true
 		self.isOnGround = false
 	end
+
+	---------------------------------------------------------------
+	-- Sent by the Controller to stop gravity if enabled (if the player click on a gift when it is falling)
+	if message_id == hash("desactivate_gravity") and self.isGravityActive then
+		self.isGravityActive = false
+	end
 end
 
 function on_input(self, action_id, action) end
