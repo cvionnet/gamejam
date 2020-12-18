@@ -9,13 +9,13 @@ function init(self)
 	-- Score
 	gui.set_text(gui.get_node("score"), GAMESTATE.score)
 	gui.set_scale(gui.get_node("score"), vmath.vector3(ZOOM_LEVEL,ZOOM_LEVEL,1))
-	gui.set_position(gui.get_node("score"), vmath.vector3(10 * ZOOM_LEVEL, 110 * ZOOM_LEVEL,1))
+	gui.set_position(gui.get_node("score"), vmath.vector3(10 * ZOOM_LEVEL, 96 * ZOOM_LEVEL,1))
 
 	-- Time
 	self.time = GAMESTATE.totalTime
 	gui.set_text(gui.get_node("time"), self.time)
 	gui.set_scale(gui.get_node("time"), vmath.vector3(ZOOM_LEVEL,ZOOM_LEVEL,1))
-	gui.set_position(gui.get_node("time"), vmath.vector3(96 * ZOOM_LEVEL, 110 * ZOOM_LEVEL,1))
+	gui.set_position(gui.get_node("time"), vmath.vector3(122 * ZOOM_LEVEL, 96 * ZOOM_LEVEL,1))
 
 	-- Hide points (only display when the user put a gift in the bag)
 	gui.set_enabled(gui.get_node("points"), false)
@@ -60,7 +60,6 @@ function on_message(self, message_id, message, sender)
 			end
 
 			if self.time <= 0 then
-print("time = "..self.time)
 				timer.cancel(pbar_timer)
 				msg.post("/levelManager#levelManager", "timeout")
 			end

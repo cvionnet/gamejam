@@ -14,6 +14,8 @@ local SNOW_APPEARANCE = 10		-- Add a snow effect every X gifts the player add in
 local SANTA_APPEARANCE = 7 --20		-- Santa adds gifts every X gifts the player add in a bag
 local ADD_TIME = 5 		-- Add time every X gifts the player add in a bag
 
+local MAXIMUM_GIFTS = 25 	-- Gameover if gifts on the screen exceed this value
+
 local GIFT_Z_ORDER = { 0.1, 0.2, 0.3 }
 local SANTA_TIMING = 3.0		-- How much time Santa need to cross the screen
 
@@ -102,12 +104,21 @@ function on_message(self, message_id, message, sender)
 				print("Add gifts")
 				InitializeGifts(self, math.random(5,10), false)
 			end
+
+			-- Update Santa face
+			msg.post("/santa_face#santa_face", "change_santa_face", { giftsonscreen = self.totalGifts })
+
+			-- GAMEPLAY - Gameover if gifts on screen exceed max value
+			if self.totalGifts >= MAXIMUM_GIFTS then
+				print("TODO: LOOSE - MAX GIFT")
+				msg.post("main:/loader#main", "change_scene", { scene = "sceneGameover" })
+			end
 		end
 
 		---------------------------------------------------------------
-		-- Time is out
+		-- GAMEPLAY - Time is out
 		if message_id == hash("timeout") then
-			print("TODO: TIMEOUT")
+			print("TODO: LOOSE - TIMEOUT")
 			msg.post("main:/loader#main", "change_scene", { scene = "sceneGameover" })
 		end
 	end

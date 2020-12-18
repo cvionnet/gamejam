@@ -1,0 +1,19 @@
+images {
+  image: "/src/assets/images/santa_face/santa_face1.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
+images {
+  image: "/src/assets/images/santa_face/santa_face2.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
+images {
+  image: "/src/assets/images/santa_face/santa_face3.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
+images {
+  image: "/src/assets/images/santa_face/santa_face4.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
+margin: 0
+extrude_borders: 2
+inner_padding: 0

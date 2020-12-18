@@ -1,0 +1,25 @@
+--local defmath = require("defmath.defmath")	-- to use https://github.com/subsoap/defmath
+--require("src.scripts.utils.utils")
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("change_santa_face") then
+		if message.giftsonscreen <= 3 then
+			-- Set the new animation name (= texture)
+			msg.post("#sprite", "play_animation", { id = hash("santa_face1") })
+		elseif message.giftsonscreen > 3 and message.giftsonscreen <= 10 then
+			msg.post("#sprite", "play_animation", { id = hash("santa_face2") })
+		elseif message.giftsonscreen > 10 and message.giftsonscreen <= 15 then
+			msg.post("#sprite", "play_animation", { id = hash("santa_face3") })
+		elseif message.giftsonscreen > 15 then
+			msg.post("#sprite", "play_animation", { id = hash("santa_face4") })
+		end
+	end
+end
+
+function init(self) end
+function update(self, dt) end
+function on_input(self, action_id, action) end
+function final(self) end
+function on_reload(self) end
+
+-------------------------------------------------------------------------------------------------------------
