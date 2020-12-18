@@ -126,8 +126,8 @@ function on_message(self, message_id, message, sender)
 
 			-- GAMEPLAY - Add new gifts
 			if (self.correctGifts % SANTA_APPEARANCE) == 0 then
-				-- Check that Santa do not appears less 10 seconds before
-				if self.santa_lastAppareance == nil or os.difftime(os.time(), self.santa_lastAppareance) > 10 then
+				-- Check that Santa do not appears less 7 seconds before
+				if self.santa_lastAppareance == nil or os.difftime(os.time(), self.santa_lastAppareance) > 7 then
 					self.santa_lastAppareance = os.time()
 					InitializeGifts(self, math.random(3,5), false)
 				end
