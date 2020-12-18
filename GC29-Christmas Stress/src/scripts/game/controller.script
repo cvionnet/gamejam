@@ -78,9 +78,10 @@ function on_message(self, message_id, message, sender)
         ---------------------------------------------------------------
         -- If collide with a bag and we drag a gift
         if message_id == MESSAGE.COLLISION and message.other_group == GAME.BAG and self.dragged_id ~= nil then
-            -- Get the gift color
+            -- Get the gift color and type
             local obj_url = msg.url(nil, self.dragged_id, "giftPrototype")
             local gift_color = go.get(obj_url, "colorID")
+            local gift_type = go.get(obj_url, "type")
 
             -- Get the bag color
             -- Build the other object URL from his ID
@@ -88,7 +89,7 @@ function on_message(self, message_id, message, sender)
             local bag_color = go.get(obj_url, "color")
 
             -- Send informations to the Level Manager
-            msg.post("/levelManager#levelManager", "gift_in_bag", { gift_color = gift_color, bag_color = bag_color, giftID = self.dragged_id, bagID = message.other_id })
+            msg.post("/levelManager#levelManager", "gift_in_bag", { gift_color = gift_color, bag_color = bag_color, giftID = self.dragged_id, bagID = message.other_id, gift_type = gift_type })
 
             -- Reset values as the gift will be deleted
             self.pressed = false

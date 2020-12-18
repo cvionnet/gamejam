@@ -29,7 +29,11 @@ function init(self)
 
 	self.totalGifts = 0
 	self.correctGifts = 0
+	self.giftSequence = 0		-- give more points if the player sort-out 5 gifts with the same color
+	self.giftLastColor = 0
 	self.santa_direction = 0	-- 0 = left to right    1 = right to left
+	self.santa_lastAppareance = nil		-- save the time when Santa appears (force it to appear or control that he do not apprear too much)
+
 	GAMESTATE.state = "START"
 
 	-- Create bags
@@ -39,6 +43,7 @@ function init(self)
 
 	-- Display Santa and create gifts
 	InitializeGifts(self, 0, true)
+	self.santa_lastAppareance = os.time()
 	--timer.delay(SANTA_TIMING + 1, false, function ()
 	--	InitializeGifts(self, 1)
 	--end)
@@ -52,6 +57,7 @@ function on_message(self, message_id, message, sender)
 			local gift_color = message.gift_color
 			local bag_color = message.bag_color
 			local giftID = message.giftID
+			local gift_type = message.gift_type
 			local bagID = message.bagID
 			local point_earn = 0
 
@@ -59,11 +65,27 @@ function on_message(self, message_id, message, sender)
 			local bag_x = go.get_position(bagID).x
 			local bag_y = go.get_position(bagID).y
 
+			-- Gift put in the correct bag
 			if gift_color == bag_color then
+				self.correctGifts = self.correctGifts + 1
 				sound.play("/sounds#gift_correct")
 
-				self.correctGifts = self.correctGifts + 1
-				point_earn = 1
+				-- GAMEPLAY - Check if the player sort-out a sequence with the same color (give more points)
+				if self.giftLastColor == gift_color then
+					self.giftSequence = self.giftSequence + 1
+				else
+					self.giftLastColor = gift_color
+					self.giftSequence = 0
+				end
+
+				if self.giftSequence >= 5 then
+					-- GAMEPLAY - Earn points from the gift + a bonus sequence
+					point_earn = gift_type + 10
+					self.giftSequence = 0
+				else
+					-- GAMEPLAY - Earn more points with smaller gifts   (1 = big   2 = middle   3 = small)
+					point_earn = gift_type
+				end
 
 				-- Add a particle effect above the bag
 				CreateStarEffect(10, bag_x, bag_y)
@@ -73,10 +95,11 @@ function on_message(self, message_id, message, sender)
 					CreateSnowEffect(SNOW_TO_CREATE)
 				end
 
-				-- GAMEPLAY - Add time
+				-- GAMEPLAY - Add time each XX correct gift put in a bag
 				if (self.correctGifts % ADD_TIME) == 0 then
 					msg.post("/GUI#game", "add_time", { time = 10 })
 				end
+			-- Gift put in the incorrect bag
 			else
 				sound.play("/sounds#gift_incorrect")
 				msg.post("camera", "shake", { intensity = 0.002, duration = 0.5, direction = "both" })
@@ -101,8 +124,17 @@ function on_message(self, message_id, message, sender)
 
 			-- GAMEPLAY - Add new gifts
 			if (self.correctGifts % SANTA_APPEARANCE) == 0 then
-				print("Add gifts")
-				InitializeGifts(self, math.random(5,10), false)
+				-- Check that Santa do not appears less 5 seconds before
+				if self.santa_lastAppareance == nil or os.difftime(os.time(), self.santa_lastAppareance) > 5 then
+					self.santa_lastAppareance = os.time()
+					InitializeGifts(self, math.random(3,5), false)
+				end
+			else
+				-- Display Santa every XX seconds
+				if os.difftime(os.time(), self.santa_lastAppareance) > 15 then
+					self.santa_lastAppareance = os.time()
+					InitializeGifts(self, math.random(3,5), false)
+				end
 			end
 
 			-- Update Santa face

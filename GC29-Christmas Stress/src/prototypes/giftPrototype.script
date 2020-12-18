@@ -10,6 +10,7 @@ go.property("colorID", 0)		-- BLUE = 1, GREEN = 2, RED = 3
 go.property("swipe_to", vmath.vector3())
 go.property("swipe_force", 10)
 
+go.property("type", 0)		-- 1 = big   2 = middle   3 = small
 go.property("isOnGround", true)
 go.property("isGravityActive", true)
 
@@ -18,7 +19,7 @@ go.property("isGravityActive", true)
 function init(self)
 	--self.position = vmath.vector3(0)
 	self.color = ""
-	self.type = 0
+--	self.type = 0
 
 	self.velocity = vmath.vector3(0,-10,0)
 	self.speed = 5
