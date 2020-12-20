@@ -7,6 +7,8 @@ local transitionscreen_timer = true		-- add a small timer before the player can 
 function init(self)
 	msg.post(".", "acquire_input_focus")
 
+	sound.play("/music#music")
+
 	timer.delay(1.0, false, function()
 		transitionscreen_timer = false
 	end)

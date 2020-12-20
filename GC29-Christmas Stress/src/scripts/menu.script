@@ -22,6 +22,7 @@ function init(self)
 		-- Then animate title 2 (right to left)
 		go.animate("/title2", "position.x", go.PLAYBACK_ONCE_FORWARD, 70, go.EASING_OUTBOUNCE, 1.0, 0, function ()
 			sound.play("/sounds#reveal", { delay = 0.25 })
+			sound.play("/music#music", { delay = 0.30 })
 			-- Then fadein of the background
 			go.animate("/background#sprite", "tint.w", go.PLAYBACK_ONCE_FORWARD, 1.0, go.EASING_LINEAR, 2.0, 0, function ()
 				msg.post("/hand_click#sprite", "enable")
