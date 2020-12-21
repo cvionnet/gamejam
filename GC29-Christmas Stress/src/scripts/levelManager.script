@@ -132,10 +132,10 @@ function on_message(self, message_id, message, sender)
 						InitializeGifts(self, math.random(2,4), false)
 						SANTA_APPEARANCE = 11
 					elseif self.totalGifts >= 12 then
-						InitializeGifts(self, math.random(4,6), false)
+						InitializeGifts(self, math.random(4,7), false)
 						SANTA_APPEARANCE = 9
 					else
-						InitializeGifts(self, math.random(6,8), false)
+						InitializeGifts(self, math.random(7,10), false)
 						SANTA_APPEARANCE = 7
 					end
 				end
@@ -148,10 +148,10 @@ function on_message(self, message_id, message, sender)
 						InitializeGifts(self, math.random(2,4), false)
 						SANTA_APPEARANCE = 11
 					elseif self.totalGifts >= 12 then
-						InitializeGifts(self, math.random(4,6), false)
+						InitializeGifts(self, math.random(4,7), false)
 						SANTA_APPEARANCE = 9
 					else
-						InitializeGifts(self, math.random(6,8), false)
+						InitializeGifts(self, math.random(7,10), false)
 						SANTA_APPEARANCE = 7
 					end
 				end
