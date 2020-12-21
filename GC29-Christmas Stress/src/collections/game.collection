@@ -1,45 +1,5 @@
 name: "game"
 instances {
-  id: "_fps"
-  prototype: "/metrics/fps.go"
-  position {
-    x: 36.0
-    y: 100.0
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-  }
-}
-instances {
-  id: "_mem"
-  prototype: "/metrics/mem.go"
-  position {
-    x: 36.0
-    y: 77.0
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-  }
-}
-instances {
   id: "camera"
   prototype: "/orthographic/camera.go"
   position {

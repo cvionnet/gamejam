@@ -23,7 +23,7 @@ function on_reload(self) end
 
 --* HOW TO USE : to get access to the functions, add:      require "my_directory.utils"
 
-DEBUG_MODE = true
+DEBUG_MODE = false
 
 ZOOM_LEVEL = 1
 
