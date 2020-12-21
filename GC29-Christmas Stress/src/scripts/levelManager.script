@@ -1,18 +1,14 @@
 require("src.scripts.utils.utils")
 local GAMESTATE = require("src.scripts.gamestate")
 
---local TILE_WIDTH = 16
---local TILE_HEIGHT = 16
-
---local topOffset = gameHeight - TILE_HEIGHT
---local MAP_WIDTH = 16
-
 -- GAMEPLAY
-local SNOW_TO_CREATE = 40
+local SNOW_TO_CREATE = 60
 
 local SNOW_APPEARANCE = 10		-- Add a snow effect every X gifts the player add in the correct bag
 local SANTA_APPEARANCE = 7 		-- Santa adds gifts every X gifts the player add in a bag
-local ADD_TIME = 5 		-- Add time every X gifts the player add in a bag
+local SANTA_APPEARANCE_SECONDS = 5		-- Check that Santa do not appears again before at least X seconds
+
+local ADD_TIME = 8 		-- Add time every X gifts the player add in a bag
 
 local MAXIMUM_GIFTS = 25 	-- Gameover if gifts on the screen exceed this value
 
@@ -107,7 +103,7 @@ function on_message(self, message_id, message, sender)
 				msg.post("camera", "shake", { intensity = 0.002, duration = 0.5, direction = "both" })
 
 				if GAMESTATE.score > 0 then
-					point_earn = -1
+					point_earn = -3
 				end
 			end
 
@@ -128,16 +124,36 @@ function on_message(self, message_id, message, sender)
 
 			-- GAMEPLAY - Add new gifts
 			if (self.correctGifts % SANTA_APPEARANCE) == 0 then
-				-- Check that Santa do not appears less 7 seconds before
-				if self.santa_lastAppareance == nil or os.difftime(os.time(), self.santa_lastAppareance) > 7 then
+				-- Check that Santa do not appears less SANTA_APPEARANCE_SECONDS before
+				if self.santa_lastAppareance == nil or os.difftime(os.time(), self.santa_lastAppareance) > SANTA_APPEARANCE_SECONDS then
 					self.santa_lastAppareance = os.time()
-					InitializeGifts(self, math.random(3,5), false)
+					
+					if self.totalGifts >= 20 then
+						InitializeGifts(self, math.random(2,4), false)
+						SANTA_APPEARANCE = 11
+					elseif self.totalGifts >= 12 then
+						InitializeGifts(self, math.random(4,6), false)
+						SANTA_APPEARANCE = 9
+					else
+						InitializeGifts(self, math.random(6,8), false)
+						SANTA_APPEARANCE = 7
+					end
 				end
 			else
 				-- Display Santa every XX seconds
 				if os.difftime(os.time(), self.santa_lastAppareance) > 15 then
 					self.santa_lastAppareance = os.time()
-					InitializeGifts(self, math.random(3,5), false)
+
+					if self.totalGifts >= 20 then
+						InitializeGifts(self, math.random(2,4), false)
+						SANTA_APPEARANCE = 11
+					elseif self.totalGifts >= 12 then
+						InitializeGifts(self, math.random(4,6), false)
+						SANTA_APPEARANCE = 9
+					else
+						InitializeGifts(self, math.random(6,8), false)
+						SANTA_APPEARANCE = 7
+					end
 				end
 			end
 
@@ -172,7 +188,7 @@ function on_reload(self) end
 function InitializeGifts(self, pGifttoCreate, pStartTimer)
 	local gifttocreate = 0
 
-	if pGifttoCreate then gifttocreate = self.gift_to_create
+	if pGifttoCreate == nil or pGifttoCreate == 0 then gifttocreate = self.gift_to_create
 	else gifttocreate = pGifttoCreate end
 
 	-- Animate Santa in the sky
@@ -181,7 +197,7 @@ function InitializeGifts(self, pGifttoCreate, pStartTimer)
 	-- Wait 1 second, then create gifts
 	timer.delay(1.0, false, function ()
 		-- Create gifts
-		--CreateGifts(self, self.gift_to_create)
+		-- CreateGifts(self, self.gift_to_create)
 		timer.delay(SANTA_TIMING/gifttocreate, true, function (self,pbar_timer,_)
 
 			CreateGifts(self, 1)
