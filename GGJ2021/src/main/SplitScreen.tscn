@@ -1,0 +1,162 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://assets/scenes/light.png" type="Texture" id=1]
+[ext_resource path="res://src/main/Game.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/main/SplitScreen.gd" type="Script" id=3]
+[ext_resource path="res://src/main/effects/ScreenShake.gd" type="Script" id=4]
+[ext_resource path="res://src/HUD/HUDMessage.tscn" type="PackedScene" id=5]
+
+[node name="SplitScreen" type="CanvasLayer"]
+script = ExtResource( 3 )
+
+[node name="BorderColor" type="TextureRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 1 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GridContainer" type="GridContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/vseparation = 2
+custom_constants/hseparation = 2
+columns = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Container1" type="ViewportContainer" parent="GridContainer"]
+margin_right = 239.0
+margin_bottom = 134.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+stretch = true
+
+[node name="Viewport1" type="Viewport" parent="GridContainer/Container1"]
+size = Vector2( 239, 134 )
+handle_input_locally = false
+usage = 0
+render_target_update_mode = 3
+
+[node name="Camera2D" type="Camera2D" parent="GridContainer/Container1/Viewport1"]
+current = true
+zoom = Vector2( 0.5, 0.5 )
+limit_left = -930
+limit_top = -260
+limit_right = 470
+limit_bottom = 470
+limit_smoothed = true
+drag_margin_h_enabled = true
+drag_margin_v_enabled = true
+smoothing_enabled = true
+smoothing_speed = 6.0
+drag_margin_left = 0.0
+drag_margin_top = 0.0
+drag_margin_right = 0.0
+drag_margin_bottom = 0.0
+script = ExtResource( 4 )
+
+[node name="Game" parent="GridContainer/Container1/Viewport1" instance=ExtResource( 2 )]
+
+[node name="Container2" type="ViewportContainer" parent="GridContainer"]
+margin_left = 241.0
+margin_right = 480.0
+margin_bottom = 134.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+stretch = true
+
+[node name="Viewport2" type="Viewport" parent="GridContainer/Container2"]
+size = Vector2( 239, 134 )
+handle_input_locally = false
+usage = 0
+render_target_update_mode = 3
+
+[node name="Camera2D" type="Camera2D" parent="GridContainer/Container2/Viewport2"]
+current = true
+zoom = Vector2( 0.5, 0.5 )
+limit_left = -930
+limit_top = -260
+limit_right = 470
+limit_bottom = 470
+limit_smoothed = true
+drag_margin_h_enabled = true
+drag_margin_v_enabled = true
+smoothing_enabled = true
+smoothing_speed = 6.0
+drag_margin_left = 0.0
+drag_margin_top = 0.0
+drag_margin_right = 0.0
+drag_margin_bottom = 0.0
+script = ExtResource( 4 )
+
+[node name="Container3" type="ViewportContainer" parent="GridContainer"]
+margin_top = 136.0
+margin_right = 239.0
+margin_bottom = 270.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+stretch = true
+
+[node name="Viewport3" type="Viewport" parent="GridContainer/Container3"]
+size = Vector2( 239, 134 )
+handle_input_locally = false
+usage = 0
+render_target_update_mode = 3
+
+[node name="Camera2D" type="Camera2D" parent="GridContainer/Container3/Viewport3"]
+current = true
+zoom = Vector2( 0.5, 0.5 )
+limit_left = -930
+limit_top = -260
+limit_right = 470
+limit_bottom = 470
+limit_smoothed = true
+drag_margin_h_enabled = true
+drag_margin_v_enabled = true
+smoothing_enabled = true
+smoothing_speed = 6.0
+drag_margin_left = 0.0
+drag_margin_top = 0.0
+drag_margin_right = 0.0
+drag_margin_bottom = 0.0
+script = ExtResource( 4 )
+
+[node name="Container4" type="ViewportContainer" parent="GridContainer"]
+margin_left = 241.0
+margin_top = 136.0
+margin_right = 480.0
+margin_bottom = 270.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+stretch = true
+
+[node name="Viewport4" type="Viewport" parent="GridContainer/Container4"]
+size = Vector2( 239, 134 )
+handle_input_locally = false
+usage = 0
+render_target_update_mode = 3
+
+[node name="Camera2D" type="Camera2D" parent="GridContainer/Container4/Viewport4"]
+current = true
+zoom = Vector2( 0.5, 0.5 )
+limit_left = -930
+limit_top = -260
+limit_right = 470
+limit_bottom = 470
+limit_smoothed = true
+drag_margin_h_enabled = true
+drag_margin_v_enabled = true
+smoothing_enabled = true
+smoothing_speed = 6.0
+drag_margin_left = 0.0
+drag_margin_top = 0.0
+drag_margin_right = 0.0
+drag_margin_bottom = 0.0
+script = ExtResource( 4 )
+
+[node name="HUDMessage" parent="." instance=ExtResource( 5 )]
+position = Vector2( 220, 125 )

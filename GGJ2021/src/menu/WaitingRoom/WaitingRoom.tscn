@@ -1,0 +1,227 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://src/menu/WaitingRoom/WaitingPlayer/WaitingPlayer.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/menu/WaitingRoom/StartButton.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/menu/WaitingRoom/WaitingRoom.gd" type="Script" id=3]
+[ext_resource path="res://src/animations/FadeIn.tscn" type="PackedScene" id=4]
+[ext_resource path="res://src/menu/Common/MenuButton.gd" type="Script" id=5]
+[ext_resource path="res://assets/sound/Select.ogg" type="AudioStream" id=6]
+[ext_resource path="res://src/menu/WaitingRoom/ExitButton.tscn" type="PackedScene" id=7]
+[ext_resource path="res://assets/images/Right.png" type="Texture" id=8]
+[ext_resource path="res://assets/images/down.png" type="Texture" id=9]
+[ext_resource path="res://assets/images/Left.png" type="Texture" id=10]
+[ext_resource path="res://assets/images/up.png" type="Texture" id=11]
+[ext_resource path="res://assets/font/Xolonium-Regular.ttf" type="DynamicFontData" id=12]
+
+[sub_resource type="DynamicFont" id=1]
+size = 10
+font_data = ExtResource( 12 )
+
+[node name="Control" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Rows" type="VBoxContainer" parent="."]
+margin_left = 20.0
+margin_top = 20.0
+margin_right = 460.0
+margin_bottom = 260.0
+custom_constants/separation = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Players" type="HBoxContainer" parent="Rows"]
+margin_right = 440.0
+margin_bottom = 191.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="PlayerOne" parent="Rows/Players" instance=ExtResource( 1 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 107.0
+margin_bottom = 191.0
+
+[node name="PlayerTwo" parent="Rows/Players" instance=ExtResource( 1 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 111.0
+margin_right = 218.0
+margin_bottom = 191.0
+
+[node name="PlayerTree" parent="Rows/Players" instance=ExtResource( 1 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 222.0
+margin_right = 329.0
+margin_bottom = 191.0
+
+[node name="PlayerFour" parent="Rows/Players" instance=ExtResource( 1 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 333.0
+margin_right = 440.0
+margin_bottom = 191.0
+
+[node name="Buttons" type="HBoxContainer" parent="Rows"]
+margin_top = 201.0
+margin_right = 440.0
+margin_bottom = 240.0
+size_flags_horizontal = 3
+size_flags_vertical = 0
+alignment = 1
+
+[node name="ExitContainer" type="CenterContainer" parent="Rows/Buttons"]
+margin_right = 75.0
+margin_bottom = 39.0
+
+[node name="Exit" parent="Rows/Buttons/ExitContainer" instance=ExtResource( 7 )]
+margin_top = 4.0
+margin_right = 75.0
+margin_bottom = 34.0
+script = ExtResource( 5 )
+scene_to_load = "res://src/menu/Title/menu.tscn"
+
+[node name="Down" type="VBoxContainer" parent="Rows/Buttons"]
+margin_left = 79.0
+margin_right = 146.0
+margin_bottom = 39.0
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="CenterContainer" type="CenterContainer" parent="Rows/Buttons/Down"]
+margin_right = 67.0
+margin_bottom = 25.0
+
+[node name="TextureRect" type="TextureRect" parent="Rows/Buttons/Down/CenterContainer"]
+margin_left = 21.0
+margin_right = 46.0
+margin_bottom = 25.0
+size_flags_horizontal = 3
+texture = ExtResource( 9 )
+
+[node name="Label" type="Label" parent="Rows/Buttons/Down"]
+margin_top = 29.0
+margin_right = 67.0
+margin_bottom = 39.0
+custom_fonts/font = SubResource( 1 )
+text = "Loot"
+align = 1
+valign = 1
+
+[node name="Right" type="VBoxContainer" parent="Rows/Buttons"]
+margin_left = 150.0
+margin_right = 218.0
+margin_bottom = 39.0
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="CenterContainer" type="CenterContainer" parent="Rows/Buttons/Right"]
+margin_right = 68.0
+margin_bottom = 25.0
+
+[node name="TextureRect" type="TextureRect" parent="Rows/Buttons/Right/CenterContainer"]
+margin_left = 21.0
+margin_right = 46.0
+margin_bottom = 25.0
+texture = ExtResource( 8 )
+
+[node name="Label" type="Label" parent="Rows/Buttons/Right"]
+margin_top = 29.0
+margin_right = 68.0
+margin_bottom = 39.0
+custom_fonts/font = SubResource( 1 )
+text = "Hit"
+align = 1
+valign = 1
+
+[node name="Up" type="VBoxContainer" parent="Rows/Buttons"]
+margin_left = 222.0
+margin_right = 289.0
+margin_bottom = 39.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+
+[node name="CenterContainer" type="CenterContainer" parent="Rows/Buttons/Up"]
+margin_right = 67.0
+margin_bottom = 25.0
+
+[node name="TextureRect" type="TextureRect" parent="Rows/Buttons/Up/CenterContainer"]
+margin_left = 21.0
+margin_right = 46.0
+margin_bottom = 25.0
+texture = ExtResource( 11 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Rows/Buttons/Up"]
+margin_top = 29.0
+margin_right = 67.0
+margin_bottom = 39.0
+custom_fonts/font = SubResource( 1 )
+text = "Dash"
+align = 1
+valign = 1
+
+[node name="Left" type="VBoxContainer" parent="Rows/Buttons"]
+margin_left = 293.0
+margin_right = 361.0
+margin_bottom = 39.0
+size_flags_horizontal = 3
+
+[node name="CenterContainer" type="CenterContainer" parent="Rows/Buttons/Left"]
+margin_right = 68.0
+margin_bottom = 25.0
+
+[node name="TextureRect" type="TextureRect" parent="Rows/Buttons/Left/CenterContainer"]
+margin_left = 21.0
+margin_right = 46.0
+margin_bottom = 25.0
+texture = ExtResource( 10 )
+
+[node name="Label" type="Label" parent="Rows/Buttons/Left"]
+margin_top = 29.0
+margin_right = 68.0
+margin_bottom = 39.0
+custom_fonts/font = SubResource( 1 )
+text = "Light"
+align = 1
+valign = 1
+
+[node name="StartContainer" type="CenterContainer" parent="Rows/Buttons"]
+margin_left = 365.0
+margin_right = 440.0
+margin_bottom = 39.0
+
+[node name="Start" parent="Rows/Buttons/StartContainer" instance=ExtResource( 2 )]
+margin_top = 4.0
+margin_right = 75.0
+margin_bottom = 34.0
+script = ExtResource( 5 )
+scene_to_load = "res://src/main/SplitScreen.tscn"
+
+[node name="FadeIn" parent="." instance=ExtResource( 4 )]
+anchor_left = -0.00208333
+anchor_right = 0.997917
+margin_left = -0.749146
+margin_top = 3.2475
+margin_right = -0.749146
+margin_bottom = 3.2475
+mouse_filter = 2
+
+[node name="Audio" type="Node" parent="."]
+
+[node name="Select" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource( 6 )
+[connection signal="player_status_changed" from="Rows/Players/PlayerOne" to="." method="_on_Player_player_status_changed"]
+[connection signal="player_status_changed" from="Rows/Players/PlayerTwo" to="." method="_on_Player_player_status_changed"]
+[connection signal="player_status_changed" from="Rows/Players/PlayerTree" to="." method="_on_Player_player_status_changed"]
+[connection signal="player_status_changed" from="Rows/Players/PlayerFour" to="." method="_on_Player_player_status_changed"]
+[connection signal="fade_in_finished" from="FadeIn" to="." method="_on_FadeIn_fade_in_finished"]

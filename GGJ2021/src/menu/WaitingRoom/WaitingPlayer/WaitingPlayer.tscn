@@ -1,0 +1,257 @@
+[gd_scene load_steps=36 format=2]
+
+[ext_resource path="res://src/menu/WaitingRoom/WaitingPlayer/WaitingPlayer.gd" type="Script" id=1]
+[ext_resource path="res://assets/font/Xolonium-Regular.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://assets/actors/player/player2.png" type="Texture" id=3]
+[ext_resource path="res://assets/actors/player/player3.png" type="Texture" id=4]
+[ext_resource path="res://assets/actors/player/player4.png" type="Texture" id=5]
+[ext_resource path="res://assets/actors/player/player1.png" type="Texture" id=6]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.6, 0.6, 0.6, 0 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0.552941, 0.584314, 0.658824, 1 )
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0.301961, 0.301961, 0.301961, 1 )
+
+[sub_resource type="DynamicFont" id=3]
+font_data = ExtResource( 2 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 6 )
+region = Rect2( 0, 0, 25, 25 )
+
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 6 )
+region = Rect2( 25, 0, 25, 25 )
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 6 )
+region = Rect2( 50, 0, 25, 25 )
+
+[sub_resource type="AtlasTexture" id=7]
+atlas = ExtResource( 6 )
+region = Rect2( 75, 0, 25, 25 )
+
+[sub_resource type="SpriteFrames" id=8]
+animations = [ {
+"frames": [ SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="AtlasTexture" id=9]
+atlas = ExtResource( 3 )
+region = Rect2( 0, 25, 25, 25 )
+
+[sub_resource type="AtlasTexture" id=10]
+atlas = ExtResource( 3 )
+region = Rect2( 25, 25, 25, 25 )
+
+[sub_resource type="AtlasTexture" id=11]
+atlas = ExtResource( 3 )
+region = Rect2( 50, 25, 25, 25 )
+
+[sub_resource type="AtlasTexture" id=12]
+atlas = ExtResource( 3 )
+region = Rect2( 75, 25, 25, 25 )
+
+[sub_resource type="AtlasTexture" id=13]
+atlas = ExtResource( 3 )
+region = Rect2( 0, 50, 25, 25 )
+
+[sub_resource type="AtlasTexture" id=14]
+atlas = ExtResource( 3 )
+region = Rect2( 25, 50, 25, 25 )
+
+[sub_resource type="AtlasTexture" id=15]
+atlas = ExtResource( 3 )
+region = Rect2( 50, 50, 25, 25 )
+
+[sub_resource type="AtlasTexture" id=16]
+atlas = ExtResource( 3 )
+region = Rect2( 75, 50, 25, 25 )
+
+[sub_resource type="SpriteFrames" id=17]
+animations = [ {
+"frames": [ SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ), SubResource( 15 ), SubResource( 16 ) ],
+"loop": true,
+"name": "idle",
+"speed": 5.0
+} ]
+
+[sub_resource type="AtlasTexture" id=18]
+atlas = ExtResource( 4 )
+region = Rect2( 0, 93, 31, 31 )
+
+[sub_resource type="AtlasTexture" id=19]
+atlas = ExtResource( 4 )
+region = Rect2( 31, 93, 31, 31 )
+
+[sub_resource type="AtlasTexture" id=20]
+atlas = ExtResource( 4 )
+region = Rect2( 62, 93, 31, 31 )
+
+[sub_resource type="AtlasTexture" id=21]
+atlas = ExtResource( 4 )
+region = Rect2( 93, 93, 31, 31 )
+
+[sub_resource type="SpriteFrames" id=22]
+animations = [ {
+"frames": [ SubResource( 18 ), SubResource( 19 ), SubResource( 20 ), SubResource( 21 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="AtlasTexture" id=23]
+atlas = ExtResource( 5 )
+region = Rect2( 0, 150, 25, 25 )
+
+[sub_resource type="AtlasTexture" id=24]
+atlas = ExtResource( 5 )
+region = Rect2( 25, 150, 25, 25 )
+
+[sub_resource type="AtlasTexture" id=25]
+atlas = ExtResource( 5 )
+region = Rect2( 50, 150, 25, 25 )
+
+[sub_resource type="SpriteFrames" id=26]
+animations = [ {
+"frames": [ SubResource( 23 ), SubResource( 24 ), SubResource( 25 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="DynamicFont" id=27]
+size = 12
+font_data = ExtResource( 2 )
+
+[sub_resource type="StyleBoxFlat" id=28]
+bg_color = Color( 0.301961, 0.301961, 0.301961, 1 )
+
+[sub_resource type="DynamicFont" id=29]
+font_data = ExtResource( 2 )
+
+[node name="Player" type="Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/panel = SubResource( 1 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Rows" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 20.0
+margin_top = 10.0
+margin_right = -20.0
+margin_bottom = -10.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PlayerName" type="Label" parent="Rows"]
+margin_right = 440.0
+margin_bottom = 17.0
+custom_styles/normal = SubResource( 2 )
+custom_fonts/font = SubResource( 3 )
+align = 1
+valign = 1
+
+[node name="CenterContainer" type="CenterContainer" parent="Rows"]
+margin_top = 21.0
+margin_right = 440.0
+margin_bottom = 229.0
+size_flags_horizontal = 7
+size_flags_vertical = 7
+
+[node name="Control" type="Control" parent="Rows/CenterContainer"]
+margin_left = 220.0
+margin_top = 104.0
+margin_right = 220.0
+margin_bottom = 104.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="Rows/CenterContainer/Control"]
+visible = false
+position = Vector2( -64, -55 )
+scale = Vector2( 4, 4 )
+frames = SubResource( 8 )
+playing = true
+centered = false
+
+[node name="AnimatedSprite2" type="AnimatedSprite" parent="Rows/CenterContainer/Control"]
+visible = false
+position = Vector2( -64, -55 )
+scale = Vector2( 4, 4 )
+frames = SubResource( 17 )
+animation = "idle"
+frame = 2
+playing = true
+centered = false
+
+[node name="AnimatedSprite3" type="AnimatedSprite" parent="Rows/CenterContainer/Control"]
+visible = false
+position = Vector2( -64, -55 )
+scale = Vector2( 4, 4 )
+frames = SubResource( 22 )
+frame = 1
+playing = true
+centered = false
+
+[node name="AnimatedSprite4" type="AnimatedSprite" parent="Rows/CenterContainer/Control"]
+visible = false
+position = Vector2( -64, -55 )
+scale = Vector2( 4, 4 )
+frames = SubResource( 26 )
+playing = true
+centered = false
+
+[node name="Waiting" type="Label" parent="Rows/CenterContainer/Control"]
+margin_left = -50.0
+margin_top = -25.0
+margin_right = 50.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 100, 50 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = SubResource( 27 )
+text = "Press Start to join"
+align = 1
+valign = 1
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PlayerStatus" type="Label" parent="Rows"]
+margin_top = 233.0
+margin_right = 440.0
+margin_bottom = 250.0
+custom_styles/normal = SubResource( 28 )
+custom_fonts/font = SubResource( 29 )
+custom_colors/font_color = Color( 0.827451, 0.0352941, 0.0352941, 1 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ReadyTimer" type="Timer" parent="."]
+wait_time = 0.2
+[connection signal="timeout" from="ReadyTimer" to="." method="_on_ReadyTimer_timeout"]

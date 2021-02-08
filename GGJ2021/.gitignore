@@ -1,0 +1,17 @@
+
+# Godot-specific ignores
+.import/
+export.cfg
+export_presets.cfg
+
+# Mono-specific ignores
+.mono/
+.vs/
+/_dist/favicon.png
+/_dist/favicon.png.import
+/_dist/index.html
+/_dist/index.js
+/_dist/index.pck
+/_dist/index.png
+/_dist/index.png.import
+/_dist/index.wasm

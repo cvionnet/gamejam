@@ -1,0 +1,538 @@
+[gd_scene load_steps=34 format=2]
+
+[ext_resource path="res://assets/actors/player/player4.png" type="Texture" id=1]
+[ext_resource path="res://src/actors/Player.gd" type="Script" id=2]
+[ext_resource path="res://assets/scenes/light.png" type="Texture" id=3]
+[ext_resource path="res://assets/actors/player/player1.png" type="Texture" id=4]
+[ext_resource path="res://assets/actors/player/player2.png" type="Texture" id=5]
+[ext_resource path="res://assets/actors/player/player3.png" type="Texture" id=6]
+[ext_resource path="res://assets/sound/punch.wav" type="AudioStream" id=7]
+[ext_resource path="res://assets/sound/foosteps/Step1.wav" type="AudioStream" id=8]
+[ext_resource path="res://assets/sound/foosteps/Step2.wav" type="AudioStream" id=9]
+[ext_resource path="res://assets/sound/foosteps/Step3.wav" type="AudioStream" id=10]
+[ext_resource path="res://assets/sound/foosteps/Step4.wav" type="AudioStream" id=11]
+[ext_resource path="res://assets/sound/whoosh.wav" type="AudioStream" id=12]
+[ext_resource path="res://assets/sound/whoosh_hit.wav" type="AudioStream" id=13]
+[ext_resource path="res://assets/sound/LightOn.ogg" type="AudioStream" id=14]
+[ext_resource path="res://assets/sound/LightOff.ogg" type="AudioStream" id=15]
+[ext_resource path="res://src/HUD/HUDPlayer.tscn" type="PackedScene" id=16]
+
+[sub_resource type="Animation" id=1]
+resource_name = "attack"
+length = 1.2
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.6, 0.9 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 90, 91, 92, 93 ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "hurt"
+length = 0.9
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ 54, 55, 56 ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "idle"
+length = 1.2
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.6, 0.9 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 1, 2, 3, 3 ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "run"
+length = 1.2
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4, 0.6, 0.8, 1 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 24, 25, 26, 27, 28, 29 ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath("..")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4, 0.6, 0.8, 1 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"values": [ {
+"args": [ 1 ],
+"method": "Sound_FootSteps"
+}, {
+"args": [ 2 ],
+"method": "Sound_FootSteps"
+}, {
+"args": [ 3 ],
+"method": "Sound_FootSteps"
+}, {
+"args": [ 4 ],
+"method": "Sound_FootSteps"
+}, {
+"args": [ 2 ],
+"method": "Sound_FootSteps"
+}, {
+"args": [ 3 ],
+"method": "Sound_FootSteps"
+} ]
+}
+
+[sub_resource type="Animation" id=5]
+resource_name = "attack"
+length = 1.2
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.6, 0.9 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 90, 91, 92, 93 ]
+}
+
+[sub_resource type="Animation" id=6]
+resource_name = "hurt"
+length = 0.9
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ 54, 55, 56 ]
+}
+
+[sub_resource type="Animation" id=7]
+resource_name = "idle"
+length = 1.2
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.6, 0.9 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 1, 2, 3, 3 ]
+}
+
+[sub_resource type="Animation" id=8]
+resource_name = "run"
+length = 1.2
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4, 0.6, 0.8, 1 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 24, 25, 26, 27, 28, 29 ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath("..")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4, 0.6, 0.8, 1 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"values": [ {
+"args": [ 2 ],
+"method": "Sound_FootSteps"
+}, {
+"args": [ 3 ],
+"method": "Sound_FootSteps"
+}, {
+"args": [ 4 ],
+"method": "Sound_FootSteps"
+}, {
+"args": [ 1 ],
+"method": "Sound_FootSteps"
+}, {
+"args": [ 4 ],
+"method": "Sound_FootSteps"
+}, {
+"args": [ 2 ],
+"method": "Sound_FootSteps"
+} ]
+}
+
+[sub_resource type="Animation" id=9]
+resource_name = "attack"
+length = 0.9
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ 72, 73, 74 ]
+}
+
+[sub_resource type="Animation" id=10]
+resource_name = "hurt"
+length = 0.9
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ 54, 55, 56 ]
+}
+
+[sub_resource type="Animation" id=11]
+resource_name = "idle"
+length = 1.2
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.6, 0.9 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 1, 2, 3, 3 ]
+}
+
+[sub_resource type="Animation" id=12]
+resource_name = "run"
+length = 1.2
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4, 0.6, 0.8, 1 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 24, 25, 26, 27, 28, 29 ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath("..")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4, 0.6, 0.8, 1 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"values": [ {
+"args": [ 3 ],
+"method": "Sound_FootSteps"
+}, {
+"args": [ 4 ],
+"method": "Sound_FootSteps"
+}, {
+"args": [ 1 ],
+"method": "Sound_FootSteps"
+}, {
+"args": [ 2 ],
+"method": "Sound_FootSteps"
+}, {
+"args": [ 4 ],
+"method": "Sound_FootSteps"
+}, {
+"args": [ 1 ],
+"method": "Sound_FootSteps"
+} ]
+}
+
+[sub_resource type="Animation" id=13]
+resource_name = "attack"
+length = 0.9
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ 36, 37, 38 ]
+}
+
+[sub_resource type="Animation" id=14]
+resource_name = "hurt"
+length = 0.9
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ 24, 25, 26 ]
+}
+
+[sub_resource type="Animation" id=15]
+resource_name = "idle"
+length = 1.2
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.6, 0.9 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 1, 2, 3, 3 ]
+}
+
+[sub_resource type="Animation" id=16]
+resource_name = "run"
+length = 1.2
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4, 0.6, 0.8, 1 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 12, 13, 14, 15, 16, 17 ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath("..")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4, 0.6, 0.8, 1 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"values": [ {
+"args": [ 4 ],
+"method": "Sound_FootSteps"
+}, {
+"args": [ 1 ],
+"method": "Sound_FootSteps"
+}, {
+"args": [ 2 ],
+"method": "Sound_FootSteps"
+}, {
+"args": [ 3 ],
+"method": "Sound_FootSteps"
+}, {
+"args": [ 1 ],
+"method": "Sound_FootSteps"
+}, {
+"args": [ 2 ],
+"method": "Sound_FootSteps"
+} ]
+}
+
+[sub_resource type="RectangleShape2D" id=17]
+extents = Vector2( 5, 5 )
+
+[node name="Player" type="KinematicBody2D" groups=[
+"group_players",
+]]
+script = ExtResource( 2 )
+pv = 20
+
+[node name="HUDPlayer" parent="." instance=ExtResource( 16 )]
+position = Vector2( -6.5, -16 )
+z_index = 1
+z_as_relative = false
+
+[node name="Sprite" type="Sprite" parent="."]
+visible = false
+position = Vector2( 0, -6 )
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 4 )
+vframes = 16
+hframes = 6
+frame = 90
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Sprite"]
+anims/attack = SubResource( 1 )
+anims/hurt = SubResource( 2 )
+anims/idle = SubResource( 3 )
+anims/run = SubResource( 4 )
+
+[node name="Sprite2" type="Sprite" parent="."]
+visible = false
+position = Vector2( 0, -7 )
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 5 )
+vframes = 16
+hframes = 6
+frame = 24
+
+[node name="AnimationPlayer2" type="AnimationPlayer" parent="Sprite2"]
+anims/attack = SubResource( 5 )
+anims/hurt = SubResource( 6 )
+anims/idle = SubResource( 7 )
+anims/run = SubResource( 8 )
+
+[node name="Sprite3" type="Sprite" parent="."]
+visible = false
+position = Vector2( 0, -7 )
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 6 )
+vframes = 15
+hframes = 6
+frame = 24
+
+[node name="AnimationPlayer3" type="AnimationPlayer" parent="Sprite3"]
+anims/attack = SubResource( 9 )
+anims/hurt = SubResource( 10 )
+anims/idle = SubResource( 11 )
+anims/run = SubResource( 12 )
+
+[node name="Sprite4" type="Sprite" parent="."]
+visible = false
+position = Vector2( 0, -7 )
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 1 )
+vframes = 7
+hframes = 6
+frame = 12
+
+[node name="AnimationPlayer4" type="AnimationPlayer" parent="Sprite4"]
+anims/attack = SubResource( 13 )
+anims/hurt = SubResource( 14 )
+anims/idle = SubResource( 15 )
+anims/run = SubResource( 16 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0, -4 )
+shape = SubResource( 17 )
+
+[node name="Light2D" type="Light2D" parent="."]
+visible = false
+position = Vector2( 0, -9 )
+texture = ExtResource( 3 )
+offset = Vector2( 0, 8 )
+texture_scale = 0.15
+mode = 2
+
+[node name="LightTimer" type="Timer" parent="."]
+wait_time = 0.3
+one_shot = true
+
+[node name="Audio" type="Node" parent="."]
+
+[node name="Punch" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource( 7 )
+volume_db = -10.0
+bus = "SoundEffects"
+
+[node name="Footstep1" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource( 8 )
+volume_db = -10.0
+bus = "SoundEffects"
+
+[node name="Footstep2" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource( 9 )
+volume_db = -10.0
+bus = "SoundEffects"
+
+[node name="Footstep3" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource( 10 )
+volume_db = -10.0
+bus = "SoundEffects"
+
+[node name="Footstep4" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource( 11 )
+volume_db = -10.0
+bus = "SoundEffects"
+
+[node name="Boost" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource( 12 )
+volume_db = -5.0
+bus = "SoundEffects"
+
+[node name="Hit" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource( 13 )
+volume_db = -5.0
+bus = "SoundEffects"
+
+[node name="LightOn" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource( 14 )
+bus = "SoundEffects"
+
+[node name="LightOff" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource( 15 )
+bus = "SoundEffects"
+[connection signal="animation_finished" from="Sprite/AnimationPlayer" to="." method="_on_Animation_finished"]
+[connection signal="animation_finished" from="Sprite2/AnimationPlayer2" to="." method="_on_Animation_finished"]
+[connection signal="animation_finished" from="Sprite3/AnimationPlayer3" to="." method="_on_Animation_finished"]
+[connection signal="animation_finished" from="Sprite4/AnimationPlayer4" to="." method="_on_Animation_finished"]
+[connection signal="timeout" from="LightTimer" to="." method="_on_LightTimer_timeout"]

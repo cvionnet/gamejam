@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/Trap.ogg-ebc8c091f35f71f37287b4070baaf934.oggstr"
+
+[deps]
+
+source_file="res://assets/sound/Trap.ogg"
+dest_files=[ "res://.import/Trap.ogg-ebc8c091f35f71f37287b4070baaf934.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

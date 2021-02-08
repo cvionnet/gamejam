@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/Step2.wav-e76c1b411ce739ec5b24f0bbb720f56b.sample"
+
+[deps]
+
+source_file="res://assets/sound/foosteps/Step2.wav"
+dest_files=[ "res://.import/Step2.wav-e76c1b411ce739ec5b24f0bbb720f56b.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

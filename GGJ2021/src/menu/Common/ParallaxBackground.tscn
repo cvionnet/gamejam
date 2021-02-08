@@ -1,0 +1,68 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://src/menu/Common/1.png" type="Texture" id=1]
+[ext_resource path="res://src/menu/Common/2.png" type="Texture" id=2]
+[ext_resource path="res://src/menu/Common/4.png" type="Texture" id=3]
+[ext_resource path="res://src/menu/Common/5.png" type="Texture" id=4]
+[ext_resource path="res://src/menu/Common/3.png" type="Texture" id=5]
+
+[node name="ParallaxBackground" type="ParallaxBackground"]
+scroll_ignore_camera_zoom = true
+
+[node name="BackgroundLayer" type="ParallaxLayer" parent="."]
+motion_scale = Vector2( 0.25, 1 )
+motion_mirroring = Vector2( 960, 0 )
+
+[node name="Background" type="Sprite" parent="BackgroundLayer"]
+position = Vector2( 0, 1.059 )
+texture = ExtResource( 1 )
+centered = false
+
+[node name="BackgroundLayer2" type="ParallaxLayer" parent="."]
+motion_scale = Vector2( 0.5, 1 )
+motion_mirroring = Vector2( 960, 0 )
+
+[node name="Background2" type="Sprite" parent="BackgroundLayer2"]
+position = Vector2( 1.5874, 691.445 )
+scale = Vector2( 1.00496, 1 )
+z_index = -1
+texture = ExtResource( 2 )
+centered = false
+offset = Vector2( 0, -690 )
+
+[node name="BackgroundLayer3" type="ParallaxLayer" parent="."]
+z_index = 1
+motion_scale = Vector2( 0.75, 1 )
+motion_mirroring = Vector2( 960, 0 )
+
+[node name="Background3" type="Sprite" parent="BackgroundLayer3"]
+position = Vector2( 0.354802, 449.65 )
+scale = Vector2( 1.00331, 1 )
+z_index = 2
+texture = ExtResource( 5 )
+centered = false
+offset = Vector2( 0, -450 )
+
+[node name="BackgroundLayer4" type="ParallaxLayer" parent="."]
+z_index = 2
+motion_mirroring = Vector2( 960, 0 )
+
+[node name="Background4" type="Sprite" parent="BackgroundLayer4"]
+position = Vector2( 2.79587, 453.765 )
+scale = Vector2( 1.00331, 1 )
+z_index = 2
+texture = ExtResource( 3 )
+centered = false
+offset = Vector2( 0, -450 )
+
+[node name="BackgroundLayer5" type="ParallaxLayer" parent="."]
+z_index = 2
+motion_mirroring = Vector2( 960, 0 )
+
+[node name="Background5" type="Sprite" parent="BackgroundLayer5"]
+position = Vector2( 0, 452.477 )
+scale = Vector2( 1.00331, 1 )
+z_index = 2
+texture = ExtResource( 4 )
+centered = false
+offset = Vector2( 0, -450 )

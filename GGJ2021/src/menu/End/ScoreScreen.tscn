@@ -1,0 +1,96 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://src/menu/WaitingRoom/WaitingPlayer/WaitingPlayer.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/menu/WaitingRoom/StartButton.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/menu/End/ScoreScreen.gd" type="Script" id=3]
+[ext_resource path="res://src/animations/FadeIn.tscn" type="PackedScene" id=4]
+[ext_resource path="res://src/menu/Common/MenuButton.gd" type="Script" id=5]
+[ext_resource path="res://src/menu/End/Score.tscn" type="PackedScene" id=6]
+
+[node name="Control" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Rows" type="VBoxContainer" parent="."]
+margin_left = 20.0
+margin_top = 20.0
+margin_right = 460.0
+margin_bottom = 260.0
+custom_constants/separation = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Players" type="HBoxContainer" parent="Rows"]
+margin_right = 440.0
+margin_bottom = 200.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="PlayerOne" parent="Rows/Players" instance=ExtResource( 1 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 107.0
+margin_bottom = 200.0
+
+[node name="Score" parent="Rows/Players/PlayerOne" instance=ExtResource( 6 )]
+position = Vector2( 0, 170 )
+
+[node name="PlayerTwo" parent="Rows/Players" instance=ExtResource( 1 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 111.0
+margin_right = 218.0
+margin_bottom = 200.0
+
+[node name="Score" parent="Rows/Players/PlayerTwo" instance=ExtResource( 6 )]
+position = Vector2( 0, 170 )
+
+[node name="PlayerTree" parent="Rows/Players" instance=ExtResource( 1 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 222.0
+margin_right = 329.0
+margin_bottom = 200.0
+
+[node name="Score" parent="Rows/Players/PlayerTree" instance=ExtResource( 6 )]
+position = Vector2( 0, 170 )
+
+[node name="PlayerFour" parent="Rows/Players" instance=ExtResource( 1 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 333.0
+margin_right = 440.0
+margin_bottom = 200.0
+
+[node name="Score" parent="Rows/Players/PlayerFour" instance=ExtResource( 6 )]
+position = Vector2( 0, 170 )
+
+[node name="Buttons" type="HBoxContainer" parent="Rows"]
+margin_top = 210.0
+margin_right = 440.0
+margin_bottom = 240.0
+size_flags_horizontal = 3
+alignment = 2
+
+[node name="Start" parent="Rows/Buttons" instance=ExtResource( 2 )]
+margin_left = 365.0
+margin_bottom = 30.0
+script = ExtResource( 5 )
+scene_to_load = "res://src/menu/WaitingRoom/WaitingRoom.tscn"
+
+[node name="FadeIn" parent="." instance=ExtResource( 4 )]
+margin_left = -0.749146
+margin_top = 2.2475
+margin_right = -0.749146
+margin_bottom = 2.2475
+mouse_filter = 2
+[connection signal="player_status_changed" from="Rows/Players/PlayerOne" to="." method="_on_Player_player_status_changed"]
+[connection signal="player_status_changed" from="Rows/Players/PlayerTwo" to="." method="_on_Player_player_status_changed"]
+[connection signal="player_status_changed" from="Rows/Players/PlayerTree" to="." method="_on_Player_player_status_changed"]
+[connection signal="player_status_changed" from="Rows/Players/PlayerFour" to="." method="_on_Player_player_status_changed"]
+[connection signal="fade_in_finished" from="FadeIn" to="." method="_on_FadeIn_fade_in_finished"]

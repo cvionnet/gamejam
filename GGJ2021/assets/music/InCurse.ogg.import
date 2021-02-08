@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/InCurse.ogg-474b36279a8a6915e88ba000608f1d58.oggstr"
+
+[deps]
+
+source_file="res://assets/music/InCurse.ogg"
+dest_files=[ "res://.import/InCurse.ogg-474b36279a8a6915e88ba000608f1d58.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

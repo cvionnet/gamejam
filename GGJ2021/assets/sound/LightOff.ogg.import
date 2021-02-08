@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/LightOff.ogg-ae3de4b1538a32e42d84b0f4bd361bf6.oggstr"
+
+[deps]
+
+source_file="res://assets/sound/LightOff.ogg"
+dest_files=[ "res://.import/LightOff.ogg-ae3de4b1538a32e42d84b0f4bd361bf6.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

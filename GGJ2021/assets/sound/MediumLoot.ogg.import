@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/MediumLoot.ogg-bfa0dbe5e55f2041207b19a3aa2086c1.oggstr"
+
+[deps]
+
+source_file="res://assets/sound/MediumLoot.ogg"
+dest_files=[ "res://.import/MediumLoot.ogg-bfa0dbe5e55f2041207b19a3aa2086c1.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

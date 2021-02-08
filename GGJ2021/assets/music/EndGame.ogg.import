@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/EndGame.ogg-d814388eb70b73ece5feed4c31513920.oggstr"
+
+[deps]
+
+source_file="res://assets/music/EndGame.ogg"
+dest_files=[ "res://.import/EndGame.ogg-d814388eb70b73ece5feed4c31513920.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0
