@@ -1,11 +1,11 @@
 ### Game made for Gamecodeur GameJam #29 (theme : Christmas spirit)
 
 
-## Status : 🔨 Work in progress 🔨
+## Status : closed
 
 
 * Lua / Defold
-* Itchi.io : TBD
+* Itchi.io : https://ricopetitdej.itch.io/santas-sort-center
 
 
 
