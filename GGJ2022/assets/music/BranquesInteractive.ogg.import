@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/BranquesInteractive.ogg-f9b31b3568e494ed4a3757a766c3d391.oggstr"
+
+[deps]
+
+source_file="res://assets/music/BranquesInteractive.ogg"
+dest_files=[ "res://.import/BranquesInteractive.ogg-f9b31b3568e494ed4a3757a766c3d391.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

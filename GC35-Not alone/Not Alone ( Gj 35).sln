@@ -1,0 +1,19 @@
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Not Alone ( Gj 35)", "Not Alone ( Gj 35).csproj", "{D0292724-D7F2-41D2-8FA1-8CA2656BEADC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+	Debug|Any CPU = Debug|Any CPU
+	ExportDebug|Any CPU = ExportDebug|Any CPU
+	ExportRelease|Any CPU = ExportRelease|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D0292724-D7F2-41D2-8FA1-8CA2656BEADC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0292724-D7F2-41D2-8FA1-8CA2656BEADC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0292724-D7F2-41D2-8FA1-8CA2656BEADC}.ExportDebug|Any CPU.ActiveCfg = ExportDebug|Any CPU
+		{D0292724-D7F2-41D2-8FA1-8CA2656BEADC}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
+		{D0292724-D7F2-41D2-8FA1-8CA2656BEADC}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
+		{D0292724-D7F2-41D2-8FA1-8CA2656BEADC}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
+	EndGlobalSection
+EndGlobal

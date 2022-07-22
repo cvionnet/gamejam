@@ -1,0 +1,1237 @@
+[gd_scene load_steps=36 format=2]
+
+[ext_resource path="res://assets/scenes/tileset/WallCatTree.png" type="Texture" id=1]
+[ext_resource path="res://assets/scenes/tileset/ProbCatTree.png" type="Texture" id=2]
+[ext_resource path="res://src/main/Level/Level1.gd" type="Script" id=3]
+[ext_resource path="res://src/items/Item.tscn" type="PackedScene" id=4]
+
+[sub_resource type="ConvexPolygonShape2D" id=1]
+points = PoolVector2Array( 0, 22, 24, 22, 24, 26, 0, 26 )
+
+[sub_resource type="ConvexPolygonShape2D" id=3]
+points = PoolVector2Array( 0, 0, 2, 0, 2, 22, 23, 22, 24, 23, 24, 24, 0, 24 )
+
+[sub_resource type="ConvexPolygonShape2D" id=4]
+points = PoolVector2Array( 0, 0, 1, 0, 2, 1, 2, 22, 24, 22, 24, 24, 0, 24 )
+
+[sub_resource type="ConvexPolygonShape2D" id=5]
+points = PoolVector2Array( 0, 0, 2, 0, 2, 22, 24, 22, 24, 24, 0, 24 )
+
+[sub_resource type="ConvexPolygonShape2D" id=6]
+points = PoolVector2Array( 0, 0, 2, 0, 2, 23, 1, 24, 0, 24 )
+
+[sub_resource type="ConvexPolygonShape2D" id=7]
+points = PoolVector2Array( 2, 23, 1, 24, 0, 24, 0, 0, 24, 0, 24, 1, 23, 2, 2, 2 )
+
+[sub_resource type="ConvexPolygonShape2D" id=8]
+points = PoolVector2Array( 0, 0, 24, 0, 24, 1, 23, 2, 2, 2, 2, 24, 0, 24 )
+
+[sub_resource type="ConvexPolygonShape2D" id=9]
+points = PoolVector2Array( 2, 2, 2, 23, 1, 24, 0, 24, 0, 0, 24, 0, 24, 2 )
+
+[sub_resource type="ConvexPolygonShape2D" id=10]
+points = PoolVector2Array( 2, 24, 0, 24, 0, 0, 24, 0, 24, 2, 2, 2 )
+
+[sub_resource type="ConvexPolygonShape2D" id=11]
+points = PoolVector2Array( 1, 22, 24, 22, 24, 26, 1, 26, 0, 25, 0, 23 )
+
+[sub_resource type="ConvexPolygonShape2D" id=12]
+points = PoolVector2Array( 24, 24, 22, 24, 22, 1, 23, 0, 24, 0 )
+
+[sub_resource type="ConvexPolygonShape2D" id=13]
+points = PoolVector2Array( 22, 22, 22, 1, 23, 0, 24, 0, 24, 24, 0, 24, 0, 23, 1, 22 )
+
+[sub_resource type="ConvexPolygonShape2D" id=14]
+points = PoolVector2Array( 24, 0, 24, 24, 0, 24, 0, 23, 1, 22, 22, 22, 22, 0 )
+
+[sub_resource type="ConvexPolygonShape2D" id=15]
+points = PoolVector2Array( 22, 0, 24, 0, 24, 24, 0, 24, 0, 22, 22, 22 )
+
+[sub_resource type="ConvexPolygonShape2D" id=16]
+points = PoolVector2Array( 22, 1, 23, 0, 24, 0, 24, 24, 0, 24, 0, 22, 22, 22 )
+
+[sub_resource type="ConvexPolygonShape2D" id=17]
+points = PoolVector2Array( 24, 0, 24, 24, 23, 24, 22, 23, 22, 23, 22, 23, 22, 0 )
+
+[sub_resource type="ConvexPolygonShape2D" id=18]
+points = PoolVector2Array( 24, 0, 24, 24, 23, 24, 22, 23, 22, 2, 1, 2, 0, 1, 0, 0 )
+
+[sub_resource type="ConvexPolygonShape2D" id=19]
+points = PoolVector2Array( 0, 0, 24, 0, 24, 24, 22, 24, 22, 2, 1, 2, 0, 1 )
+
+[sub_resource type="ConvexPolygonShape2D" id=20]
+points = PoolVector2Array( 0, 0, 24, 0, 24, 24, 22, 24, 22, 2, 0, 2 )
+
+[sub_resource type="ConvexPolygonShape2D" id=21]
+points = PoolVector2Array( 0, 0, 24, 0, 24, 24, 23, 24, 22, 23, 22, 2, 0, 2 )
+
+[sub_resource type="ConvexPolygonShape2D" id=22]
+points = PoolVector2Array( 0, 22, 23, 22, 24, 23, 24, 25, 23, 26, 0, 26 )
+
+[sub_resource type="ConvexPolygonShape2D" id=23]
+points = PoolVector2Array( 22, 0, 24, 0, 24, 24, 22, 24 )
+
+[sub_resource type="ConvexPolygonShape2D" id=24]
+points = PoolVector2Array( 1, 22, 23, 22, 24, 23, 24, 25, 23, 26, 1, 26, 0, 25, 0, 23 )
+
+[sub_resource type="ConvexPolygonShape2D" id=25]
+points = PoolVector2Array( 13, 22, 24, 22, 24, 26, 13, 26, 12, 25, 12, 23 )
+
+[sub_resource type="ConvexPolygonShape2D" id=26]
+points = PoolVector2Array( 0, 22, 11, 22, 12, 23, 12, 25, 11, 26, 0, 26 )
+
+[sub_resource type="ConvexPolygonShape2D" id=27]
+points = PoolVector2Array( 0, 0, 1, 0, 2, 1, 2, 24, 0, 24 )
+
+[sub_resource type="ConvexPolygonShape2D" id=28]
+points = PoolVector2Array( 0, 0, 2, 0, 2, 24, 0, 24 )
+
+[sub_resource type="ConvexPolygonShape2D" id=29]
+points = PoolVector2Array( 1, 0, 2, 1, 2, 22, 23, 22, 24, 23, 24, 24, 0, 24, 0, 0 )
+
+[sub_resource type="TileSet" id=2]
+0/name = "WallCatTree.png 0"
+0/texture = ExtResource( 1 )
+0/tex_offset = Vector2( 0, 0 )
+0/modulate = Color( 1, 1, 1, 1 )
+0/region = Rect2( 48, 0, 24, 48 )
+0/tile_mode = 0
+0/occluder_offset = Vector2( 0, 0 )
+0/navigation_offset = Vector2( 0, 0 )
+0/shape_offset = Vector2( 0, 0 )
+0/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+0/shape_one_way = false
+0/shape_one_way_margin = 0.0
+0/shapes = [  ]
+0/z_index = 0
+1/name = "WallCatTree.png 1"
+1/texture = ExtResource( 1 )
+1/tex_offset = Vector2( 0, 0 )
+1/modulate = Color( 1, 1, 1, 1 )
+1/region = Rect2( 48, 0, 24, 48 )
+1/tile_mode = 0
+1/occluder_offset = Vector2( 0, 0 )
+1/navigation_offset = Vector2( 0, 0 )
+1/shape_offset = Vector2( 0, 0 )
+1/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+1/shape = SubResource( 1 )
+1/shape_one_way = false
+1/shape_one_way_margin = 1.0
+1/shapes = [ {
+"autotile_coord": Vector2( 0, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 1 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
+} ]
+1/z_index = 0
+2/name = "WallCatTree.png 2"
+2/texture = ExtResource( 1 )
+2/tex_offset = Vector2( 0, 0 )
+2/modulate = Color( 1, 1, 1, 1 )
+2/region = Rect2( 24, 0, 24, 48 )
+2/tile_mode = 0
+2/occluder_offset = Vector2( 0, 0 )
+2/navigation_offset = Vector2( 0, 0 )
+2/shape_offset = Vector2( 0, 0 )
+2/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+2/shape = SubResource( 11 )
+2/shape_one_way = false
+2/shape_one_way_margin = 1.0
+2/shapes = [ {
+"autotile_coord": Vector2( 0, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 11 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
+} ]
+2/z_index = 0
+3/name = "WallCatTree.png 3"
+3/texture = ExtResource( 1 )
+3/tex_offset = Vector2( 0, 0 )
+3/modulate = Color( 1, 1, 1, 1 )
+3/region = Rect2( 72, 0, 24, 48 )
+3/tile_mode = 0
+3/occluder_offset = Vector2( 0, 0 )
+3/navigation_offset = Vector2( 0, 0 )
+3/shape_offset = Vector2( 0, 0 )
+3/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+3/shape = SubResource( 22 )
+3/shape_one_way = false
+3/shape_one_way_margin = 1.0
+3/shapes = [ {
+"autotile_coord": Vector2( 0, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 22 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
+} ]
+3/z_index = 0
+4/name = "WallCatTree.png 4"
+4/texture = ExtResource( 1 )
+4/tex_offset = Vector2( 0, 0 )
+4/modulate = Color( 1, 1, 1, 1 )
+4/region = Rect2( 0, 0, 24, 48 )
+4/tile_mode = 0
+4/occluder_offset = Vector2( 0, 0 )
+4/navigation_offset = Vector2( 0, 0 )
+4/shape_offset = Vector2( 0, 0 )
+4/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+4/shape = SubResource( 24 )
+4/shape_one_way = false
+4/shape_one_way_margin = 1.0
+4/shapes = [ {
+"autotile_coord": Vector2( 0, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 24 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
+} ]
+4/z_index = 0
+5/name = "WallCatTree.png 5"
+5/texture = ExtResource( 1 )
+5/tex_offset = Vector2( 0, 0 )
+5/modulate = Color( 1, 1, 1, 1 )
+5/region = Rect2( 96, 0, 24, 48 )
+5/tile_mode = 0
+5/occluder_offset = Vector2( 0, 0 )
+5/navigation_offset = Vector2( 0, 0 )
+5/shape_offset = Vector2( 0, 0 )
+5/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+5/shape = SubResource( 25 )
+5/shape_one_way = false
+5/shape_one_way_margin = 1.0
+5/shapes = [ {
+"autotile_coord": Vector2( 0, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 25 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
+} ]
+5/z_index = 0
+6/name = "WallCatTree.png 6"
+6/texture = ExtResource( 1 )
+6/tex_offset = Vector2( 0, 0 )
+6/modulate = Color( 1, 1, 1, 1 )
+6/region = Rect2( 120, 0, 24, 48 )
+6/tile_mode = 0
+6/occluder_offset = Vector2( 0, 0 )
+6/navigation_offset = Vector2( 0, 0 )
+6/shape_offset = Vector2( 0, 0 )
+6/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+6/shape = SubResource( 26 )
+6/shape_one_way = false
+6/shape_one_way_margin = 1.0
+6/shapes = [ {
+"autotile_coord": Vector2( 0, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 26 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
+} ]
+6/z_index = 0
+7/name = "WallCatTree.png 7"
+7/texture = ExtResource( 1 )
+7/tex_offset = Vector2( 0, 0 )
+7/modulate = Color( 1, 1, 1, 1 )
+7/region = Rect2( 0, 48, 24, 24 )
+7/tile_mode = 0
+7/occluder_offset = Vector2( 0, 0 )
+7/navigation_offset = Vector2( 0, 0 )
+7/shape_offset = Vector2( 0, 0 )
+7/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+7/shape = SubResource( 27 )
+7/shape_one_way = false
+7/shape_one_way_margin = 1.0
+7/shapes = [ {
+"autotile_coord": Vector2( 0, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 27 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
+} ]
+7/z_index = 0
+8/name = "WallCatTree.png 8"
+8/texture = ExtResource( 1 )
+8/tex_offset = Vector2( 0, 0 )
+8/modulate = Color( 1, 1, 1, 1 )
+8/region = Rect2( 120, 48, 24, 24 )
+8/tile_mode = 0
+8/occluder_offset = Vector2( 0, 0 )
+8/navigation_offset = Vector2( 0, 0 )
+8/shape_offset = Vector2( 0, 0 )
+8/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+8/shape = SubResource( 28 )
+8/shape_one_way = false
+8/shape_one_way_margin = 1.0
+8/shapes = [ {
+"autotile_coord": Vector2( 0, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 28 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
+} ]
+8/z_index = 0
+9/name = "WallCatTree.png 9"
+9/texture = ExtResource( 1 )
+9/tex_offset = Vector2( 0, 0 )
+9/modulate = Color( 1, 1, 1, 1 )
+9/region = Rect2( 24, 48, 24, 24 )
+9/tile_mode = 0
+9/occluder_offset = Vector2( 0, 0 )
+9/navigation_offset = Vector2( 0, 0 )
+9/shape_offset = Vector2( 0, 0 )
+9/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+9/shape = SubResource( 29 )
+9/shape_one_way = false
+9/shape_one_way_margin = 1.0
+9/shapes = [ {
+"autotile_coord": Vector2( 0, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 29 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
+} ]
+9/z_index = 0
+10/name = "WallCatTree.png 10"
+10/texture = ExtResource( 1 )
+10/tex_offset = Vector2( 0, 0 )
+10/modulate = Color( 1, 1, 1, 1 )
+10/region = Rect2( 48, 48, 24, 24 )
+10/tile_mode = 0
+10/occluder_offset = Vector2( 0, 0 )
+10/navigation_offset = Vector2( 0, 0 )
+10/shape_offset = Vector2( 0, 0 )
+10/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+10/shape = SubResource( 3 )
+10/shape_one_way = false
+10/shape_one_way_margin = 1.0
+10/shapes = [ {
+"autotile_coord": Vector2( 0, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 3 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
+} ]
+10/z_index = 0
+11/name = "WallCatTree.png 11"
+11/texture = ExtResource( 1 )
+11/tex_offset = Vector2( 0, 0 )
+11/modulate = Color( 1, 1, 1, 1 )
+11/region = Rect2( 72, 48, 24, 24 )
+11/tile_mode = 0
+11/occluder_offset = Vector2( 0, 0 )
+11/navigation_offset = Vector2( 0, 0 )
+11/shape_offset = Vector2( 0, 0 )
+11/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+11/shape = SubResource( 4 )
+11/shape_one_way = false
+11/shape_one_way_margin = 1.0
+11/shapes = [ {
+"autotile_coord": Vector2( 0, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 4 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
+} ]
+11/z_index = 0
+12/name = "WallCatTree.png 12"
+12/texture = ExtResource( 1 )
+12/tex_offset = Vector2( 0, 0 )
+12/modulate = Color( 1, 1, 1, 1 )
+12/region = Rect2( 96, 48, 24, 24 )
+12/tile_mode = 0
+12/occluder_offset = Vector2( 0, 0 )
+12/navigation_offset = Vector2( 0, 0 )
+12/shape_offset = Vector2( 0, 0 )
+12/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+12/shape = SubResource( 5 )
+12/shape_one_way = false
+12/shape_one_way_margin = 1.0
+12/shapes = [ {
+"autotile_coord": Vector2( 0, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 5 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
+} ]
+12/z_index = 0
+13/name = "WallCatTree.png 13"
+13/texture = ExtResource( 1 )
+13/tex_offset = Vector2( 0, 0 )
+13/modulate = Color( 1, 1, 1, 1 )
+13/region = Rect2( 99, 49, 1, 1 )
+13/tile_mode = 0
+13/occluder_offset = Vector2( 0, 0 )
+13/navigation_offset = Vector2( 0, 0 )
+13/shape_offset = Vector2( 0, 0 )
+13/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+13/shape_one_way = false
+13/shape_one_way_margin = 0.0
+13/shapes = [  ]
+13/z_index = 0
+14/name = "WallCatTree.png 14"
+14/texture = ExtResource( 1 )
+14/tex_offset = Vector2( 0, 0 )
+14/modulate = Color( 1, 1, 1, 1 )
+14/region = Rect2( 0, 72, 24, 24 )
+14/tile_mode = 0
+14/occluder_offset = Vector2( 0, 0 )
+14/navigation_offset = Vector2( 0, 0 )
+14/shape_offset = Vector2( 0, 0 )
+14/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+14/shape = SubResource( 6 )
+14/shape_one_way = false
+14/shape_one_way_margin = 1.0
+14/shapes = [ {
+"autotile_coord": Vector2( 0, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 6 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
+} ]
+14/z_index = 0
+15/name = "WallCatTree.png 15"
+15/texture = ExtResource( 1 )
+15/tex_offset = Vector2( 0, 0 )
+15/modulate = Color( 1, 1, 1, 1 )
+15/region = Rect2( 24, 72, 24, 24 )
+15/tile_mode = 0
+15/occluder_offset = Vector2( 0, 0 )
+15/navigation_offset = Vector2( 0, 0 )
+15/shape_offset = Vector2( 0, 0 )
+15/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+15/shape = SubResource( 7 )
+15/shape_one_way = false
+15/shape_one_way_margin = 1.0
+15/shapes = [ {
+"autotile_coord": Vector2( 0, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 7 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
+} ]
+15/z_index = 0
+16/name = "WallCatTree.png 16"
+16/texture = ExtResource( 1 )
+16/tex_offset = Vector2( 0, 0 )
+16/modulate = Color( 1, 1, 1, 1 )
+16/region = Rect2( 48, 72, 24, 24 )
+16/tile_mode = 0
+16/occluder_offset = Vector2( 0, 0 )
+16/navigation_offset = Vector2( 0, 0 )
+16/shape_offset = Vector2( 0, 0 )
+16/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+16/shape_one_way = false
+16/shape_one_way_margin = 0.0
+16/shapes = [  ]
+16/z_index = 0
+17/name = "WallCatTree.png 17"
+17/texture = ExtResource( 1 )
+17/tex_offset = Vector2( 0, 0 )
+17/modulate = Color( 1, 1, 1, 1 )
+17/region = Rect2( 48, 72, 24, 24 )
+17/tile_mode = 0
+17/occluder_offset = Vector2( 0, 0 )
+17/navigation_offset = Vector2( 0, 0 )
+17/shape_offset = Vector2( 0, 0 )
+17/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+17/shape = SubResource( 8 )
+17/shape_one_way = false
+17/shape_one_way_margin = 1.0
+17/shapes = [ {
+"autotile_coord": Vector2( 0, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 8 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
+} ]
+17/z_index = 0
+18/name = "WallCatTree.png 18"
+18/texture = ExtResource( 1 )
+18/tex_offset = Vector2( 0, 0 )
+18/modulate = Color( 1, 1, 1, 1 )
+18/region = Rect2( 72, 72, 24, 24 )
+18/tile_mode = 0
+18/occluder_offset = Vector2( 0, 0 )
+18/navigation_offset = Vector2( 0, 0 )
+18/shape_offset = Vector2( 0, 0 )
+18/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+18/shape = SubResource( 9 )
+18/shape_one_way = false
+18/shape_one_way_margin = 1.0
+18/shapes = [ {
+"autotile_coord": Vector2( 0, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 9 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
+} ]
+18/z_index = 0
+19/name = "WallCatTree.png 19"
+19/texture = ExtResource( 1 )
+19/tex_offset = Vector2( 0, 0 )
+19/modulate = Color( 1, 1, 1, 1 )
+19/region = Rect2( 96, 72, 24, 24 )
+19/tile_mode = 0
+19/occluder_offset = Vector2( 0, 0 )
+19/navigation_offset = Vector2( 0, 0 )
+19/shape_offset = Vector2( 0, 0 )
+19/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+19/shape = SubResource( 10 )
+19/shape_one_way = false
+19/shape_one_way_margin = 1.0
+19/shapes = [ {
+"autotile_coord": Vector2( 0, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 10 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
+} ]
+19/z_index = 0
+20/name = "WallCatTree.png 20"
+20/texture = ExtResource( 1 )
+20/tex_offset = Vector2( 0, 0 )
+20/modulate = Color( 1, 1, 1, 1 )
+20/region = Rect2( 0, 96, 24, 24 )
+20/tile_mode = 0
+20/occluder_offset = Vector2( 0, 0 )
+20/navigation_offset = Vector2( 0, 0 )
+20/shape_offset = Vector2( 0, 0 )
+20/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+20/shape = SubResource( 12 )
+20/shape_one_way = false
+20/shape_one_way_margin = 1.0
+20/shapes = [ {
+"autotile_coord": Vector2( 0, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 12 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
+} ]
+20/z_index = 0
+21/name = "WallCatTree.png 21"
+21/texture = ExtResource( 1 )
+21/tex_offset = Vector2( 0, 0 )
+21/modulate = Color( 1, 1, 1, 1 )
+21/region = Rect2( 24, 96, 24, 24 )
+21/tile_mode = 0
+21/occluder_offset = Vector2( 0, 0 )
+21/navigation_offset = Vector2( 0, 0 )
+21/shape_offset = Vector2( 0, 0 )
+21/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+21/shape = SubResource( 13 )
+21/shape_one_way = false
+21/shape_one_way_margin = 1.0
+21/shapes = [ {
+"autotile_coord": Vector2( 0, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 13 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
+} ]
+21/z_index = 0
+22/name = "WallCatTree.png 22"
+22/texture = ExtResource( 1 )
+22/tex_offset = Vector2( 0, 0 )
+22/modulate = Color( 1, 1, 1, 1 )
+22/region = Rect2( 48, 96, 24, 24 )
+22/tile_mode = 0
+22/occluder_offset = Vector2( 0, 0 )
+22/navigation_offset = Vector2( 0, 0 )
+22/shape_offset = Vector2( 0, 0 )
+22/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+22/shape = SubResource( 14 )
+22/shape_one_way = false
+22/shape_one_way_margin = 1.0
+22/shapes = [ {
+"autotile_coord": Vector2( 0, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 14 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
+} ]
+22/z_index = 0
+23/name = "WallCatTree.png 23"
+23/texture = ExtResource( 1 )
+23/tex_offset = Vector2( 0, 0 )
+23/modulate = Color( 1, 1, 1, 1 )
+23/region = Rect2( 72, 96, 24, 24 )
+23/tile_mode = 0
+23/occluder_offset = Vector2( 0, 0 )
+23/navigation_offset = Vector2( 0, 0 )
+23/shape_offset = Vector2( 0, 0 )
+23/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+23/shape = SubResource( 15 )
+23/shape_one_way = false
+23/shape_one_way_margin = 1.0
+23/shapes = [ {
+"autotile_coord": Vector2( 0, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 15 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
+} ]
+23/z_index = 0
+24/name = "WallCatTree.png 24"
+24/texture = ExtResource( 1 )
+24/tex_offset = Vector2( 0, 0 )
+24/modulate = Color( 1, 1, 1, 1 )
+24/region = Rect2( 96, 96, 24, 24 )
+24/tile_mode = 0
+24/occluder_offset = Vector2( 0, 0 )
+24/navigation_offset = Vector2( 0, 0 )
+24/shape_offset = Vector2( 0, 0 )
+24/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+24/shape = SubResource( 16 )
+24/shape_one_way = false
+24/shape_one_way_margin = 1.0
+24/shapes = [ {
+"autotile_coord": Vector2( 0, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 16 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
+} ]
+24/z_index = 0
+25/name = "WallCatTree.png 25"
+25/texture = ExtResource( 1 )
+25/tex_offset = Vector2( 0, 0 )
+25/modulate = Color( 1, 1, 1, 1 )
+25/region = Rect2( 0, 120, 24, 24 )
+25/tile_mode = 0
+25/occluder_offset = Vector2( 0, 0 )
+25/navigation_offset = Vector2( 0, 0 )
+25/shape_offset = Vector2( 0, 0 )
+25/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+25/shape = SubResource( 17 )
+25/shape_one_way = false
+25/shape_one_way_margin = 1.0
+25/shapes = [ {
+"autotile_coord": Vector2( 0, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 17 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
+} ]
+25/z_index = 0
+26/name = "WallCatTree.png 26"
+26/texture = ExtResource( 1 )
+26/tex_offset = Vector2( 0, 0 )
+26/modulate = Color( 1, 1, 1, 1 )
+26/region = Rect2( 24, 120, 24, 24 )
+26/tile_mode = 0
+26/occluder_offset = Vector2( 0, 0 )
+26/navigation_offset = Vector2( 0, 0 )
+26/shape_offset = Vector2( 0, 0 )
+26/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+26/shape = SubResource( 18 )
+26/shape_one_way = false
+26/shape_one_way_margin = 1.0
+26/shapes = [ {
+"autotile_coord": Vector2( 0, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 18 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
+} ]
+26/z_index = 0
+27/name = "WallCatTree.png 27"
+27/texture = ExtResource( 1 )
+27/tex_offset = Vector2( 0, 0 )
+27/modulate = Color( 1, 1, 1, 1 )
+27/region = Rect2( 48, 120, 24, 24 )
+27/tile_mode = 0
+27/occluder_offset = Vector2( 0, 0 )
+27/navigation_offset = Vector2( 0, 0 )
+27/shape_offset = Vector2( 0, 0 )
+27/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+27/shape = SubResource( 19 )
+27/shape_one_way = false
+27/shape_one_way_margin = 1.0
+27/shapes = [ {
+"autotile_coord": Vector2( 0, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 19 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
+} ]
+27/z_index = 0
+28/name = "WallCatTree.png 28"
+28/texture = ExtResource( 1 )
+28/tex_offset = Vector2( 0, 0 )
+28/modulate = Color( 1, 1, 1, 1 )
+28/region = Rect2( 72, 120, 24, 24 )
+28/tile_mode = 0
+28/occluder_offset = Vector2( 0, 0 )
+28/navigation_offset = Vector2( 0, 0 )
+28/shape_offset = Vector2( 0, 0 )
+28/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+28/shape = SubResource( 20 )
+28/shape_one_way = false
+28/shape_one_way_margin = 1.0
+28/shapes = [ {
+"autotile_coord": Vector2( 0, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 20 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
+} ]
+28/z_index = 0
+29/name = "WallCatTree.png 29"
+29/texture = ExtResource( 1 )
+29/tex_offset = Vector2( 0, 0 )
+29/modulate = Color( 1, 1, 1, 1 )
+29/region = Rect2( 96, 120, 24, 24 )
+29/tile_mode = 0
+29/occluder_offset = Vector2( 0, 0 )
+29/navigation_offset = Vector2( 0, 0 )
+29/shape_offset = Vector2( 0, 0 )
+29/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+29/shape = SubResource( 21 )
+29/shape_one_way = false
+29/shape_one_way_margin = 1.0
+29/shapes = [ {
+"autotile_coord": Vector2( 0, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 21 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
+} ]
+29/z_index = 0
+30/name = "WallCatTree.png 30"
+30/texture = ExtResource( 1 )
+30/tex_offset = Vector2( 0, 0 )
+30/modulate = Color( 1, 1, 1, 1 )
+30/region = Rect2( 120, 96, 24, 24 )
+30/tile_mode = 0
+30/occluder_offset = Vector2( 0, 0 )
+30/navigation_offset = Vector2( 0, 0 )
+30/shape_offset = Vector2( 0, 0 )
+30/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+30/shape = SubResource( 23 )
+30/shape_one_way = false
+30/shape_one_way_margin = 1.0
+30/shapes = [ {
+"autotile_coord": Vector2( 0, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 23 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
+} ]
+30/z_index = 0
+
+[sub_resource type="TileSet" id=30]
+0/name = "ProbCatTree.png 0"
+0/texture = ExtResource( 2 )
+0/tex_offset = Vector2( 0, 0 )
+0/modulate = Color( 1, 1, 1, 1 )
+0/region = Rect2( 0, 48, 24, 24 )
+0/tile_mode = 0
+0/occluder_offset = Vector2( 0, 0 )
+0/navigation_offset = Vector2( 0, 0 )
+0/shape_offset = Vector2( 0, 0 )
+0/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+0/shape_one_way = false
+0/shape_one_way_margin = 0.0
+0/shapes = [  ]
+0/z_index = 0
+1/name = "ProbCatTree.png 1"
+1/texture = ExtResource( 2 )
+1/tex_offset = Vector2( 0, 0 )
+1/modulate = Color( 1, 1, 1, 1 )
+1/region = Rect2( 24, 48, 24, 24 )
+1/tile_mode = 0
+1/occluder_offset = Vector2( 0, 0 )
+1/navigation_offset = Vector2( 0, 0 )
+1/shape_offset = Vector2( 0, 0 )
+1/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+1/shape_one_way = false
+1/shape_one_way_margin = 0.0
+1/shapes = [  ]
+1/z_index = 0
+2/name = "ProbCatTree.png 2"
+2/texture = ExtResource( 2 )
+2/tex_offset = Vector2( 0, 0 )
+2/modulate = Color( 1, 1, 1, 1 )
+2/region = Rect2( 48, 48, 24, 24 )
+2/tile_mode = 0
+2/occluder_offset = Vector2( 0, 0 )
+2/navigation_offset = Vector2( 0, 0 )
+2/shape_offset = Vector2( 0, 0 )
+2/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+2/shape_one_way = false
+2/shape_one_way_margin = 0.0
+2/shapes = [  ]
+2/z_index = 0
+3/name = "ProbCatTree.png 3"
+3/texture = ExtResource( 2 )
+3/tex_offset = Vector2( 0, 0 )
+3/modulate = Color( 1, 1, 1, 1 )
+3/region = Rect2( 0, 120, 24, 24 )
+3/tile_mode = 0
+3/occluder_offset = Vector2( 0, 0 )
+3/navigation_offset = Vector2( 0, 0 )
+3/shape_offset = Vector2( 0, 0 )
+3/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+3/shape_one_way = false
+3/shape_one_way_margin = 0.0
+3/shapes = [  ]
+3/z_index = 0
+4/name = "ProbCatTree.png 4"
+4/texture = ExtResource( 2 )
+4/tex_offset = Vector2( 0, 0 )
+4/modulate = Color( 1, 1, 1, 1 )
+4/region = Rect2( 96, 120, 24, 24 )
+4/tile_mode = 0
+4/occluder_offset = Vector2( 0, 0 )
+4/navigation_offset = Vector2( 0, 0 )
+4/shape_offset = Vector2( 0, 0 )
+4/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+4/shape_one_way = false
+4/shape_one_way_margin = 0.0
+4/shapes = [  ]
+4/z_index = 0
+
+[sub_resource type="TileSet" id=31]
+0/name = "ProbCatTree.png 0"
+0/texture = ExtResource( 2 )
+0/tex_offset = Vector2( 0, 0 )
+0/modulate = Color( 1, 1, 1, 1 )
+0/region = Rect2( 0, 0, 24, 24 )
+0/tile_mode = 0
+0/occluder_offset = Vector2( 0, 0 )
+0/navigation_offset = Vector2( 0, 0 )
+0/shape_offset = Vector2( 0, 0 )
+0/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+0/shape_one_way = false
+0/shape_one_way_margin = 0.0
+0/shapes = [  ]
+0/z_index = 0
+1/name = "ProbCatTree.png 1"
+1/texture = ExtResource( 2 )
+1/tex_offset = Vector2( 0, 0 )
+1/modulate = Color( 1, 1, 1, 1 )
+1/region = Rect2( 24, 0, 24, 24 )
+1/tile_mode = 0
+1/occluder_offset = Vector2( 0, 0 )
+1/navigation_offset = Vector2( 0, 0 )
+1/shape_offset = Vector2( 0, 0 )
+1/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+1/shape_one_way = false
+1/shape_one_way_margin = 0.0
+1/shapes = [  ]
+1/z_index = 0
+2/name = "ProbCatTree.png 2"
+2/texture = ExtResource( 2 )
+2/tex_offset = Vector2( 0, 0 )
+2/modulate = Color( 1, 1, 1, 1 )
+2/region = Rect2( 48, 0, 24, 24 )
+2/tile_mode = 0
+2/occluder_offset = Vector2( 0, 0 )
+2/navigation_offset = Vector2( 0, 0 )
+2/shape_offset = Vector2( 0, 0 )
+2/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+2/shape_one_way = false
+2/shape_one_way_margin = 0.0
+2/shapes = [  ]
+2/z_index = 0
+3/name = "ProbCatTree.png 3"
+3/texture = ExtResource( 2 )
+3/tex_offset = Vector2( 0, 0 )
+3/modulate = Color( 1, 1, 1, 1 )
+3/region = Rect2( 72, 0, 24, 24 )
+3/tile_mode = 0
+3/occluder_offset = Vector2( 0, 0 )
+3/navigation_offset = Vector2( 0, 0 )
+3/shape_offset = Vector2( 0, 0 )
+3/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+3/shape_one_way = false
+3/shape_one_way_margin = 0.0
+3/shapes = [  ]
+3/z_index = 0
+4/name = "ProbCatTree.png 4"
+4/texture = ExtResource( 2 )
+4/tex_offset = Vector2( 0, 0 )
+4/modulate = Color( 1, 1, 1, 1 )
+4/region = Rect2( 0, 24, 24, 24 )
+4/tile_mode = 0
+4/occluder_offset = Vector2( 0, 0 )
+4/navigation_offset = Vector2( 0, 0 )
+4/shape_offset = Vector2( 0, 0 )
+4/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+4/shape_one_way = false
+4/shape_one_way_margin = 0.0
+4/shapes = [  ]
+4/z_index = 0
+5/name = "ProbCatTree.png 5"
+5/texture = ExtResource( 2 )
+5/tex_offset = Vector2( 0, 0 )
+5/modulate = Color( 1, 1, 1, 1 )
+5/region = Rect2( 24, 24, 24, 24 )
+5/tile_mode = 0
+5/occluder_offset = Vector2( 0, 0 )
+5/navigation_offset = Vector2( 0, 0 )
+5/shape_offset = Vector2( 0, 0 )
+5/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+5/shape_one_way = false
+5/shape_one_way_margin = 0.0
+5/shapes = [  ]
+5/z_index = 0
+6/name = "ProbCatTree.png 6"
+6/texture = ExtResource( 2 )
+6/tex_offset = Vector2( 0, 0 )
+6/modulate = Color( 1, 1, 1, 1 )
+6/region = Rect2( 48, 24, 24, 24 )
+6/tile_mode = 0
+6/occluder_offset = Vector2( 0, 0 )
+6/navigation_offset = Vector2( 0, 0 )
+6/shape_offset = Vector2( 0, 0 )
+6/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+6/shape_one_way = false
+6/shape_one_way_margin = 0.0
+6/shapes = [  ]
+6/z_index = 0
+7/name = "ProbCatTree.png 7"
+7/texture = ExtResource( 2 )
+7/tex_offset = Vector2( 0, 0 )
+7/modulate = Color( 1, 1, 1, 1 )
+7/region = Rect2( 72, 24, 24, 24 )
+7/tile_mode = 0
+7/occluder_offset = Vector2( 0, 0 )
+7/navigation_offset = Vector2( 0, 0 )
+7/shape_offset = Vector2( 0, 0 )
+7/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+7/shape_one_way = false
+7/shape_one_way_margin = 0.0
+7/shapes = [  ]
+7/z_index = 0
+8/name = "ProbCatTree.png 8"
+8/texture = ExtResource( 2 )
+8/tex_offset = Vector2( 0, 0 )
+8/modulate = Color( 1, 1, 1, 1 )
+8/region = Rect2( 0, 72, 24, 24 )
+8/tile_mode = 0
+8/occluder_offset = Vector2( 0, 0 )
+8/navigation_offset = Vector2( 0, 0 )
+8/shape_offset = Vector2( 0, 0 )
+8/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+8/shape_one_way = false
+8/shape_one_way_margin = 0.0
+8/shapes = [  ]
+8/z_index = 0
+9/name = "ProbCatTree.png 9"
+9/texture = ExtResource( 2 )
+9/tex_offset = Vector2( 0, 0 )
+9/modulate = Color( 1, 1, 1, 1 )
+9/region = Rect2( 24, 72, 24, 24 )
+9/tile_mode = 0
+9/occluder_offset = Vector2( 0, 0 )
+9/navigation_offset = Vector2( 0, 0 )
+9/shape_offset = Vector2( 0, 0 )
+9/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+9/shape_one_way = false
+9/shape_one_way_margin = 0.0
+9/shapes = [  ]
+9/z_index = 0
+10/name = "ProbCatTree.png 10"
+10/texture = ExtResource( 2 )
+10/tex_offset = Vector2( 0, 0 )
+10/modulate = Color( 1, 1, 1, 1 )
+10/region = Rect2( 48, 72, 24, 24 )
+10/tile_mode = 0
+10/occluder_offset = Vector2( 0, 0 )
+10/navigation_offset = Vector2( 0, 0 )
+10/shape_offset = Vector2( 0, 0 )
+10/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+10/shape_one_way = false
+10/shape_one_way_margin = 0.0
+10/shapes = [  ]
+10/z_index = 0
+11/name = "ProbCatTree.png 11"
+11/texture = ExtResource( 2 )
+11/tex_offset = Vector2( 0, 0 )
+11/modulate = Color( 1, 1, 1, 1 )
+11/region = Rect2( 72, 72, 24, 24 )
+11/tile_mode = 0
+11/occluder_offset = Vector2( 0, 0 )
+11/navigation_offset = Vector2( 0, 0 )
+11/shape_offset = Vector2( 0, 0 )
+11/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+11/shape_one_way = false
+11/shape_one_way_margin = 0.0
+11/shapes = [  ]
+11/z_index = 0
+12/name = "ProbCatTree.png 12"
+12/texture = ExtResource( 2 )
+12/tex_offset = Vector2( 0, 0 )
+12/modulate = Color( 1, 1, 1, 1 )
+12/region = Rect2( 96, 72, 24, 24 )
+12/tile_mode = 0
+12/occluder_offset = Vector2( 0, 0 )
+12/navigation_offset = Vector2( 0, 0 )
+12/shape_offset = Vector2( 0, 0 )
+12/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+12/shape_one_way = false
+12/shape_one_way_margin = 0.0
+12/shapes = [  ]
+12/z_index = 0
+13/name = "ProbCatTree.png 13"
+13/texture = ExtResource( 2 )
+13/tex_offset = Vector2( 0, 0 )
+13/modulate = Color( 1, 1, 1, 1 )
+13/region = Rect2( 120, 72, 24, 24 )
+13/tile_mode = 0
+13/occluder_offset = Vector2( 0, 0 )
+13/navigation_offset = Vector2( 0, 0 )
+13/shape_offset = Vector2( 0, 0 )
+13/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+13/shape_one_way = false
+13/shape_one_way_margin = 0.0
+13/shapes = [  ]
+13/z_index = 0
+14/name = "ProbCatTree.png 14"
+14/texture = ExtResource( 2 )
+14/tex_offset = Vector2( 0, 0 )
+14/modulate = Color( 1, 1, 1, 1 )
+14/region = Rect2( 0, 96, 24, 24 )
+14/tile_mode = 0
+14/occluder_offset = Vector2( 0, 0 )
+14/navigation_offset = Vector2( 0, 0 )
+14/shape_offset = Vector2( 0, 0 )
+14/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+14/shape_one_way = false
+14/shape_one_way_margin = 0.0
+14/shapes = [  ]
+14/z_index = 0
+15/name = "ProbCatTree.png 15"
+15/texture = ExtResource( 2 )
+15/tex_offset = Vector2( 0, 0 )
+15/modulate = Color( 1, 1, 1, 1 )
+15/region = Rect2( 24, 96, 24, 24 )
+15/tile_mode = 0
+15/occluder_offset = Vector2( 0, 0 )
+15/navigation_offset = Vector2( 0, 0 )
+15/shape_offset = Vector2( 0, 0 )
+15/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+15/shape_one_way = false
+15/shape_one_way_margin = 0.0
+15/shapes = [  ]
+15/z_index = 0
+16/name = "ProbCatTree.png 16"
+16/texture = ExtResource( 2 )
+16/tex_offset = Vector2( 0, 0 )
+16/modulate = Color( 1, 1, 1, 1 )
+16/region = Rect2( 48, 96, 24, 24 )
+16/tile_mode = 0
+16/occluder_offset = Vector2( 0, 0 )
+16/navigation_offset = Vector2( 0, 0 )
+16/shape_offset = Vector2( 0, 0 )
+16/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+16/shape_one_way = false
+16/shape_one_way_margin = 0.0
+16/shapes = [  ]
+16/z_index = 0
+17/name = "ProbCatTree.png 17"
+17/texture = ExtResource( 2 )
+17/tex_offset = Vector2( 0, 0 )
+17/modulate = Color( 1, 1, 1, 1 )
+17/region = Rect2( 72, 96, 24, 24 )
+17/tile_mode = 0
+17/occluder_offset = Vector2( 0, 0 )
+17/navigation_offset = Vector2( 0, 0 )
+17/shape_offset = Vector2( 0, 0 )
+17/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+17/shape_one_way = false
+17/shape_one_way_margin = 0.0
+17/shapes = [  ]
+17/z_index = 0
+18/name = "ProbCatTree.png 18"
+18/texture = ExtResource( 2 )
+18/tex_offset = Vector2( 0, 0 )
+18/modulate = Color( 1, 1, 1, 1 )
+18/region = Rect2( 96, 96, 24, 24 )
+18/tile_mode = 0
+18/occluder_offset = Vector2( 0, 0 )
+18/navigation_offset = Vector2( 0, 0 )
+18/shape_offset = Vector2( 0, 0 )
+18/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+18/shape_one_way = false
+18/shape_one_way_margin = 0.0
+18/shapes = [  ]
+18/z_index = 0
+19/name = "ProbCatTree.png 19"
+19/texture = ExtResource( 2 )
+19/tex_offset = Vector2( 0, 0 )
+19/modulate = Color( 1, 1, 1, 1 )
+19/region = Rect2( 24, 120, 24, 24 )
+19/tile_mode = 0
+19/occluder_offset = Vector2( 0, 0 )
+19/navigation_offset = Vector2( 0, 0 )
+19/shape_offset = Vector2( 0, 0 )
+19/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+19/shape_one_way = false
+19/shape_one_way_margin = 0.0
+19/shapes = [  ]
+19/z_index = 0
+20/name = "ProbCatTree.png 20"
+20/texture = ExtResource( 2 )
+20/tex_offset = Vector2( 0, 0 )
+20/modulate = Color( 1, 1, 1, 1 )
+20/region = Rect2( 48, 120, 24, 24 )
+20/tile_mode = 0
+20/occluder_offset = Vector2( 0, 0 )
+20/navigation_offset = Vector2( 0, 0 )
+20/shape_offset = Vector2( 0, 0 )
+20/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+20/shape_one_way = false
+20/shape_one_way_margin = 0.0
+20/shapes = [  ]
+20/z_index = 0
+21/name = "ProbCatTree.png 21"
+21/texture = ExtResource( 2 )
+21/tex_offset = Vector2( 0, 0 )
+21/modulate = Color( 1, 1, 1, 1 )
+21/region = Rect2( 72, 120, 24, 24 )
+21/tile_mode = 0
+21/occluder_offset = Vector2( 0, 0 )
+21/navigation_offset = Vector2( 0, 0 )
+21/shape_offset = Vector2( 0, 0 )
+21/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+21/shape_one_way = false
+21/shape_one_way_margin = 0.0
+21/shapes = [  ]
+21/z_index = 0
+
+[node name="Level1" type="Node"]
+script = ExtResource( 3 )
+ItemScene = ExtResource( 4 )
+
+[node name="Ground" type="TileMap" parent="."]
+z_index = 1
+tile_set = SubResource( 2 )
+cell_size = Vector2( 24, 24 )
+format = 1
+tile_data = PoolIntArray( -2031616, 1, 0, -2031615, 1, 0, -2031614, 1, 0, -2031613, 1, 0, -2031612, 1, 0, -2031611, 1, 0, -2031610, 1, 0, -2031609, 1, 0, -2031608, 1, 0, -2031607, 1, 0, -2031606, 1, 0, -2031605, 1, 0, -2031604, 1, 0, -2031603, 1, 0, -2031602, 1, 0, -2031601, 1, 0, -2031600, 1, 0, -2031599, 1, 0, -2031598, 1, 0, -2031597, 1, 0, -2031596, 1, 0, -2031595, 1, 0, -2031594, 1, 0, -2031593, 1, 0, -2031592, 1, 0, -2031591, 1, 0, -2031590, 1, 0, -2031589, 1, 0, -2031588, 1, 0, -2031587, 1, 0, -2031586, 1, 0, -2031585, 1, 0, -2031584, 1, 0, -2031583, 1, 0, -2031582, 1, 0, -2031581, 1, 0, -2031580, 1, 0, -2031579, 1, 0, -2031578, 1, 0, -1966080, 18, 0, -1966041, 28, 0, -1900544, 8, 0, -1900505, 30, 0, -1835008, 8, 0, -1834969, 30, 0, -1769472, 8, 0, -1769433, 30, 0, -1703936, 8, 0, -1703897, 30, 0, -1638400, 8, 0, -1638361, 30, 0, -1572864, 8, 0, -1572825, 30, 0, -1507328, 8, 0, -1507289, 30, 0, -1441792, 8, 0, -1441753, 30, 0, -1376256, 8, 0, -1376217, 30, 0, -1310720, 8, 0, -1310681, 30, 0, -1245184, 8, 0, -1245145, 30, 0, -1179648, 8, 0, -1179609, 30, 0, -1114112, 8, 0, -1114073, 30, 0, -1048576, 8, 0, -1048537, 30, 0, -983040, 8, 0, -983001, 30, 0, -917504, 8, 0, -917465, 30, 0, -851968, 8, 0, -851929, 30, 0, -786432, 8, 0, -786393, 30, 0, -720896, 8, 0, -720857, 30, 0, -655360, 8, 0, -655321, 30, 0, -589824, 8, 0, -589785, 30, 0, -524288, 8, 0, -524249, 30, 0, -458752, 8, 0, -458713, 30, 0, -393216, 8, 0, -393177, 30, 0, -327680, 8, 0, -327641, 30, 0, -262144, 8, 0, -262105, 30, 0, -196608, 8, 0, -196569, 30, 0, -131072, 8, 0, -131033, 30, 0, -65536, 8, 0, -65497, 30, 0, 0, 8, 0, 39, 30, 0, 65536, 8, 0, 65575, 30, 0, 131072, 8, 0, 131078, 0, 0, 131104, 0, 0, 131111, 30, 0, 196608, 8, 0, 196612, 2, 0, 196613, 1, 0, 196614, 1, 0, 196615, 3, 0, 196623, 0, 0, 196634, 5, 0, 196635, 6, 0, 196639, 2, 0, 196640, 1, 0, 196641, 3, 0, 196644, 5, 0, 196645, 6, 0, 196647, 30, 0, 262144, 8, 0, 262158, 2, 0, 262159, 1, 0, 262160, 3, 0, 262163, 2, 0, 262164, 1, 0, 262165, 1, 0, 262166, 3, 0, 262183, 30, 0, 327680, 8, 0, 327688, 0, 0, 327718, 0, 0, 327719, 30, 0, 393216, 8, 0, 393219, 5, 0, 393220, 6, 0, 393222, 2, 0, 393223, 1, 0, 393224, 3, 0, 393233, 4, 0, 393242, 2, 0, 393243, 1, 0, 393244, 3, 0, 393253, 5, 0, 393254, 3, 0, 393255, 30, 0, 458752, 8, 0, 458774, 4, 0, 458791, 30, 0, 524288, 8, 0, 524293, 5, 0, 524294, 6, 0, 524296, 20, 0, 524297, 8, 0, 524298, 20, 0, 524299, 7, 0, 524302, 2, 0, 524303, 1, 0, 524304, 1, 0, 524305, 1, 0, 524306, 3, 0, 524323, 21, 0, 524324, 9, 0, 524327, 30, 0, 589824, 8, 0, 589826, 0, 0, 589832, 30, 0, 589833, 8, 0, 589834, 30, 0, 589835, 8, 0, 589837, 2, 0, 589838, 1, 0, 589839, 1, 0, 589840, 1, 0, 589841, 1, 0, 589842, 1, 0, 589843, 3, 0, 589847, 0, 0, 589853, 2, 0, 589854, 3, 0, 589859, 26, 0, 589860, 15, 0, 589863, 30, 0, 655360, 8, 0, 655362, 2, 0, 655363, 1, 0, 655364, 6, 0, 655366, 5, 0, 655367, 1, 0, 655368, 23, 0, 655369, 8, 0, 655370, 30, 0, 655371, 8, 0, 655382, 2, 0, 655383, 1, 0, 655384, 3, 0, 655399, 30, 0, 720896, 8, 0, 720904, 28, 0, 720905, 8, 0, 720906, 30, 0, 720907, 8, 0, 720915, 2, 0, 720916, 1, 0, 720917, 1, 0, 720918, 1, 0, 720919, 1, 0, 720920, 3, 0, 720922, 2, 0, 720923, 1, 0, 720924, 1, 0, 720925, 1, 0, 720926, 1, 0, 720927, 1, 0, 720928, 1, 0, 720929, 1, 0, 720930, 1, 0, 720931, 1, 0, 720932, 3, 0, 720935, 30, 0, 786432, 8, 0, 786440, 30, 0, 786441, 8, 0, 786442, 30, 0, 786443, 12, 0, 786444, 1, 0, 786445, 1, 0, 786446, 3, 0, 786449, 2, 0, 786450, 1, 0, 786451, 1, 0, 786452, 1, 0, 786453, 1, 0, 786454, 1, 0, 786455, 1, 0, 786456, 3, 0, 786458, 2, 0, 786459, 1, 0, 786460, 1, 0, 786461, 1, 0, 786462, 1, 0, 786463, 1, 0, 786464, 1, 0, 786465, 1, 0, 786466, 1, 0, 786467, 1, 0, 786468, 1, 0, 786469, 3, 0, 786471, 30, 0, 851968, 8, 0, 851972, 5, 0, 851973, 1, 0, 851974, 1, 0, 851975, 3, 0, 851976, 25, 0, 851977, 14, 0, 851978, 25, 0, 851979, 18, 0, 851980, 2, 0, 851981, 1, 0, 851982, 1, 0, 851983, 1, 0, 851984, 3, 0, 851995, 0, 0, 852007, 30, 0, 917504, 8, 0, 917510, 2, 0, 917511, 1, 0, 917512, 3, 0, 917515, 2, 0, 917516, 1, 0, 917517, 3, 0, 917521, 2, 0, 917522, 1, 0, 917523, 1, 0, 917524, 1, 0, 917525, 1, 0, 917526, 1, 0, 917527, 3, 0, 917531, 2, 0, 917532, 1, 0, 917533, 3, 0, 917542, 4, 0, 917543, 30, 0, 983040, 8, 0, 983042, 2, 0, 983043, 1, 0, 983044, 3, 0, 983079, 30, 0, 1048576, 8, 0, 1048589, 2, 0, 1048590, 1, 0, 1048591, 1, 0, 1048592, 1, 0, 1048593, 3, 0, 1048599, 0, 0, 1048608, 0, 0, 1048612, 2, 0, 1048613, 1, 0, 1048614, 3, 0, 1048615, 30, 0, 1114112, 8, 0, 1114115, 2, 0, 1114116, 1, 0, 1114117, 1, 0, 1114118, 1, 0, 1114119, 6, 0, 1114131, 2, 0, 1114132, 1, 0, 1114133, 1, 0, 1114134, 1, 0, 1114135, 3, 0, 1114142, 2, 0, 1114143, 1, 0, 1114144, 1, 0, 1114145, 3, 0, 1114151, 30, 0, 1179648, 8, 0, 1179687, 30, 0, 1245184, 8, 0, 1245188, 2, 0, 1245189, 1, 0, 1245190, 1, 0, 1245191, 1, 0, 1245192, 1, 0, 1245193, 3, 0, 1245209, 2, 0, 1245210, 1, 0, 1245211, 1, 0, 1245212, 3, 0, 1245223, 30, 0, 1310720, 8, 0, 1310721, 2, 0, 1310722, 1, 0, 1310723, 1, 0, 1310724, 3, 0, 1310730, 0, 0, 1310735, 2, 0, 1310736, 1, 0, 1310737, 1, 0, 1310738, 3, 0, 1310743, 0, 0, 1310751, 2, 0, 1310752, 1, 0, 1310753, 1, 0, 1310754, 1, 0, 1310755, 1, 0, 1310756, 3, 0, 1310759, 30, 0, 1376256, 12, 0, 1376257, 1, 0, 1376258, 1, 0, 1376259, 1, 0, 1376260, 1, 0, 1376261, 1, 0, 1376262, 1, 0, 1376263, 1, 0, 1376264, 1, 0, 1376265, 1, 0, 1376266, 1, 0, 1376267, 1, 0, 1376268, 1, 0, 1376269, 1, 0, 1376270, 1, 0, 1376271, 2, 0, 1376272, 1, 0, 1376273, 1, 0, 1376274, 1, 0, 1376275, 1, 0, 1376276, 1, 0, 1376277, 1, 0, 1376278, 1, 0, 1376279, 1, 0, 1376280, 1, 0, 1376281, 1, 0, 1376282, 1, 0, 1376283, 1, 0, 1376284, 1, 0, 1376285, 1, 0, 1376286, 1, 0, 1376287, 1, 0, 1376288, 1, 0, 1376289, 1, 0, 1376290, 1, 0, 1376291, 1, 0, 1376292, 1, 0, 1376293, 1, 0, 1376294, 1, 0, 1376295, 23, 0, 1441792, 18, 0, 1441831, 28, 0 )
+
+[node name="PopBack" type="TileMap" parent="."]
+z_index = -1
+tile_set = SubResource( 30 )
+cell_size = Vector2( 24, 24 )
+format = 1
+tile_data = PoolIntArray( 131078, 2, 0, 131104, 2, 0, 196614, 1, 0, 196623, 2, 0, 196640, 1, 0, 262150, 0, 0, 262159, 1, 0, 262165, 2, 0, 262176, 0, 0, 327686, 0, 0, 327688, 2, 0, 327695, 0, 0, 327712, 0, 0, 327718, 2, 0, 393222, 0, 0, 393224, 1, 0, 393231, 0, 0, 393248, 0, 0, 393254, 1, 0, 458767, 0, 0, 458784, 0, 0, 524303, 0, 0, 524320, 0, 0, 589826, 2, 0, 589838, 3, 0, 589842, 4, 0, 589847, 2, 0, 589856, 0, 0, 655362, 1, 0, 655363, 2, 0, 655383, 1, 0, 655392, 0, 0, 720899, 0, 0, 720918, 3, 0, 720920, 4, 0, 720928, 0, 0, 786435, 0, 0, 786445, 2, 0, 786451, 3, 0, 786456, 4, 0, 786458, 3, 0, 786463, 4, 0, 786465, 3, 0, 786468, 4, 0, 851971, 0, 0, 851995, 2, 0, 851997, 0, 0, 852004, 0, 0, 917507, 0, 0, 917510, 3, 0, 917517, 4, 0, 917522, 3, 0, 917527, 4, 0, 917531, 1, 0, 917533, 0, 0, 917540, 0, 0, 983043, 0, 0, 983053, 0, 0, 983060, 0, 0, 983068, 0, 0, 983076, 0, 0, 1048589, 0, 0, 1048593, 2, 0, 1048596, 0, 0, 1048599, 2, 0, 1048604, 0, 0, 1048608, 2, 0, 1048612, 0, 0, 1114125, 0, 0, 1114129, 0, 0, 1114131, 2, 0, 1114132, 0, 0, 1114135, 1, 0, 1114140, 0, 0, 1114144, 1, 0, 1114149, 0, 0, 1179661, 0, 0, 1179665, 0, 0, 1179668, 0, 0, 1179671, 0, 0, 1179676, 0, 0, 1179680, 0, 0, 1179685, 0, 0, 1245190, 2, 0, 1245197, 0, 0, 1245201, 0, 0, 1245204, 0, 0, 1245207, 0, 0, 1245210, 2, 0, 1245212, 0, 0, 1245216, 0, 0, 1245221, 0, 0, 1310726, 0, 0, 1310730, 2, 0, 1310733, 0, 0, 1310737, 0, 0, 1310740, 0, 0, 1310743, 0, 0, 1310747, 0, 0, 1310752, 0, 0, 1310757, 0, 0, 1376257, 3, 0, 1376260, 4, 0, 1376262, 0, 0, 1376266, 1, 0, 1376269, 0, 0, 1376271, 3, 0, 1376274, 4, 0, 1376276, 0, 0, 1376279, 1, 0, 1376283, 0, 0, 1376287, 3, 0, 1376288, 0, 0, 1376292, 4, 0, 1376293, 0, 0 )
+
+[node name="PropFront" type="TileMap" parent="."]
+z_index = 2
+tile_set = SubResource( 31 )
+cell_size = Vector2( 24, 24 )
+format = 1
+tile_data = PoolIntArray( 196641, 0, 0, 262177, 1, 0, 327713, 1, 0, 393223, 0, 0, 393243, 14, 0, 393244, 16, 0, 393249, 1, 0, 458759, 2, 0, 458785, 1, 0, 524321, 2, 0, 589837, 4, 0, 589838, 19, 0, 589839, 20, 0, 589840, 20, 0, 589841, 20, 0, 589842, 21, 0, 589854, 17, 0, 655367, 18, 0, 655373, 5, 0, 720909, 5, 0, 720918, 19, 0, 720919, 20, 0, 720920, 21, 0, 786445, 7, 0, 786451, 19, 0, 786452, 20, 0, 786453, 20, 0, 786454, 20, 0, 786455, 20, 0, 786456, 21, 0, 786458, 19, 0, 786459, 20, 0, 786460, 20, 0, 786461, 20, 0, 786462, 20, 0, 786463, 21, 0, 786465, 19, 0, 786466, 20, 0, 786467, 20, 0, 786468, 21, 0, 851980, 8, 0, 851981, 10, 0, 851982, 9, 0, 851983, 9, 0, 851984, 13, 0, 917510, 19, 0, 917511, 20, 0, 917512, 20, 0, 917513, 20, 0, 917514, 20, 0, 917515, 20, 0, 917516, 20, 0, 917517, 21, 0, 917522, 19, 0, 917523, 20, 0, 917524, 20, 0, 917525, 20, 0, 917526, 20, 0, 917527, 21, 0, 917531, 4, 0, 983067, 5, 0, 1048589, 4, 0, 1048603, 5, 0, 1048612, 8, 0, 1048613, 11, 0, 1048614, 13, 0, 1114125, 5, 0, 1114139, 6, 0, 1179661, 6, 0, 1245188, 14, 0, 1245189, 15, 0, 1245190, 11, 0, 1245191, 10, 0, 1245192, 9, 0, 1245193, 16, 0, 1310724, 18, 0, 1310729, 3, 0, 1310737, 17, 0, 1376257, 19, 0, 1376258, 20, 0, 1376259, 20, 0, 1376260, 21, 0, 1376261, 15, 0, 1376262, 11, 0, 1376263, 10, 0, 1376264, 9, 0, 1376265, 11, 0, 1376266, 10, 0, 1376267, 11, 0, 1376268, 10, 0, 1376269, 9, 0, 1376270, 13, 0, 1376271, 19, 0, 1376272, 20, 0, 1376273, 20, 0, 1376274, 21, 0, 1376276, 8, 0, 1376277, 9, 0, 1376278, 10, 0, 1376279, 9, 0, 1376280, 11, 0, 1376281, 10, 0, 1376282, 9, 0, 1376283, 15, 0, 1376284, 13, 0, 1376287, 19, 0, 1376288, 20, 0, 1376289, 20, 0, 1376290, 20, 0, 1376291, 20, 0, 1376292, 21, 0 )
+
+[node name="ItemPositions" type="Node" parent="."]
+
+[node name="Position2D" type="Position2D" parent="ItemPositions" groups=["item_position"]]
+modulate = Color( 1, 0, 0, 1 )
+position = Vector2( 220, 470 )
+
+[node name="Position2D2" type="Position2D" parent="ItemPositions" groups=["item_position"]]
+modulate = Color( 1, 0, 0, 1 )
+position = Vector2( 72, 495 )
+
+[node name="Position2D3" type="Position2D" parent="ItemPositions" groups=["item_position"]]
+modulate = Color( 1, 0, 0, 1 )
+position = Vector2( 108, 516 )
+
+[node name="Position2D4" type="Position2D" parent="ItemPositions" groups=["item_position"]]
+modulate = Color( 1, 0, 0, 1 )
+position = Vector2( 315, 349 )
+
+[node name="Position2D5" type="Position2D" parent="ItemPositions" groups=["item_position"]]
+modulate = Color( 1, 0, 0, 1 )
+position = Vector2( 436, 300 )
+
+[node name="Position2D6" type="Position2D" parent="ItemPositions" groups=["item_position"]]
+modulate = Color( 1, 0, 0, 1 )
+position = Vector2( 445, 228 )
+
+[node name="Position2D7" type="Position2D" parent="ItemPositions" groups=["item_position"]]
+modulate = Color( 1, 0, 0, 1 )
+position = Vector2( 84, 251 )
+
+[node name="Position2D8" type="Position2D" parent="ItemPositions" groups=["item_position"]]
+modulate = Color( 1, 0, 0, 1 )
+position = Vector2( 203, 255 )
+
+[node name="Position2D25" type="Position2D" parent="ItemPositions" groups=["item_position"]]
+modulate = Color( 1, 0, 0, 1 )
+position = Vector2( 153, 347 )
+
+[node name="Position2D26" type="Position2D" parent="ItemPositions" groups=["item_position"]]
+modulate = Color( 1, 0, 0, 1 )
+position = Vector2( 569, 348 )
+
+[node name="Position2D9" type="Position2D" parent="ItemPositions" groups=["item_position"]]
+modulate = Color( 1, 0, 0, 1 )
+position = Vector2( 542, 276 )
+
+[node name="Position2D10" type="Position2D" parent="ItemPositions" groups=["item_position"]]
+modulate = Color( 1, 0, 0, 1 )
+position = Vector2( 759, 299 )
+
+[node name="Position2D11" type="Position2D" parent="ItemPositions" groups=["item_position"]]
+modulate = Color( 1, 0, 0, 1 )
+position = Vector2( 637, 466 )
+
+[node name="Position2D12" type="Position2D" parent="ItemPositions" groups=["item_position"]]
+modulate = Color( 1, 0, 0, 1 )
+position = Vector2( 442, 494 )
+
+[node name="Position2D13" type="Position2D" parent="ItemPositions" groups=["item_position"]]
+modulate = Color( 1, 0, 0, 1 )
+position = Vector2( 565, 422 )
+
+[node name="Position2D14" type="Position2D" parent="ItemPositions" groups=["item_position"]]
+modulate = Color( 1, 0, 0, 1 )
+position = Vector2( 475, 110 )
+
+[node name="Position2D15" type="Position2D" parent="ItemPositions" groups=["item_position"]]
+modulate = Color( 1, 0, 0, 1 )
+position = Vector2( 531, 111 )
+
+[node name="Position2D16" type="Position2D" parent="ItemPositions" groups=["item_position"]]
+modulate = Color( 1, 0, 0, 1 )
+position = Vector2( 371, 84 )
+
+[node name="Position2D17" type="Position2D" parent="ItemPositions" groups=["item_position"]]
+modulate = Color( 1, 0, 0, 1 )
+position = Vector2( 155, 58 )
+
+[node name="Position2D18" type="Position2D" parent="ItemPositions" groups=["item_position"]]
+modulate = Color( 1, 0, 0, 1 )
+position = Vector2( 156, 86 )
+
+[node name="Position2D19" type="Position2D" parent="ItemPositions" groups=["item_position"]]
+modulate = Color( 1, 0, 0, 1 )
+position = Vector2( 779, 59 )
+
+[node name="Position2D20" type="Position2D" parent="ItemPositions" groups=["item_position"]]
+modulate = Color( 1, 0, 0, 1 )
+position = Vector2( 879, 204 )
+
+[node name="Position2D22" type="Position2D" parent="ItemPositions" groups=["item_position"]]
+modulate = Color( 1, 0, 0, 1 )
+position = Vector2( 876, 515 )
+
+[node name="Position2D23" type="Position2D" parent="ItemPositions" groups=["item_position"]]
+modulate = Color( 1, 0, 0, 1 )
+position = Vector2( 684, 350 )
+
+[node name="Position2D24" type="Position2D" parent="ItemPositions" groups=["item_position"]]
+modulate = Color( 1, 0, 0, 1 )
+position = Vector2( 633, 300 )
+
+[node name="Position2D21" type="Position2D" parent="ItemPositions" groups=["item_position"]]
+modulate = Color( 1, 0, 0, 1 )
+position = Vector2( 923, 132 )
+
+[node name="ItemsNode" type="Node" parent="."]

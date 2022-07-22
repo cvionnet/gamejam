@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/chime_bell_positive_ring_02.wav-c03598c3f088925f5567b0de86b75ab1.sample"
+
+[deps]
+
+source_file="res://assets/sounds/chime_bell_positive_ring_02.wav"
+dest_files=[ "res://.import/chime_bell_positive_ring_02.wav-c03598c3f088925f5567b0de86b75ab1.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

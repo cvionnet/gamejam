@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/Super Quantum Cat-Fu - EndGame.mp3-9a36d07627d7bfc5067535658476bd92.mp3str"
+
+[deps]
+
+source_file="res://assets/music/Super Quantum Cat-Fu - EndGame.mp3"
+dest_files=[ "res://.import/Super Quantum Cat-Fu - EndGame.mp3-9a36d07627d7bfc5067535658476bd92.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/Hurt_female.wav-a58d0ac73e7574bc8b449ad00a88c46d.sample"
+
+[deps]
+
+source_file="res://assets/sounds/characters/Hurt_female.wav"
+dest_files=[ "res://.import/Hurt_female.wav-a58d0ac73e7574bc8b449ad00a88c46d.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

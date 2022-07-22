@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/FootstepZombieRun.wav-c9b72566286a558aaf1651c17bc2a648.sample"
+
+[deps]
+
+source_file="res://assets/sounds/foosteps/FootstepZombieRun.wav"
+dest_files=[ "res://.import/FootstepZombieRun.wav-c9b72566286a558aaf1651c17bc2a648.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

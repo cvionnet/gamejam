@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/SupaKantumCatuFu Bitcrush.mp3-8c436ae8a0582f2594ba012d24269d7d.mp3str"
+
+[deps]
+
+source_file="res://assets/sound/SupaKantumCatuFu Bitcrush.mp3"
+dest_files=[ "res://.import/SupaKantumCatuFu Bitcrush.mp3-8c436ae8a0582f2594ba012d24269d7d.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

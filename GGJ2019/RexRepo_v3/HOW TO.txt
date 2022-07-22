@@ -1,0 +1,16 @@
+Fermer Construct
+Lancer app.exe en Admin (pour la copie du fichier)
+Selctionner l'emplacement du répertoire de Construct
+Double cliquer sur un Plugin / Behavrious
+
+
+
+Offical doc :    https://c2rexplugins.weebly.com/my-plugins-repository-v3.html
+
+Install & Run
+- Just download this tool, unzip it, double click app.exe.
+- For first running, the tool will pop-up a dialog to assign the C2 root path. After that, it will show plugins and behaviors lists.
+- There are three kinds of plugin status.
+	"NEW ARRIVING" : this plugin only on server.
+	"NEW UPDATE" : this plugin has been updated, so that user might need download it.
+	"LATEST" : this plugin has not been updated. So it is latest.

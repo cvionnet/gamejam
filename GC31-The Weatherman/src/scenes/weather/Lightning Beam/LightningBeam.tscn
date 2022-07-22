@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://src/scenes/weather/Lightning Beam/LightningBeam.cs" type="Script" id=1]
+[ext_resource path="res://src/scenes/weather/Lightning Beam/LightningJolt.tscn" type="PackedScene" id=2]
+
+[node name="LightningBeam" type="RayCast2D"]
+enabled = true
+cast_to = Vector2( 0, 600 )
+collision_mask = 0
+script = ExtResource( 1 )
+LightningJolt_Scene = ExtResource( 2 )

@@ -1,0 +1,34 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://assets/actors/circle_fade.jpg" type="Texture" id=1]
+[ext_resource path="res://src/actors/torchlight/Torchlight.cs" type="Script" id=2]
+[ext_resource path="res://assets/sounds/light/LightOn.wav" type="AudioStream" id=3]
+[ext_resource path="res://assets/sounds/light/LightOff.wav" type="AudioStream" id=4]
+[ext_resource path="res://assets/sounds/light/LightFlicker.wav" type="AudioStream" id=5]
+
+[node name="Torchlight" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="TimerFlickering" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+
+[node name="TimerEnergyConsumption" type="Timer" parent="."]
+
+[node name="Light2D" type="Light2D" parent="."]
+texture = ExtResource( 1 )
+shadow_enabled = true
+shadow_gradient_length = 3.0
+shadow_filter_smooth = 50.0
+
+[node name="Sounds" type="Node" parent="."]
+
+[node name="LightOn" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource( 3 )
+
+[node name="LightOff" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource( 4 )
+
+[node name="LightFlicker" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource( 5 )
+volume_db = 1.0

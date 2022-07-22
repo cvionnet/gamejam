@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/Surprise Motherfucker.mp3-3f4286c7b34c4774d8f6dee375ede024.mp3str"
+
+[deps]
+
+source_file="res://assets/sound/Surprise Motherfucker.mp3"
+dest_files=[ "res://.import/Surprise Motherfucker.mp3-3f4286c7b34c4774d8f6dee375ede024.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

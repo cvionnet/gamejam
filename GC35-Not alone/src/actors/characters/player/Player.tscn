@@ -1,0 +1,255 @@
+[gd_scene load_steps=28 format=2]
+
+[ext_resource path="res://src/ui/UI_Radar.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/actors/camera_shake/CameraShake.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/actors/characters/player/StateMachine_Player.cs" type="Script" id=3]
+[ext_resource path="res://assets/actors/characters/player.png" type="Texture" id=4]
+[ext_resource path="res://src/actors/characters/player/states/Spawn_Player.cs" type="Script" id=5]
+[ext_resource path="res://src/actors/characters/player/Player.cs" type="Script" id=6]
+[ext_resource path="res://src/actors/characters/player/states/Move_Player.cs" type="Script" id=7]
+[ext_resource path="res://src/actors/characters/player/states/Idle_Player.cs" type="Script" id=8]
+[ext_resource path="res://src/utils/debug_panel/Debug_Panel.tscn" type="PackedScene" id=9]
+[ext_resource path="res://src/actors/characters/player/states/Dash_Player.cs" type="Script" id=10]
+[ext_resource path="res://src/actors/characters/player/states/Fall_Player.cs" type="Script" id=11]
+[ext_resource path="res://src/ui/UI_Player.tscn" type="PackedScene" id=12]
+[ext_resource path="res://src/actors/characters/CharacterTimers.tscn" type="PackedScene" id=13]
+[ext_resource path="res://src/actors/characters/player/states/Hurt_Player.cs" type="Script" id=14]
+[ext_resource path="res://src/actors/torchlight/Torchlight.tscn" type="PackedScene" id=15]
+[ext_resource path="res://src/actors/characters/sounds/Sound_Steps.tscn" type="PackedScene" id=16]
+[ext_resource path="res://assets/sounds/characters/Hurt_male.wav" type="AudioStream" id=17]
+[ext_resource path="res://assets/sounds/characters/Death_male.wav" type="AudioStream" id=18]
+[ext_resource path="res://assets/sounds/characters/Cmon_male.wav" type="AudioStream" id=19]
+[ext_resource path="res://assets/musics/Song.wav" type="AudioStream" id=20]
+
+[sub_resource type="Animation" id=7]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("CharacterSprite:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ) ]
+}
+
+[sub_resource type="Animation" id=10]
+resource_name = "fall"
+length = 0.8
+tracks/0/type = "value"
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 48, 49, 50, 51 ]
+}
+
+[sub_resource type="Animation" id=9]
+resource_name = "hurt"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ 54, 55, 56 ]
+}
+
+[sub_resource type="Animation" id=5]
+length = 0.8
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 3 ]
+}
+
+[sub_resource type="Animation" id=6]
+length = 1.2
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("CharacterSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4, 0.6, 0.8, 1 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 24, 25, 26, 27, 28, 29 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("CharacterSprite:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.2, 0.5, 0.8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( 0, -6 ), Vector2( 0, 0 ), Vector2( 0, -6 ) ]
+}
+tracks/2/type = "method"
+tracks/2/path = NodePath("Sounds/Sound_Steps")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.2, 0.5, 0.8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"values": [ {
+"args": [ 1 ],
+"method": "Sound_FootSteps"
+}, {
+"args": [ 2 ],
+"method": "Sound_FootSteps"
+}, {
+"args": [ 3 ],
+"method": "Sound_FootSteps"
+}, {
+"args": [ 4 ],
+"method": "Sound_FootSteps"
+} ]
+}
+
+[sub_resource type="CapsuleShape2D" id=3]
+radius = 11.0
+height = 0.0
+
+[sub_resource type="CapsuleShape2D" id=8]
+radius = 12.0
+height = 8.0
+
+[node name="Player" type="KinematicBody2D"]
+collision_mask = 39
+script = ExtResource( 6 )
+
+[node name="UI" type="Node" parent="."]
+
+[node name="UI_Player" parent="UI" instance=ExtResource( 12 )]
+
+[node name="UI_Radar" parent="UI" instance=ExtResource( 1 )]
+
+[node name="Torchlight" parent="." instance=ExtResource( 15 )]
+position = Vector2( 0, 16 )
+
+[node name="Debug_Panel" parent="." instance=ExtResource( 9 )]
+FontSize = 26
+
+[node name="CharacterAnimation" type="AnimationPlayer" parent="."]
+anims/RESET = SubResource( 7 )
+anims/fall = SubResource( 10 )
+anims/hurt = SubResource( 9 )
+anims/idle = SubResource( 5 )
+anims/run = SubResource( 6 )
+
+[node name="CharacterSprite" type="Sprite" parent="."]
+scale = Vector2( 2, 2 )
+texture = ExtResource( 4 )
+hframes = 6
+vframes = 15
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+modulate = Color( 1, 0, 0, 1 )
+position = Vector2( 0, 12 )
+shape = SubResource( 3 )
+
+[node name="CollisionBrain" type="Area2D" parent="."]
+collision_mask = 32
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionBrain"]
+modulate = Color( 0.00392157, 1, 0.0196078, 1 )
+position = Vector2( 0, 7 )
+shape = SubResource( 8 )
+
+[node name="CameraShake" parent="." instance=ExtResource( 2 )]
+position = Vector2( 9, 53.3273 )
+limit_left = 0
+limit_top = 0
+limit_smoothed = true
+
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource( 3 )
+InitialStateNode = NodePath("Spawn")
+
+[node name="Spawn" type="Node" parent="StateMachine"]
+script = ExtResource( 5 )
+
+[node name="Fall" type="Node" parent="StateMachine"]
+script = ExtResource( 11 )
+
+[node name="Move" type="Node" parent="StateMachine"]
+script = ExtResource( 7 )
+
+[node name="Idle" type="Node" parent="StateMachine/Move"]
+script = ExtResource( 8 )
+
+[node name="Dash" type="Node" parent="StateMachine/Move"]
+script = ExtResource( 10 )
+
+[node name="Hurt" type="Node" parent="StateMachine/Move"]
+script = ExtResource( 14 )
+
+[node name="Timers" type="Node" parent="."]
+
+[node name="CharacterTimers" parent="Timers" instance=ExtResource( 13 )]
+
+[node name="TimerRadar" type="Timer" parent="Timers"]
+
+[node name="Sounds" type="Node" parent="."]
+
+[node name="Sound_Steps" parent="Sounds" instance=ExtResource( 16 )]
+
+[node name="Hurt" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource( 17 )
+volume_db = -4.0
+
+[node name="Death" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource( 18 )
+volume_db = -4.37
+
+[node name="CMon" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource( 19 )
+volume_db = -3.0
+
+[node name="Music" type="Node" parent="."]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Music"]
+stream = ExtResource( 20 )
+autoplay = true
+bus = "Music"

@@ -1,0 +1,21 @@
+[gd_scene format=2]
+
+[node name="CharacterTimers" type="Node"]
+
+[node name="TimerItemActionDuration" type="Timer" parent="."]
+one_shot = true
+
+[node name="TimerNewDestination" type="Timer" parent="."]
+one_shot = true
+
+[node name="TimerDashDuration" type="Timer" parent="."]
+one_shot = true
+
+[node name="TimerRunningDuration" type="Timer" parent="."]
+one_shot = true
+
+[node name="TimerInvicibilityDuration" type="Timer" parent="."]
+one_shot = true
+
+[node name="TimerWakeUp" type="Timer" parent="."]
+one_shot = true

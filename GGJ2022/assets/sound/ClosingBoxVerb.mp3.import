@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/ClosingBoxVerb.mp3-31c5617d7c0e39cb8db71b9a495bf862.mp3str"
+
+[deps]
+
+source_file="res://assets/sound/ClosingBoxVerb.mp3"
+dest_files=[ "res://.import/ClosingBoxVerb.mp3-31c5617d7c0e39cb8db71b9a495bf862.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

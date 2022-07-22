@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/Super Quantum Cat-Fu - BoxOpen.mp3-504f705e9129db4dd51da53da33bf800.mp3str"
+
+[deps]
+
+source_file="res://assets/music/Super Quantum Cat-Fu - BoxOpen.mp3"
+dest_files=[ "res://.import/Super Quantum Cat-Fu - BoxOpen.mp3-504f705e9129db4dd51da53da33bf800.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

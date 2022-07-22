@@ -1,0 +1,36 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://assets/sounds/foosteps/Step2.wav" type="AudioStream" id=1]
+[ext_resource path="res://src/actors/characters/sounds/Sound_Steps.cs" type="Script" id=2]
+[ext_resource path="res://assets/sounds/foosteps/Step4.wav" type="AudioStream" id=3]
+[ext_resource path="res://assets/sounds/foosteps/Step3.wav" type="AudioStream" id=4]
+[ext_resource path="res://assets/sounds/foosteps/FootstepZombieRun.wav" type="AudioStream" id=5]
+[ext_resource path="res://assets/sounds/foosteps/FootstepZombieWalk.wav" type="AudioStream" id=6]
+
+[node name="Sound_Steps" type="Node"]
+script = ExtResource( 2 )
+
+[node name="Footstep1" type="AudioStreamPlayer" parent="."]
+bus = "Steps"
+
+[node name="Footstep2" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 1 )
+bus = "Steps"
+
+[node name="Footstep3" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )
+bus = "Steps"
+
+[node name="Footstep4" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 3 )
+bus = "Steps"
+
+[node name="FootstepZombieWalk" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 6 )
+volume_db = -14.0
+bus = "Steps"
+
+[node name="FootstepZombieRun" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 5 )
+volume_db = -14.0
+bus = "Steps"

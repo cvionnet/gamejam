@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/TitleBoom1.mp3-d34fa6a5202dcdb4a1dd3cf625e2e72e.mp3str"
+
+[deps]
+
+source_file="res://assets/sound/TitleBoom1.mp3"
+dest_files=[ "res://.import/TitleBoom1.mp3-d34fa6a5202dcdb4a1dd3cf625e2e72e.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

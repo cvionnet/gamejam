@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/Resurrection.mp3-146049d31cda1adc9337254cafb2a207.mp3str"
+
+[deps]
+
+source_file="res://assets/sound/Resurrection.mp3"
+dest_files=[ "res://.import/Resurrection.mp3-146049d31cda1adc9337254cafb2a207.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

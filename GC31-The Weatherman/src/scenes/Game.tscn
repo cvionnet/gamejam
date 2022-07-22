@@ -1,0 +1,86 @@
+[gd_scene load_steps=19 format=2]
+
+[ext_resource path="res://src/scenes/Game.cs" type="Script" id=1]
+[ext_resource path="res://src/scenes/WorldMap.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/main/spawn_factory/Spawn_Factory.tscn" type="PackedScene" id=3]
+[ext_resource path="res://assets/sounds/jingle_chime_16_negative.wav" type="AudioStream" id=4]
+[ext_resource path="res://src/actors/Weatherman.tscn" type="PackedScene" id=5]
+[ext_resource path="res://src/ui/Countdown_Answer.tscn" type="PackedScene" id=6]
+[ext_resource path="res://src/ui/Countdown_Audiance.tscn" type="PackedScene" id=7]
+[ext_resource path="res://src/scenes/weather/Fog.tscn" type="PackedScene" id=8]
+[ext_resource path="res://src/actors/camera_shake/CameraShake.tscn" type="PackedScene" id=9]
+[ext_resource path="res://src/scenes/weather/Rain.tscn" type="PackedScene" id=10]
+[ext_resource path="res://src/scenes/weather/Clouds.tscn" type="PackedScene" id=11]
+[ext_resource path="res://src/scenes/weather/CloudsSun.tscn" type="PackedScene" id=12]
+[ext_resource path="res://src/scenes/weather/Sun.tscn" type="PackedScene" id=13]
+[ext_resource path="res://src/scenes/weather/Snow.tscn" type="PackedScene" id=14]
+[ext_resource path="res://src/scenes/weather/Storm.tscn" type="PackedScene" id=15]
+[ext_resource path="res://assets/sounds/chime_bell_positive_ring_02.wav" type="AudioStream" id=16]
+[ext_resource path="res://assets/sounds/cash_register_open_coins_cha_ching_01.wav" type="AudioStream" id=17]
+[ext_resource path="res://assets/musics/Music.ogg" type="AudioStream" id=18]
+
+[node name="Game" type="Node"]
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_horizontal_guides_": [  ],
+"_edit_vertical_guides_": [  ]
+}
+Clouds_Scene = ExtResource( 11 )
+Rain_Scene = ExtResource( 10 )
+CloudsSun_Scene = ExtResource( 12 )
+Sun_Scene = ExtResource( 13 )
+Storm_Scene = ExtResource( 15 )
+Snow_Scene = ExtResource( 14 )
+Fog_Scene = ExtResource( 8 )
+
+[node name="WorldMap" parent="." instance=ExtResource( 2 )]
+position = Vector2( 961.888, 540 )
+
+[node name="WeatherEffects" type="Node" parent="."]
+
+[node name="Weatherman" parent="." instance=ExtResource( 5 )]
+position = Vector2( 109.876, 771.559 )
+
+[node name="Spawn_FactoryPinMap" parent="." instance=ExtResource( 3 )]
+
+[node name="Spawn_FactoryCard" parent="." instance=ExtResource( 3 )]
+
+[node name="Countdown_Answer" parent="." instance=ExtResource( 6 )]
+margin_left = 235.384
+margin_top = 579.034
+margin_right = 235.384
+margin_bottom = 579.034
+
+[node name="Countdown_Audiance" parent="." instance=ExtResource( 7 )]
+margin_left = 345.272
+margin_top = 714.966
+margin_right = 385.272
+margin_bottom = 754.966
+
+[node name="CameraShake" parent="." instance=ExtResource( 9 )]
+limit_left = 0
+limit_top = 0
+limit_right = 1920
+limit_bottom = 1080
+limit_smoothed = true
+
+[node name="PositionCards1" type="Position2D" parent="."]
+position = Vector2( 655, 880 )
+
+[node name="PositionCards2" type="Position2D" parent="."]
+position = Vector2( 655, 975 )
+
+[node name="Correct" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 16 )
+
+[node name="Incorrect" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )
+
+[node name="PinMap" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 17 )
+volume_db = -10.0
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 18 )
+volume_db = -5.0
+autoplay = true

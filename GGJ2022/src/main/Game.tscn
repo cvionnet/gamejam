@@ -1,0 +1,130 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://src/HUD/HUDPlayer.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/main/Game.gd" type="Script" id=2]
+[ext_resource path="res://assets/sound/Start.mp3" type="AudioStream" id=3]
+[ext_resource path="res://src/main/effects/ScreenShake.gd" type="Script" id=4]
+[ext_resource path="res://src/main/Level/Level1.tscn" type="PackedScene" id=5]
+[ext_resource path="res://src/main/background/Background.tscn" type="PackedScene" id=6]
+[ext_resource path="res://src/main/effects/FlashWhite.tscn" type="PackedScene" id=7]
+[ext_resource path="res://assets/scenes/lightx64.png" type="Texture" id=8]
+[ext_resource path="res://src/actors/cat.tscn" type="PackedScene" id=9]
+[ext_resource path="res://assets/sound/NewPlayer.mp3" type="AudioStream" id=10]
+[ext_resource path="res://assets/sound/Surprise Motherfucker.mp3" type="AudioStream" id=11]
+
+[node name="Game" type="Node2D"]
+script = ExtResource( 2 )
+Cat = ExtResource( 9 )
+
+[node name="Background" parent="." instance=ExtResource( 6 )]
+
+[node name="Level1" parent="." instance=ExtResource( 5 )]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( 490, 270 )
+current = true
+limit_left = 0
+limit_top = 0
+limit_right = 960
+limit_bottom = 540
+limit_smoothed = true
+smoothing_enabled = true
+script = ExtResource( 4 )
+
+[node name="Cats" type="Node" parent="."]
+
+[node name="Light2D" type="Light2D" parent="."]
+position = Vector2( 409, 533 )
+scale = Vector2( 0.969727, 0.95996 )
+texture = ExtResource( 8 )
+shadow_enabled = true
+
+[node name="Light2D2" type="Light2D" parent="."]
+position = Vector2( 393, 240 )
+scale = Vector2( 0.969727, 0.95996 )
+texture = ExtResource( 8 )
+shadow_enabled = true
+
+[node name="Light2D3" type="Light2D" parent="."]
+position = Vector2( 709, 308 )
+scale = Vector2( 0.969727, 0.95996 )
+texture = ExtResource( 8 )
+shadow_enabled = true
+
+[node name="Light2D4" type="Light2D" parent="."]
+position = Vector2( 853, 310 )
+scale = Vector2( 0.969727, 0.95996 )
+texture = ExtResource( 8 )
+shadow_enabled = true
+
+[node name="Light2D5" type="Light2D" parent="."]
+position = Vector2( 239, 354 )
+scale = Vector2( 0.969727, 0.95996 )
+texture = ExtResource( 8 )
+shadow_enabled = true
+
+[node name="Light2D6" type="Light2D" parent="."]
+position = Vector2( 70, 529 )
+scale = Vector2( 0.969727, 0.95996 )
+texture = ExtResource( 8 )
+shadow_enabled = true
+
+[node name="Light2D7" type="Light2D" parent="."]
+position = Vector2( 825, 530 )
+scale = Vector2( 1.21924, 1.12061 )
+texture = ExtResource( 8 )
+shadow_enabled = true
+
+[node name="Light2D8" type="Light2D" parent="."]
+position = Vector2( 564, 299 )
+scale = Vector2( 1.21924, 1.12061 )
+texture = ExtResource( 8 )
+shadow_enabled = true
+
+[node name="HUD_Player_1" parent="." instance=ExtResource( 1 )]
+margin_left = 63.0
+margin_top = 48.0
+margin_right = 103.0
+margin_bottom = 88.0
+
+[node name="HUD_Player_2" parent="." instance=ExtResource( 1 )]
+margin_left = 321.0
+margin_top = 48.0
+margin_right = 361.0
+margin_bottom = 88.0
+rect_pivot_offset = Vector2( -364, 20 )
+PlayerIndex = 2
+
+[node name="HUD_Player_3" parent="." instance=ExtResource( 1 )]
+margin_left = 620.0
+margin_top = 48.0
+margin_right = 660.0
+margin_bottom = 88.0
+rect_pivot_offset = Vector2( -821, 147 )
+PlayerIndex = 3
+
+[node name="HUD_Player_4" parent="." instance=ExtResource( 1 )]
+margin_left = 898.0
+margin_top = 48.0
+margin_right = 938.0
+margin_bottom = 88.0
+rect_pivot_offset = Vector2( -821, 147 )
+PlayerIndex = 4
+
+[node name="FlashWhite" parent="." instance=ExtResource( 7 )]
+z_index = 5
+
+[node name="TweenCamera" type="Tween" parent="."]
+
+[node name="Audio" type="Node" parent="."]
+
+[node name="Start" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource( 3 )
+
+[node name="NewPlayer" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource( 10 )
+volume_db = -6.0
+
+[node name="Suprise" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource( 11 )
+volume_db = -14.0

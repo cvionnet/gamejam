@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/Hurt_male.wav-513e2cad788d2a5592abd534a2709f51.sample"
+
+[deps]
+
+source_file="res://assets/sounds/characters/Hurt_male.wav"
+dest_files=[ "res://.import/Hurt_male.wav-513e2cad788d2a5592abd534a2709f51.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

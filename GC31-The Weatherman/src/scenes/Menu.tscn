@@ -1,0 +1,268 @@
+[gd_scene load_steps=26 format=2]
+
+[ext_resource path="res://src/scenes/Menu.cs" type="Script" id=1]
+[ext_resource path="res://assets/actors/weatherman_eye.png" type="Texture" id=2]
+[ext_resource path="res://assets/UI/green_button00.png" type="Texture" id=3]
+[ext_resource path="res://assets/actors/Coda-Regular.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://assets/scenes/news_desktop.png" type="Texture" id=5]
+[ext_resource path="res://assets/actors/weatherman_mouth.png" type="Texture" id=6]
+[ext_resource path="res://assets/actors/weatherman_speechbox.png" type="Texture" id=7]
+[ext_resource path="res://src/actors/Weatherman_Eyes.cs" type="Script" id=8]
+[ext_resource path="res://assets/UI/flag_china.png" type="Texture" id=9]
+[ext_resource path="res://assets/UI/flag_uk.png" type="Texture" id=10]
+[ext_resource path="res://assets/UI/flag_france.png" type="Texture" id=11]
+[ext_resource path="res://src/ui/HowTo.tscn" type="PackedScene" id=12]
+[ext_resource path="res://assets/sounds/voice_fun_character_flutter_man_01.wav" type="AudioStream" id=13]
+[ext_resource path="res://assets/sounds/ui_menu_button_click_02.wav" type="AudioStream" id=14]
+[ext_resource path="res://assets/GameTitle.png" type="Texture" id=15]
+[ext_resource path="res://assets/musics/Music.ogg" type="AudioStream" id=16]
+
+[sub_resource type="AtlasTexture" id=1]
+flags = 4
+atlas = ExtResource( 6 )
+region = Rect2( 96, 0, 48, 29 )
+
+[sub_resource type="AtlasTexture" id=2]
+flags = 4
+atlas = ExtResource( 6 )
+region = Rect2( 0, 0, 48, 29 )
+
+[sub_resource type="AtlasTexture" id=3]
+flags = 4
+atlas = ExtResource( 6 )
+region = Rect2( 48, 0, 48, 29 )
+
+[sub_resource type="SpriteFrames" id=4]
+animations = [ {
+"frames": [ SubResource( 1 ) ],
+"loop": false,
+"name": "idle",
+"speed": 0.0
+}, {
+"frames": [ SubResource( 2 ), SubResource( 3 ) ],
+"loop": true,
+"name": "speech",
+"speed": 5.0
+} ]
+
+[sub_resource type="DynamicFont" id=5]
+size = 36
+font_data = ExtResource( 4 )
+
+[sub_resource type="StreamTexture" id=6]
+flags = 4
+load_path = "res://.import/green_button00.png-77b29856d8704c8b64336cf385f5e3ef.stex"
+
+[sub_resource type="DynamicFont" id=7]
+size = 48
+font_data = ExtResource( 4 )
+
+[sub_resource type="DynamicFont" id=8]
+size = 36
+font_data = ExtResource( 4 )
+
+[sub_resource type="Animation" id=9]
+resource_name = "MoveTitle"
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimationPlayer/GameTitle:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5, 1 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1608.26, 402.596 ), Vector2( 1608.27, 390 ), Vector2( 1608.26, 402.596 ) ]
+}
+
+[node name="Menu" type="Node"]
+script = ExtResource( 1 )
+
+[node name="Speaker" type="Sprite" parent="."]
+position = Vector2( 961, 541.782 )
+texture = ExtResource( 5 )
+
+[node name="LeftEye" type="Node2D" parent="Speaker"]
+modulate = Color( 0.0980392, 0.67451, 0.701961, 1 )
+position = Vector2( -48.167, -64.747 )
+scale = Vector2( 2, 2 )
+script = ExtResource( 8 )
+Max_Distance = 15.0
+
+[node name="L_Eye" type="Sprite" parent="Speaker/LeftEye"]
+texture = ExtResource( 2 )
+
+[node name="RightEye" type="Node2D" parent="Speaker"]
+modulate = Color( 0.0980392, 0.67451, 0.701961, 1 )
+position = Vector2( 129.23, -65.192 )
+scale = Vector2( 2, 2 )
+script = ExtResource( 8 )
+Max_Distance = 15.0
+
+[node name="R_Eye" type="Sprite" parent="Speaker/RightEye"]
+texture = ExtResource( 2 )
+
+[node name="Mouth" type="AnimatedSprite" parent="Speaker"]
+position = Vector2( 40.56, 133.119 )
+scale = Vector2( 2, 2 )
+frames = SubResource( 4 )
+animation = "speech"
+
+[node name="SpeechPanel" type="Sprite" parent="."]
+position = Vector2( 1531.75, 792.617 )
+scale = Vector2( 4.90544, 1.23069 )
+texture = ExtResource( 7 )
+
+[node name="TimerSpeech" type="Timer" parent="SpeechPanel"]
+wait_time = 0.05
+
+[node name="Label" type="Label" parent="."]
+modulate = Color( 0.0313726, 0.0313726, 0.0313726, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 1179.0
+margin_top = 682.0
+margin_right = -52.0
+margin_bottom = -166.0
+custom_fonts/font = SubResource( 5 )
+text = "hgfhgf"
+autowrap = true
+max_lines_visible = 7
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureButton" type="TextureButton" parent="."]
+margin_left = 1552.0
+margin_top = 949.259
+margin_right = 1882.0
+margin_bottom = 1046.26
+texture_normal = ExtResource( 3 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label2" type="Label" parent="TextureButton"]
+modulate = Color( 0, 0, 0, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = -2.0
+margin_right = -9.0
+margin_bottom = -4.0
+custom_fonts/font = SubResource( 5 )
+text = "C'est parti !"
+align = 1
+valign = 1
+autowrap = true
+max_lines_visible = 7
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ButtonHowTo" type="TextureButton" parent="."]
+margin_left = 1769.22
+margin_top = 577.0
+margin_right = 1881.22
+margin_bottom = 644.0
+texture_normal = SubResource( 6 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label2" type="Label" parent="ButtonHowTo"]
+modulate = Color( 0, 0, 0, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = -2.0
+margin_right = -9.0
+margin_bottom = -4.0
+custom_fonts/font = SubResource( 7 )
+text = "?"
+align = 1
+valign = 1
+autowrap = true
+max_lines_visible = 7
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MenuDifficulty" type="OptionButton" parent="."]
+margin_left = 1190.87
+margin_top = 964.0
+margin_right = 1448.87
+margin_bottom = 1034.0
+custom_fonts/font = SubResource( 8 )
+text = "Normal"
+align = 1
+items = [ "Easy", null, false, 0, null, "Normal", null, false, 1, null, "Hard", null, false, 2, null ]
+selected = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Flag_UK" type="TextureButton" parent="."]
+margin_left = 1391.75
+margin_top = 584.31
+margin_right = 1500.75
+margin_bottom = 637.31
+texture_normal = ExtResource( 10 )
+expand = true
+stretch_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Flag_FR" type="TextureButton" parent="."]
+margin_left = 1546.76
+margin_top = 584.31
+margin_right = 1655.76
+margin_bottom = 637.31
+texture_normal = ExtResource( 11 )
+expand = true
+stretch_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Flag_CN" type="TextureButton" parent="."]
+visible = false
+margin_left = 1619.82
+margin_top = 584.31
+margin_right = 1728.82
+margin_bottom = 637.31
+texture_normal = ExtResource( 9 )
+expand = true
+stretch_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HowTo" parent="." instance=ExtResource( 12 )]
+visible = false
+
+[node name="Speech" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 13 )
+volume_db = -12.0
+
+[node name="ButtonOK" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 14 )
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 16 )
+volume_db = -5.0
+autoplay = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "MoveTitle"
+anims/MoveTitle = SubResource( 9 )
+
+[node name="GameTitle" type="Sprite" parent="AnimationPlayer"]
+position = Vector2( 1608.26, 402.596 )
+scale = Vector2( 1.5, 1.5 )
+texture = ExtResource( 15 )

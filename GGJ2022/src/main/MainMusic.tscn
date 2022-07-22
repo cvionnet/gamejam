@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://assets/music/Super Quantum Cat-Fu - Titre.mp3" type="AudioStream" id=1]
+[ext_resource path="res://assets/music/Super Quantum Cat-Fu - BoxOpen.mp3" type="AudioStream" id=2]
+[ext_resource path="res://assets/music/Super Quantum Cat-Fu - InGame.mp3" type="AudioStream" id=3]
+[ext_resource path="res://assets/music/Super Quantum Cat-Fu - EndGame.mp3" type="AudioStream" id=4]
+
+[node name="MainMusic" type="Node"]
+
+[node name="MusicTitre" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 1 )
+
+[node name="MusicInGame" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 3 )
+
+[node name="MusicBoxOpen" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 2 )
+
+[node name="MusicEndGame" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )
+volume_db = -3.0

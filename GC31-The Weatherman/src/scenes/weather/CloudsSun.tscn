@@ -1,0 +1,112 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://src/scenes/weather/CloudsSun.cs" type="Script" id=1]
+[ext_resource path="res://assets/effects/cloud3.png" type="Texture" id=2]
+[ext_resource path="res://assets/effects/cloud4.png" type="Texture" id=3]
+[ext_resource path="res://assets/effects/cloud7.png" type="Texture" id=4]
+[ext_resource path="res://assets/effects/cloud5.png" type="Texture" id=5]
+[ext_resource path="res://assets/effects/sun.png" type="Texture" id=6]
+
+[sub_resource type="Animation" id=1]
+resource_name = "Move"
+length = 4.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimationPlayer/Sprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 2, 3.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 82.6381, 36.0218 ), Vector2( 82.638, 50 ), Vector2( 82.638, 36.022 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("AnimationPlayer/Sprite2:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.5, 2.5, 4 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 563.634, -10.5944 ), Vector2( 563.634, 5 ), Vector2( 563.634, -10.5944 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("AnimationPlayer/Sprite3:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 1.8, 3.6 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1703.62, 12.7138 ), Vector2( 1703.62, 18 ), Vector2( 1703.62, 12.7138 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("AnimationPlayer/Sprite4:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 1.1, 3.1 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1080.65, -2.11868 ), Vector2( 1080.65, -15 ), Vector2( 1080.65, -2.11868 ) ]
+}
+
+[node name="CloudsSun" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="VisibilityEnabler2D" type="VisibilityEnabler2D" parent="."]
+
+[node name="Control" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="Control"]
+modulate = Color( 0.0705882, 0.0666667, 0.0666667, 0.301961 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Control"]
+autoplay = "Move"
+anims/Move = SubResource( 1 )
+
+[node name="Sun" type="Sprite" parent="Control/AnimationPlayer"]
+modulate = Color( 0.72549, 0.67451, 0.101961, 1 )
+position = Vector2( 1379.42, -29.6649 )
+scale = Vector2( 4, 4 )
+texture = ExtResource( 6 )
+
+[node name="Sprite" type="Sprite" parent="Control/AnimationPlayer"]
+position = Vector2( 82.6381, 36.0218 )
+scale = Vector2( 2, 2 )
+texture = ExtResource( 2 )
+
+[node name="Sprite2" type="Sprite" parent="Control/AnimationPlayer"]
+position = Vector2( 563.634, -10.5944 )
+scale = Vector2( 2, 2 )
+texture = ExtResource( 5 )
+
+[node name="Sprite3" type="Sprite" parent="Control/AnimationPlayer"]
+position = Vector2( 1703.62, 12.7138 )
+scale = Vector2( 2, 2 )
+texture = ExtResource( 3 )
+
+[node name="Sprite4" type="Sprite" parent="Control/AnimationPlayer"]
+position = Vector2( 1080.65, -2.11868 )
+scale = Vector2( 2, 2 )
+texture = ExtResource( 4 )

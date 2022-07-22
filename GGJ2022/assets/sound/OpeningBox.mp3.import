@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/OpeningBox.mp3-7604ad43905cd0aed26305b4876b188e.mp3str"
+
+[deps]
+
+source_file="res://assets/sound/OpeningBox.mp3"
+dest_files=[ "res://.import/OpeningBox.mp3-7604ad43905cd0aed26305b4876b188e.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

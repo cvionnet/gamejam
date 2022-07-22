@@ -1,0 +1,12 @@
+suppression de l'API pour 2 raisons :
+- temps de chargement lorsque + de 5 villes
+- impossible de compiler en HTML5 avec paquet Nugget (?)
+
+
+
+https://duckduckgo.com/?q=C%23+html5+WebAssembly.Net.Http.dll&t=brave&ia=web
+https://webnoos.altervista.org/index.php/it/programmazione/194-run-c-code-in-browser-using-web-assembly-via-mono-wasm
+
+https://www.google.com/search?hl=en&q=godot%20probing%20location%3A%20%27%2Froot%2Fmono%2Dinstalls%2Fwasm%2Druntime%2Drelease%2Flib%2FWebAssembly.Net.Http.dll%27
+https://docs.godotengine.org/en/stable/getting_started/workflow/export/exporting_for_web.html#calling-javascript-from-script
+

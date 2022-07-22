@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/Cmon_male.wav-1f6601dc93200201d4903e8dcb09b65c.sample"
+
+[deps]
+
+source_file="res://assets/sounds/characters/Cmon_male.wav"
+dest_files=[ "res://.import/Cmon_male.wav-1f6601dc93200201d4903e8dcb09b65c.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0
